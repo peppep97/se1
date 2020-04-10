@@ -1,6 +1,6 @@
 # Requirements Document 
 
-Authors: Giuseppe Pipero
+Authors: Giuseppe Pipero, Matteo Pappadà
 
 Date:
 
