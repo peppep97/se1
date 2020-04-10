@@ -1,6 +1,6 @@
 # Graphical User Interface Prototype  
 
-Authors:
+Authors: Filippo Fontan
 
 Date:
 
