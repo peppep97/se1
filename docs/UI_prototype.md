@@ -1,9 +1,20 @@
 # Graphical User Interface Prototype  
 
-Authors: Filippo Fontan
+Authors: Filippo Fontan, Giuseppe Pipero
 
-Date:
+Date: 18/04/2020
 
-Version:
+Version: 1
 
-\<Report here the GUI that you propose. You are free to organize it as you prefer. A suggested presentation matches the Use cases and scenarios defined in the Requirement document. The GUI can be shown as a sequence of graphical files (jpg, png)  >
+# User side
+
+## Login
+![Login](images/login.JPG)
+
+## Scenario 1.1
+
+![Scenario 1.1](images/s1_1.JPG)
+
+## Scenario 1.2
+
+![Scenario 1.2](images/s1_2.JPG)
