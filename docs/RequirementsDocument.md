@@ -283,7 +283,7 @@ a --> (FR15 Edit/Delete Gas station/prices)
 
 ### Use case 5, UC5 Remove/correct self made errors (FR9)
 
-| Actors Involved  | Administrator |
+| Actors Involved  | User |
 | ---------------- | :-----------------------: |
 | Precondition | Submitted report/request R (not approved yet) |
 | Postcondition | Report R deleted or modified |
@@ -309,7 +309,7 @@ a --> (FR15 Edit/Delete Gas station/prices)
 
 ### Use case 6, UC6 Review / report false information (FR6 - FR10)
 
-| Actors Involved  | Administrator |
+| Actors Involved  | User |
 | ---------------- | :-----------------------: |
 | Precondition | User is logged in and station selected |
 | Postcondition | Report R submitted |
