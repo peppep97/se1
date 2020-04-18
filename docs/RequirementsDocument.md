@@ -38,7 +38,7 @@ Version: 1
 		- [Use case 5, UC5 Remove/correct self made errors (FR9)](#use-case-5-uc5-removecorrect-self-made-errors-fr9)
 				- [Scenario 5.1](#scenario-51)
 				- [Scenario 5.2](#scenario-52)
-		- [Use case 6, UC6 Review / report false information (FR6)](#use-case-6-uc6-review--report-false-information-fr6)
+		- [Use case 6, UC6 Review / report false information (FR6 - FR10)](#use-case-6-uc6-review--report-false-information-fr6---fr10)
 				- [Scenario 6.1](#scenario-61)
 				- [Scenario 6.2](#scenario-62)
 - [Glossary](#glossary)
@@ -307,7 +307,7 @@ a --> (FR15 Edit/Delete Gas station/prices)
 |  1     | User selects the added gas station |  
 |  2     | User corrects/removes the request |
 
-### Use case 6, UC6 Review / report false information (FR6)
+### Use case 6, UC6 Review / report false information (FR6 - FR10)
 
 | Actors Involved  | Administrator |
 | ---------------- | :-----------------------: |
