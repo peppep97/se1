@@ -40,7 +40,7 @@ Version: 1
 				- [Scenario 5.2](#scenario-52)
 		- [Use case 6, UC6 Review / report false information (FR6)](#use-case-6-uc6-review--report-false-information-fr6)
 				- [Scenario 6.1](#scenario-61)
-				- [Scenario 6.1](#scenario-61-1)
+				- [Scenario 6.2](#scenario-62)
 - [Glossary](#glossary)
 - [Deployment diagram](#deployment-diagram)
 
@@ -327,8 +327,8 @@ a --> (FR15 Edit/Delete Gas station/prices)
 |  3     | User report fake information |  
 |  4     | User submit the report |
 
-##### Scenario 6.1
-| Scenario 6.1 | |
+##### Scenario 6.2
+| Scenario 6.2 | |
 | ------------- |:-------------:| 
 |  Precondition     | User is logged in and station selected |
 |  Post condition     | Report R submitted |
