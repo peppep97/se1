@@ -18,3 +18,7 @@ Version: 1
 ## Scenario 1.2
 
 ![Scenario 1.2](images/s1_2.JPG)
+
+## Scenario 2.1 
+
+![Scenario 2.1](images/s2_1.JPG)
