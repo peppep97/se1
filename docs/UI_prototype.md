@@ -1,6 +1,6 @@
 # Graphical User Interface Prototype  
 
-Authors: Filippo Fontan, Giuseppe Pipero
+Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
 Date: 18/04/2020
 
