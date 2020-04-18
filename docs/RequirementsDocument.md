@@ -38,8 +38,9 @@ Version: 1
 		- [Use case 5, UC5 Remove/correct self made errors (FR9)](#use-case-5-uc5-removecorrect-self-made-errors-fr9)
 				- [Scenario 5.1](#scenario-51)
 				- [Scenario 5.2](#scenario-52)
-		- [Use case 6, UC6 report false information (FR6)](#use-case-6-uc6-report-false-information-fr6)
+		- [Use case 6, UC6 Review / report false information (FR6)](#use-case-6-uc6-review--report-false-information-fr6)
 				- [Scenario 6.1](#scenario-61)
+				- [Scenario 6.1](#scenario-61-1)
 - [Glossary](#glossary)
 - [Deployment diagram](#deployment-diagram)
 
@@ -306,13 +307,13 @@ a --> (FR15 Edit/Delete Gas station/prices)
 |  1     | User selects the added gas station |  
 |  2     | User corrects/removes the request |
 
-### Use case 6, UC6 report false information (FR6)
+### Use case 6, UC6 Review / report false information (FR6)
 
 | Actors Involved  | Administrator |
 | ---------------- | :-----------------------: |
 | Precondition | User is logged in and station selected |
 | Postcondition | Report R submitted |
-| Nominal Scenario | User select a station, report a false information, send it |
+| Nominal Scenario | User select a station, write review / false information, send it |
 | Variants  |    |
 
 ##### Scenario 6.1
@@ -325,6 +326,17 @@ a --> (FR15 Edit/Delete Gas station/prices)
 |  2     | User press button to send a report |  
 |  3     | User report fake information |  
 |  4     | User submit the report |
+
+##### Scenario 6.1
+| Scenario 6.1 | |
+| ------------- |:-------------:| 
+|  Precondition     | User is logged in and station selected |
+|  Post condition     | Report R submitted |
+| Step#        | Description  |
+|  1     | User open gas station detail page | 
+|  2     | User press button to leave a review |  
+|  3     | User insert a ration (0 to 5) and an optional comment |  
+|  4     | User submit the review |
 
 # Glossary
 
