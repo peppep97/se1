@@ -93,7 +93,7 @@ So John decides to use EZGas service to update prices of a specific gas station 
 
 Jimmy is a delivery man who has always been very conscious about gas prices. To support his route's decisions and maximize his efficiency both money and time -wise he frequently takes a peek at the EZGAS app, particularely useful in case a new gas pump shows up. Moreover he's happy to do his part by checking and updating any gas price he can find, thus helping fellow drivers.
 
-Mary is reporter, and has to travel a lot with her car. All the costs for the travels are not included in her salary, so she wants always to save money on gas, hotels and highway taxes. For this, every time she has to get gas, she looks for the cheaper price and since she find out the EZGas app she is very happy, because she doesn’t have to struggle a lot to find the cheaper gas station during her travels.
+Mary is a reporter, and has to travel a lot with her car. All the costs for the travels are not included in her salary, so she wants always to save money on gas, hotels and highway taxes. For this, every time she has to get gas, she looks for the cheaper price and since she find out the EZGas app she is very happy, because she doesn’t have to struggle a lot to find the cheaper gas station during her travels.
 
 Bob uses EZGas to find gas stations. In a certain moment, he realize that a station reported in the app doesn't exist anymore and he would like to avoid that other people can live the same inconvenient. So, he send a report to an administrator signal that the specified station no longer exist, hoping that the report can be managed as soon as possible.
 
