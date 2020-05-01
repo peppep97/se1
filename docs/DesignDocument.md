@@ -231,62 +231,8 @@ Contains Service classes that implement the Service Interfaces in the Service pa
 
 ```plantuml
 @startuml
-package "Backend" {
 
-package "it.polito.ezgas.service"  as ps {
-   interface "GasStationService"
-   interface "UserService"
 
-   package "impl" {
-
-    class UserServiceImpl {
- getUserById(int id);
- getAllUsers();
- saveUser(UserDto user);
- deleteUser(int id);
- increaseUserReputation(int id);
- decreaseUserReputation(int id);
- login(String user, String pswd);
-}
-
-class GasStationServiceImpl {
- getGasStationById(int id);getAllGasStations();
- saveGasStation(GasStationDto gasStation);
- deleteGasStation(int id);
- getGasStationsByGasolineType(String type);
- getGasStationsByLocation(long lat, long lon);
- getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
- getGasStationsWithoutCoordinates(String type, String carSharing);
- setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
- getGasStationByCarSharing(String carSharing);
-}
-   }
-
-   GasStationServiceImpl ..> GasStationService
-      UserServiceImpl ..> UserService
-} 
-
-package "it.polito.ezgas.controller" {
-    class UserController {
- getUserById(int id);
- getAllUsers();
- saveUser(UserDto user);
- deleteUser(int id);
- increaseUserReputation(int id);
- decreaseUserReputation(int id);
- login(String user, String pswd);
-}
-
-class GasStationController {
- getGasStationById(int id);getAllGasStations();
- saveGasStation(GasStationDto gasStation);
- deleteGasStation(int id);
- getGasStationsByGasolineType(String type);
- getGasStationsByLocation(long lat, long lon);
- getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
- setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
-}
-}
 
 package "it.polito.ezgas.converter" {
 
@@ -437,11 +383,65 @@ UserRepository "*" -- GeoPointRepository
 GeoPointRepository -- GasStationRepository
 }
 
-    
+```
+
+```plantuml
+package "it.polito.ezgas.service"  as ps {
+   interface "GasStationService"
+   interface "UserService"
+
+   package "impl" {
+
+    class UserServiceImpl {
+ getUserById(int id);
+ getAllUsers();
+ saveUser(UserDto user);
+ deleteUser(int id);
+ increaseUserReputation(int id);
+ decreaseUserReputation(int id);
+ login(String user, String pswd);
+}
+
+class GasStationServiceImpl {
+ getGasStationById(int id);getAllGasStations();
+ saveGasStation(GasStationDto gasStation);
+ deleteGasStation(int id);
+ getGasStationsByGasolineType(String type);
+ getGasStationsByLocation(long lat, long lon);
+ getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
+ getGasStationsWithoutCoordinates(String type, String carSharing);
+ setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
+ getGasStationByCarSharing(String carSharing);
+}
+   }
+
+   GasStationServiceImpl ..> GasStationService
+      UserServiceImpl ..> UserService
+} 
+
+package "it.polito.ezgas.controller" {
+    class UserController {
+ getUserById(int id);
+ getAllUsers();
+ saveUser(UserDto user);
+ deleteUser(int id);
+ increaseUserReputation(int id);
+ decreaseUserReputation(int id);
+ login(String user, String pswd);
+}
+
+class GasStationController {
+ getGasStationById(int id);getAllGasStations();
+ saveGasStation(GasStationDto gasStation);
+ deleteGasStation(int id);
+ getGasStationsByGasolineType(String type);
+ getGasStationsByLocation(long lat, long lon);
+ getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
+ setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
+}
 }
 
 ```
-
 
 # Verification traceability matrix
 
