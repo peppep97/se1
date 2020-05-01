@@ -19,6 +19,9 @@ Version:
 - [Low level design](#low-level-design)
 - [Verification traceability matrix](#verification-traceability-matrix)
 - [Verification sequence diagrams](#verification-sequence-diagrams)
+  - [UC1](#uc1)
+  - [UC6](#uc6)
+  - [Scenario 10.1](#scenario-101)
 
 # Instructions
 
@@ -216,23 +219,11 @@ Contains Service classes that implement the Service Interfaces in the Service pa
 
 
 
-
-
-
-
-
-
-
 # Low level design
-
-<Based on the official requirements and on the Spring Boot design guidelines, define the required classes (UML class diagram) of the back-end in the proper packages described in the high-level design section.>
-
 
 
 ```plantuml
 @startuml
-
-
 
 package "it.polito.ezgas.converter" {
 
@@ -246,6 +237,7 @@ package "it.polito.ezgas.dto" {
  trust_level : Integer
  lat : long
  lon : long
+ admin: Boolean
 }
 
 class GasStationDto {
@@ -266,7 +258,7 @@ class GasStationDto {
 class CarSharingCompanyDto {
  name : String
 }
-class PriceListDto {
+class PriceReportDto {
  time_tag: Long
  dieselPrice : Double
  gasolinePrice : Double
@@ -274,24 +266,24 @@ class PriceListDto {
  premiumGasolinePrice : Double
  LPGPrice : Double
  methanePrice : Double
- trust_level : Integer
 }
 
 GasStationDto "*" -- "0..1" CarSharingCompanyDto
-GasStationDto  -- "0..1" PriceListDto
-UserDto -- "*" PriceListDto
+GasStationDto  -- "0..1" PriceReportDto
+UserDto -- "*" PriceReportDto
 
 }
 
 package "it.polito.ezgas.entity" {
 
 class User {
-    id: Integer
+ id: Integer
  account_name : String
  account_pwd : String
  email : String
  trust_level : Integer
  geoPoint: GeoPoint
+ admin: Boolean
  prices : ArrayList<PriceList>
 }
 
@@ -308,7 +300,7 @@ class GasStation {
  hasMethane : Boolean
  geoPoint : GeoPoint
  carSharingCompany : CarSharingCompany
- priceList : PriceList
+ priceReport : PriceReport
 }
 class GeoPoint {
  latitude : Long
@@ -318,7 +310,7 @@ class CarSharingCompany {
  name : String
  gasStationList : List<GasStation>
 }
-class PriceList {
+class PriceReport {
  time_tag: Long
  dieselPrice : Double
  gasolinePrice : Double
@@ -332,8 +324,8 @@ class PriceList {
 }
 
 GasStation "*" -- "0..1" CarSharingCompany
-GasStation  -- "0..1" PriceList
-User -- "*" PriceList
+GasStation  -- "0..1" PriceReport
+User -- "*" PriceReport
 User "*" -- GeoPoint
 GeoPoint -- GasStation
 
@@ -347,6 +339,7 @@ package "it.polito.ezgas.repository" {
     count();
     delete(User user);
     exists(String email);
+    updateReputation(String email, int trustLevel)
 }
 
 class GasStationRepository {
@@ -357,7 +350,7 @@ class GasStationRepository {
     findByCarSharing(String sharing);
     findAll();
     count();
-    delete(GasStation gasStation);
+    delete(int id);
     exists(int id);
 }
 class GeoPointRepository {
@@ -370,15 +363,15 @@ class CarSharingCompanyRepository {
     delete(CarSharingCompany company);
     exists(String name);
 }
-class PriceListRepository {
-save(PriceList priceList);
+class PriceReportRepository {
+ save(PriceReport priceList);
  findByGasStation(GasStation gasStation);
  delete(PriceList priceList);
 }
 
 GasStationRepository "*" -- "0..1" CarSharingCompanyRepository
-GasStationRepository  -- "0..1" PriceListRepository
-UserRepository -- "*" PriceListRepository
+GasStationRepository  -- "0..1" PriceReportRepository
+UserRepository -- "*" PriceReportRepository
 UserRepository "*" -- GeoPointRepository
 GeoPointRepository -- GasStationRepository
 }
@@ -394,6 +387,7 @@ package "it.polito.ezgas.service"  as ps {
 
     class UserServiceImpl {
  getUserById(int id);
+ getUserByEmail(String email);
  getAllUsers();
  saveUser(UserDto user);
  deleteUser(int id);
@@ -403,7 +397,9 @@ package "it.polito.ezgas.service"  as ps {
 }
 
 class GasStationServiceImpl {
- getGasStationById(int id);getAllGasStations();
+ getGasStationById(int id);
+ getUserByEmail(String email);
+ getAllGasStations();
  saveGasStation(GasStationDto gasStation);
  deleteGasStation(int id);
  getGasStationsByGasolineType(String type);
@@ -412,6 +408,7 @@ class GasStationServiceImpl {
  getGasStationsWithoutCoordinates(String type, String carSharing);
  setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
  getGasStationByCarSharing(String carSharing);
+
 }
    }
 
@@ -431,7 +428,8 @@ package "it.polito.ezgas.controller" {
 }
 
 class GasStationController {
- getGasStationById(int id);getAllGasStations();
+ getGasStationById(int id);
+ getAllGasStations();
  saveGasStation(GasStationDto gasStation);
  deleteGasStation(int id);
  getGasStationsByGasolineType(String type);
@@ -445,24 +443,58 @@ class GasStationController {
 
 # Verification traceability matrix
 
-\<for each functional requirement from the requirement document, list which classes concur to implement it>
 
-
-
-
-
-
-
-
-
+| 		| User | GeoPoint  | GasStation | PriceReport | CarSharingCompany |  UserDto  | GasStationDto | PriceReportDto | CarSharingCompanyDto | UserRepository | GeoPointRepository  | GasStationRepository | PriceReportRepository | CarSharingCompanyRepository | UserServiceImpl | GasStationServiceImpl |  UserController | GasStationController |
+| ---------- |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:| :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| FR1  	|x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
+| FR1.1 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
+| FR1.2 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
+| FR1.3 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
+| FR1.4 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
+| FR2  	|x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
+| FR3  	|   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
+| FR3.1 |   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
+| FR3.2 |   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
+| FR3.3	|   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
+| FR4	|   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  | 
+| FR4.1 |   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  |
+| FR4.2	|   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  |
+| FR4.3	|   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  |
+| FR4.4	|   | 	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  |
+| FR4.5	|   | 	|x  |  	|x 	|   |x	|  	|x 	|   |  	|x	|  	|x 	|   |x 	|	|x  |
+| FR5	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
+| FR5.1	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
+| FR5.2	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
+| FR5.3	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
 
 
 # Verification sequence diagrams 
-\<select key scenarios from the requirement document. For each of them define a sequence diagram showing that the scenario can be implemented by the classes and methods in the design>
 
+## UC1
 
+```plantuml
+UserController -> UserServiceImpl : saveUser(userDto)
+UserServiceImpl -> UserRepository : exists(userDto.getEmail())
+UserServiceImpl <- UserRepository 
+UserServiceImpl -> UserRepository : save(user)
+```
+## UC6
 
+```plantuml
+GasStationController -> GasStationServiceImpl : deleteGasStation(id)
+GasStationServiceImpl -> GasStationRepository : delete(id)
+```
 
+## Scenario 10.1 
 
+```plantuml
+GasStationController -> GasStationServiceImpl : getGasStationById(id)
+GasStationServiceImpl -> GasStationRepository : findById(id)
 
+newpage Signal price correct
+
+UserController -> UserServiceImpl : increaseUserReputation(gasStation.priceReport.user.userId())
+UserServiceImpl -> UserRepository : updateReputation(...)
+
+```
 
