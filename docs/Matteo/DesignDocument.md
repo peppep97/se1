@@ -227,220 +227,80 @@ Contains Service classes that implement the Service Interfaces in the Service pa
 
 <Based on the official requirements and on the Spring Boot design guidelines, define the required classes (UML class diagram) of the back-end in the proper packages described in the high-level design section.>
 
-
-
 ```plantuml
-@startuml
-package "Backend" {
-
-package "it.polito.ezgas.service"  as ps {
-   interface "GasStationService"
-   interface "UserService"
-
-   package "impl" {
-
-    class UserServiceImpl {
- getUserById(int id);
- getAllUsers();
- saveUser(UserDto user);
- deleteUser(int id);
- increaseUserReputation(int id);
- decreaseUserReputation(int id);
- login(String user, String pswd);
-}
-
-class GasStationServiceImpl {
- getGasStationById(int id);getAllGasStations();
- saveGasStation(GasStationDto gasStation);
- deleteGasStation(int id);
- getGasStationsByGasolineType(String type);
- getGasStationsByLocation(long lat, long lon);
- getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
- getGasStationsWithoutCoordinates(String type, String carSharing);
- setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
- getGasStationByCarSharing(String carSharing);
-}
-   }
-
-   GasStationServiceImpl ..> GasStationService
-      UserServiceImpl ..> UserService
-} 
-
-package "it.polito.ezgas.controller" {
-    class UserController {
- getUserById(int id);
- getAllUsers();
- saveUser(UserDto user);
- deleteUser(int id);
- increaseUserReputation(int id);
- decreaseUserReputation(int id);
- login(String user, String pswd);
-}
-
-class GasStationController {
- getGasStationById(int id);getAllGasStations();
- saveGasStation(GasStationDto gasStation);
- deleteGasStation(int id);
- getGasStationsByGasolineType(String type);
- getGasStationsByLocation(long lat, long lon);
- getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
- setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
-}
-}
-
-package "it.polito.ezgas.converter" {
-
-}
-
-package "it.polito.ezgas.dto" {
-
-    class UserDto {
- account_name : String
- email : String
- trust_level : Integer
- lat : long
- lon : long
-}
-
-class GasStationDto {
- name : String
- address : String
- brand : String
- carSharingName : String
- lat : long
- lon : long
- dieselPrice : Double
- gasolinePrice : Double
- premiumDieselPrice : Double
- premiumGasolinePrice : Double
- LPGPrice : Double
- methanePrice : Double
-}
-
-class CarSharingCompanyDto {
- name : String
-}
-class PriceListDto {
- time_tag: Long
- dieselPrice : Double
- gasolinePrice : Double
- premiumDieselPrice : Double
- premiumGasolinePrice : Double
- LPGPrice : Double
- methanePrice : Double
- trust_level : Integer
-}
-
-GasStationDto "*" -- "0..1" CarSharingCompanyDto
-GasStationDto  -- "0..1" PriceListDto
-UserDto -- "*" PriceListDto
-
-}
-
-package "it.polito.ezgas.entity" {
-
+class EZGas
 class User {
-    id: Integer
- account_name : String
- account_pwd : String
- email : String
- trust_level : Integer
- geoPoint: GeoPoint
- prices : ArrayList<PriceList>
+ account_name
+ account_pwd
+ email
+ trust_level
+ --
+ getUserById
+ saveUser
+ getAllUsers
+ deleteUser
+ login
+ increaseUserReputation
+ decreaseUserReputation
 }
-
+class Administrator
 class GasStation {
- ID : Integer
- name : String
- address : String
- brand : String
- hasDiesel : Boolean
- hasGasoline : Boolean
- hasPremiumDiesel : Boolean
- hasPremiumGasoline : Boolean
- hasLPG : Boolean
- hasMethane : Boolean
- geoPoint : GeoPoint
- carSharingCompany : CarSharingCompany
- priceList : PriceList
-}
+ ID
+ name
+ address
+ brand
+ hasDiesel
+ hasGasoline
+ hasPremiumDiesel
+ hasPremiumGasoline
+ hasLPG
+ hasMethane
+ priceList
+ --
+ getGasStationById
+ saveGasStation
+ getAllGasStations
+ deleteGasStation
+ getGasStationsByGasolineType
+ getGasStationsByProximity
+ getGasStationsWithCoordinates
+ getGasStationsWithoutCoordinates
+ setReport
+ getGasStationByCarSharing
+ getPriceList
+ getUserOfPriceList
+} 
 class GeoPoint {
- latitude : Long
- longitude : Long
+ latitude
+ longitude
 }
 class CarSharingCompany {
- name : String
- gasStationList : List<GasStation>
+ name
 }
 class PriceList {
- time_tag: Long
- dieselPrice : Double
- gasolinePrice : Double
- premiumDieselPrice : Double
- premiumGasolinePrice : Double
- LPGPrice : Double
- methanePrice : Double
- trust_level : Integer
- user : User
- gasStation : GasStation
+ time_tag
+ dieselPrice
+ gasolinePrice
+ premiumDieselPrice
+ premiumGasolinePrice
+ LPGPrice
+ methanePrice
+ trust_level
 }
 
+Administrator -up-|> User
+EZGas -- "*" User
+EZGas -- "*" GasStation
 GasStation "*" -- "0..1" CarSharingCompany
 GasStation  -- "0..1" PriceList
 User -- "*" PriceList
 User "*" -- GeoPoint
 GeoPoint -- GasStation
-
-}
-
-package "it.polito.ezgas.repository" {
-    class UserRepository {
-    save(User user);
-    findByEmail(String email);
-    findAll();
-    count();
-    delete(User user);
-    exists(String email);
-}
-
-class GasStationRepository {
-    save(GasStation gasStation);
-    findById(int id);
-    findByRadius(long radius);
-    findByGeoPoint(GeoPoint point);
-    findByCarSharing(String sharing);
-    findAll();
-    count();
-    delete(GasStation gasStation);
-    exists(int id);
-}
-class GeoPointRepository {
-}
-class CarSharingCompanyRepository {
-    save(CarSharingCompany company);
-    findByName(String name);
-    findAll();
-    count();
-    delete(CarSharingCompany company);
-    exists(String name);
-}
-class PriceListRepository {
-save(PriceList priceList);
- findByGasStation(GasStation gasStation);
- delete(PriceList priceList);
-}
-
-GasStationRepository "*" -- "0..1" CarSharingCompanyRepository
-GasStationRepository  -- "0..1" PriceListRepository
-UserRepository -- "*" PriceListRepository
-UserRepository "*" -- GeoPointRepository
-GeoPointRepository -- GasStationRepository
-}
-
-    
-}
-
 ```
+
+
+
+
 
 
 # Verification traceability matrix
@@ -448,11 +308,28 @@ GeoPointRepository -- GasStationRepository
 \<for each functional requirement from the requirement document, list which classes concur to implement it>
 
 
-
-
-
-
-
+| 		| User | Administrator  | GasStation | GeoPoint  | PriceList | CarSharingCompany |
+| ---------- |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| FR1  	|x  |x	|  	|  	|  	|  	|
+| FR1.1 |x 	|x 	|  	|  	|  	|  	|
+| FR1.2 |x 	|x 	|  	|  	|  	|  	|
+| FR1.3 |x 	|  	|  	|  	|  	|  	|
+| FR1.4 |x 	|  	|  	|  	|  	|  	|
+| FR2  	|x 	|x	|x 	|  	|  	|  	|
+| FR3  	|  	|x 	|x 	|x 	|  	|  	|
+| FR3.1 |  	|x 	|x 	|x 	|  	|  	|
+| FR3.2 |  	|x 	|x 	|x 	|  	|  	|
+| FR3.3	|  	|  	|x 	|x 	|  	|  	|
+| FR4	|  	|  	|x 	|x 	|  	|  	|
+| FR4.1 |  	|  	|x 	|x 	|  	|  	|
+| FR4.2	|  	|  	|x 	|x 	|  	|  	|
+| FR4.3	|  	|  	|x 	|x 	|x 	|  	|
+| FR4.4	|  	|  	|x 	|x 	|x 	|  	|
+| FR4.5	|  	|  	|x 	|x 	|x 	|x 	|
+| FR5	|  	|x  |x 	|  	|x 	|  	|
+| FR5.1	|x 	|x 	|x 	|  	|x 	|  	|
+| FR5.2	|x	|  	|x 	|  	|x 	|  	|
+| FR5.3	|x 	|  	|x 	|  	|x 	|  	|
 
 
 
@@ -461,7 +338,10 @@ GeoPointRepository -- GasStationRepository
 \<select key scenarios from the requirement document. For each of them define a sequence diagram showing that the scenario can be implemented by the classes and methods in the design>
 
 
+```plantuml
 
+
+```
 
 
 
