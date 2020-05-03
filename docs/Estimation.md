@@ -1,27 +1,28 @@
 # Project Estimation  
 
-Authors:
+Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
-Date:
-
-Version:
+Date: 24/05/2020
+ 
+Version: 1
 
 # Contents
 
-
-
-- [Estimate by product decomposition]
-- [Estimate by activity decomposition ]
+- [Project Estimation](#project-estimation)
+- [Contents](#contents)
+- [Estimation approach](#estimation-approach)
+- [Estimate by product decomposition](#estimate-by-product-decomposition)
+- [Estimate by activity decomposition](#estimate-by-activity-decomposition)
+    - [Gantt Chart](#gantt-chart)
 
 
 
 # Estimation approach
 
-<Consider the EZGas  project as described in YOUR requirement document, assume that you are going to develop the project INDEPENDENT of the deadlines of the course>
+This document reports an estimation of cost and effort based on two decomposition approaches. In estimation by product decomposition we have assumed an average size per class, in LOC, of 138 lines. We have also assumed a productivity of 10 LOC per person hour and a cost of 30 euros per 1 person hour. Finally, we have computed the estimated number of weeks required to complete the project, supposing that the team works 8 hours per day and 5 days per week.
 
 # Estimate by product decomposition
 
-### 
 
 |             | Estimate                        |             
 | ----------- | ------------------------------- |  
@@ -35,7 +36,6 @@ Version:
 
 # Estimate by activity decomposition
 
-### 
 
 |         Activity name    | Estimated effort (person hours)   |             
 | ----------- | ------------------------------- | 
@@ -47,17 +47,17 @@ Version:
 | Final changes| 2 |
 
 
-###
-Insert here Gantt chart with above activities
+### Gantt Chart
 
 ```plantuml
-Project starts the 9th of september 2020
-[Requirement definition] as [D] lasts 1 days
-[Design] as [T] lasts 1 days
-[T] starts at [D]'s end
-[Implementation] as [I] lasts 20 days
+[Requirement definition] as [D] lasts 3 days
+[UI Prototype] as [P] lasts 3 days
+[P] starts at [D]'s end
+[Design] as [T] lasts 3 days
+[T] starts at [P]'s end
+[Implementation] as [I] lasts 12 days
 [I] starts at [T]'s end
-[Unit testing] as [U] lasts 2 days
+[Unit testing] as [U] lasts 3 days
 [U] starts at [I]'s end
 [Final changes] as [F] lasts 1 days
 [F] starts at [U]'s end

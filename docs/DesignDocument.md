@@ -1,11 +1,11 @@
 # Design Document 
 
 
-Authors: 
+Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
-Date:
+Date: 03/05/2020
 
-Version:
+Version: 1
 
 
 # Contents
