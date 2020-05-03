@@ -226,7 +226,28 @@ Contains Service classes that implement the Service Interfaces in the Service pa
 @startuml
 
 package "it.polito.ezgas.converter" {
+    class UserConverter {
+toUserDto(User user);
+toUser(UserDto userDto);
+}
 
+class GasStationConverter {
+toGasStationDto(GasStation gasStation);
+toGasStation(GasStationDto gasStationDto);
+}
+
+class CarSharingCompanyConverter {
+ toCarSharingCompanyDto(CarSharingCompany carSharing);
+toCarSharingCompany(CarSharingCompanyDto carSharingDto);
+}
+class PriceReportConverter {
+ toPriceReportDto(PriceReport priceReport);
+toPriceReport(PriceReportDto priceReportDto);
+}
+
+GasStationConverter "*" -- "0..1" CarSharingCompanyConverter
+GasStationConverter  -- "0..1" PriceReportConverter
+UserConverter -- "*" PriceReportConverter
 }
 
 package "it.polito.ezgas.dto" {
@@ -235,8 +256,6 @@ package "it.polito.ezgas.dto" {
  account_name : String
  email : String
  trust_level : Integer
- lat : long
- lon : long
  admin: Boolean
 }
 
@@ -247,6 +266,12 @@ class GasStationDto {
  carSharingName : String
  lat : long
  lon : long
+ hasDiesel : Boolean
+ hasGasoline : Boolean
+ hasPremiumDiesel : Boolean
+ hasPremiumGasoline : Boolean
+ hasLPG : Boolean
+ hasMethane : Boolean
  dieselPrice : Double
  gasolinePrice : Double
  premiumDieselPrice : Double
@@ -282,7 +307,6 @@ class User {
  account_pwd : String
  email : String
  trust_level : Integer
- geoPoint: GeoPoint
  admin: Boolean
  prices : ArrayList<PriceList>
 }
@@ -292,20 +316,18 @@ class GasStation {
  name : String
  address : String
  brand : String
+ lat : long
+ lon : long
  hasDiesel : Boolean
  hasGasoline : Boolean
  hasPremiumDiesel : Boolean
  hasPremiumGasoline : Boolean
  hasLPG : Boolean
  hasMethane : Boolean
- geoPoint : GeoPoint
  carSharingCompany : CarSharingCompany
  priceReport : PriceReport
 }
-class GeoPoint {
- latitude : Long
- longitude : Long
-}
+
 class CarSharingCompany {
  name : String
  gasStationList : List<GasStation>
@@ -318,7 +340,6 @@ class PriceReport {
  premiumGasolinePrice : Double
  LPGPrice : Double
  methanePrice : Double
- trust_level : Integer
  user : User
  gasStation : GasStation
 }
@@ -326,8 +347,6 @@ class PriceReport {
 GasStation "*" -- "0..1" CarSharingCompany
 GasStation  -- "0..1" PriceReport
 User -- "*" PriceReport
-User "*" -- GeoPoint
-GeoPoint -- GasStation
 
 }
 
@@ -353,8 +372,7 @@ class GasStationRepository {
     delete(int id);
     exists(int id);
 }
-class GeoPointRepository {
-}
+
 class CarSharingCompanyRepository {
     save(CarSharingCompany company);
     findByName(String name);
@@ -372,8 +390,6 @@ class PriceReportRepository {
 GasStationRepository "*" -- "0..1" CarSharingCompanyRepository
 GasStationRepository  -- "0..1" PriceReportRepository
 UserRepository -- "*" PriceReportRepository
-UserRepository "*" -- GeoPointRepository
-GeoPointRepository -- GasStationRepository
 }
 
 ```
@@ -387,9 +403,8 @@ package "it.polito.ezgas.service"  as ps {
 
     class UserServiceImpl {
  getUserById(int id);
- getUserByEmail(String email);
- getAllUsers();
  saveUser(UserDto user);
+ getAllUsers();
  deleteUser(int id);
  increaseUserReputation(int id);
  decreaseUserReputation(int id);
@@ -397,18 +412,16 @@ package "it.polito.ezgas.service"  as ps {
 }
 
 class GasStationServiceImpl {
- getGasStationById(int id);
- getUserByEmail(String email);
- getAllGasStations();
- saveGasStation(GasStationDto gasStation);
- deleteGasStation(int id);
- getGasStationsByGasolineType(String type);
- getGasStationsByLocation(long lat, long lon);
- getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
- getGasStationsWithoutCoordinates(String type, String carSharing);
- setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
- getGasStationByCarSharing(String carSharing);
-
+getGasStationById(int id);
+saveGasStation(GasStationDto gasStationDto);
+getAllGasStations();
+deleteGasStation(int id);
+getGasStationsByGasolineType(String type);
+getGasStationsByProximity(double lat, double lon);
+getGasStationsWithCoordinates(double lat, double lon, String gasolinetype, String carsharing);
+getGasStationsWithoutCoordinates(String gasolinetype, String carsharing);
+setReport(Integer gasStationId, double dieselPrice, ..., Integer userId);
+getGasStationByCarSharing(String carSharing);
 }
    }
 
@@ -419,8 +432,8 @@ class GasStationServiceImpl {
 package "it.polito.ezgas.controller" {
     class UserController {
  getUserById(int id);
- getAllUsers();
  saveUser(UserDto user);
+ getAllUsers();
  deleteUser(int id);
  increaseUserReputation(int id);
  decreaseUserReputation(int id);
@@ -428,14 +441,16 @@ package "it.polito.ezgas.controller" {
 }
 
 class GasStationController {
- getGasStationById(int id);
- getAllGasStations();
- saveGasStation(GasStationDto gasStation);
- deleteGasStation(int id);
- getGasStationsByGasolineType(String type);
- getGasStationsByLocation(long lat, long lon);
- getGasStationsWithCoordinates(long lat, long lon, String type, String carSharing);
- setGasStationPrices(int stationId, double dieselPrice, ..., int userId);
+getGasStationById(int id);
+saveGasStation(GasStationDto gasStationDto);
+getAllGasStations();
+deleteGasStation(int id);
+getGasStationsByGasolineType(String type);
+getGasStationsByProximity(double lat, double lon);
+getGasStationsWithCoordinates(double lat, double lon, String gasolinetype, String carsharing);
+getGasStationsWithoutCoordinates(String gasolinetype, String carsharing);
+setReport(Integer gasStationId, double dieselPrice, ..., Integer userId);
+getGasStationByCarSharing(String carSharing);
 }
 }
 
@@ -444,28 +459,28 @@ class GasStationController {
 # Verification traceability matrix
 
 
-| 		| User | GeoPoint  | GasStation | PriceReport | CarSharingCompany |  UserDto  | GasStationDto | PriceReportDto | CarSharingCompanyDto | UserRepository | GeoPointRepository  | GasStationRepository | PriceReportRepository | CarSharingCompanyRepository | UserServiceImpl | GasStationServiceImpl |  UserController | GasStationController |
-| ---------- |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:| :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| FR1  	|x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
-| FR1.1 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
-| FR1.2 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
-| FR1.3 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
-| FR1.4 |x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
-| FR2  	|x  |	|  	|  	|  	| x |	|  	|  	|  x|  	|	|  	|  	| x |  	|x	| 
-| FR3  	|   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
-| FR3.1 |   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
-| FR3.2 |   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
-| FR3.3	|   |	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  | 
-| FR4	|   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  | 
-| FR4.1 |   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  |
-| FR4.2	|   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  |
-| FR4.3	|   |x	|x  |  	|  	|   |x	|  	|  	|   |x 	|x	|  	|x 	|   |x 	|	|x  |
-| FR4.4	|   | 	|x  |  	|  	|   |x	|  	|  	|   |  	|x	|  	|x 	|   |x 	|	|x  |
-| FR4.5	|   | 	|x  |  	|x 	|   |x	|  	|x 	|   |  	|x	|  	|x 	|   |x 	|	|x  |
-| FR5	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
-| FR5.1	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
-| FR5.2	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
-| FR5.3	|  	|   | 	|x 	|  	|  	|  	|x 	|  	|  	|  	|  	|x 	|  	|x 	|x 	|x 	|x 	|
+| 		| User  | GasStation | PriceReport | CarSharingCompany |  UserDto  | GasStationDto | PriceReportDto | CarSharingCompanyDto | UserRepository  | GasStationRepository | PriceReportRepository | CarSharingCompanyRepository | UserServiceImpl | GasStationServiceImpl |  UserController | GasStationController |
+| ---------- |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:| :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| FR1  	|x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
+| FR1.1 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
+| FR1.2 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
+| FR1.3 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
+| FR1.4 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
+| FR2  	|x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
+| FR3  	|   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
+| FR3.1 |   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
+| FR3.2 |   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
+| FR3.3	|   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
+| FR4	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
+| FR4.1 |   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
+| FR4.2	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
+| FR4.3	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
+| FR4.4	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
+| FR4.5	|   |x	|x  |x 	|  	|x  |x	|x 	|  	|x  |x 	|x	|  	|x 	|   |x 	|
+| FR5	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
+| FR5.1	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
+| FR5.2	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
+| FR5.3	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
 
 
 # Verification sequence diagrams 
