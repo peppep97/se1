@@ -391,10 +391,11 @@ GasStationRepository "*" -- "0..1" CarSharingCompanyRepository
 GasStationRepository  -- "0..1" PriceReportRepository
 UserRepository -- "*" PriceReportRepository
 }
-
+@enduml
 ```
 
 ```plantuml
+@startuml
 package "it.polito.ezgas.service"  as ps {
    interface "GasStationService"
    interface "UserService"
@@ -453,14 +454,14 @@ setReport(Integer gasStationId, double dieselPrice, ..., Integer userId);
 getGasStationByCarSharing(String carSharing);
 }
 }
-
+@enduml
 ```
 
 # Verification traceability matrix
 
 
 | 		| User  | GasStation | PriceReport | CarSharingCompany |  UserDto  | GasStationDto | PriceReportDto | CarSharingCompanyDto | UserRepository  | GasStationRepository | PriceReportRepository | CarSharingCompanyRepository | UserServiceImpl | GasStationServiceImpl |  UserController | GasStationController |
-| ---------- |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:| :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| ---------- |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:| :-----:|:-----:|:-----:|:-----:|
 | FR1  	|x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
 | FR1.1 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
 | FR1.2 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
