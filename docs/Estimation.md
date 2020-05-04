@@ -8,8 +8,6 @@ Version: 1
 
 # Contents
 
-- [Project Estimation](#project-estimation)
-- [Contents](#contents)
 - [Estimation approach](#estimation-approach)
 - [Estimate by product decomposition](#estimate-by-product-decomposition)
 - [Estimate by activity decomposition](#estimate-by-activity-decomposition)
