@@ -9,7 +9,10 @@ import exception.InvalidGasStationException;
 import exception.InvalidGasTypeException;
 import exception.InvalidUserException;
 import exception.PriceException;
+import it.polito.ezgas.converter.GasStationConverter;
 import it.polito.ezgas.dto.GasStationDto;
+import it.polito.ezgas.entity.GasStation;
+import it.polito.ezgas.repository.GasStationRepository;
 import it.polito.ezgas.service.GasStationService;
 
 /**
@@ -17,11 +20,21 @@ import it.polito.ezgas.service.GasStationService;
  */
 @Service
 public class GasStationServiceimpl implements GasStationService {
-
+	GasStationRepository repository;
 	@Override
 	public GasStationDto getGasStationById(Integer gasStationId) throws InvalidGasStationException {
-		// TODO Auto-generated method stub
-		return null;
+		//id error handling
+		if( gasStationId==null || gasStationId<0 ) {
+			throw new InvalidGasStationException("Invalid Gas Station ID!");
+		}
+		
+		//retrieve gas station
+		GasStation gasStation = repository.findOne(gasStationId);
+		if( gasStation == null ) {
+			return null;
+		} 
+		
+		return GasStationConverter.toGasStationDto(gasStation);
 	}
 
 	@Override
