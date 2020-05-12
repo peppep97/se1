@@ -21,7 +21,7 @@ import it.polito.ezgas.service.UserService;
  * Created by softeng on 27/4/2020.
  */
 @Service
-public class UserServiceimpl implements UserService {
+public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	@Override
 	public UserDto getUserById(Integer userId) throws InvalidUserException {
