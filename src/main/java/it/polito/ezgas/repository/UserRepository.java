@@ -1,12 +1,16 @@
 package it.polito.ezgas.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.repository.CrudRepository;
 import it.polito.ezgas.entity.User;
+import java.util.List;
 
-public interface UserRepository extends JpaRepository<User, Integer>{
-
-	User findByCredentials(String user, String pw);
-	 
+public interface UserRepository extends CrudRepository<User, Integer> {
+	
+	User save(User user);
+	void delete(User user);
+	void deleteAll();
+	Boolean existsByAdminTrue();
+	List<User> findAll();
+	User findByUserId(Integer id);
+	
 }
-
