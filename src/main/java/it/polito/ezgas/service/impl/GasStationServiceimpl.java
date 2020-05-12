@@ -113,14 +113,16 @@ public class GasStationServiceimpl implements GasStationService {
 			return new ArrayList<GasStationDto>();
 		}
 		
-		//the final vector is used to pass the boundaries to the filter function
-		GeoLocalization GPS = new GeoLocalization();
-		final double[] GPSArea = GPS.getGPSArea(lat, lon);
-		
+		// some info about lat, lon, kilometers and decimal degrees
+		// 1km (lat) = 0.00904371732 dd
+		// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
+
+		double teta = 0.00898311175 / Math.cos(lat*Math.PI/180);
+
 		//filter gas station for the coordinates inside the limits of 1km
 		Stream<GasStation> filteredGasStations = gasStations.stream()
-				.filter(g -> g.getLat()<GPSArea[0] && g.getLat()>GPSArea[1] &&
-							 g.getLon()<GPSArea[2] && g.getLon()>GPSArea[3]);
+				.filter(g -> Math.abs(g.getLat() - lat) < 0.00904371732 &&
+							 Math.abs(g.getLon() - lon) < teta);
 		if( filteredGasStations == null ) {
 			return new ArrayList<GasStationDto>();
 		}
@@ -145,15 +147,17 @@ public class GasStationServiceimpl implements GasStationService {
 		if( gasStations == null ) {
 			return new ArrayList<GasStationDto>();
 		}
-		
-		//the final vector is used to pass the boundaries to the filter function
-		GeoLocalization GPS = new GeoLocalization();
-		final double[] GPSArea = GPS.getGPSArea(lat, lon);
-		
+
+		// some info about lat, lon, kilometers and decimal degrees
+		// 1km (lat) = 0.00904371732 dd
+		// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
+
+		double teta = 0.00898311175 / Math.cos(lat*Math.PI/180);
+
 		//filter gas station for the coordinates inside the limits of 1km
 		Stream<GasStation> filteredGasStations = gasStations.stream()
-				.filter(g -> g.getLat()<GPSArea[0] && g.getLat()>GPSArea[1] &&
-							 g.getLon()<GPSArea[2] && g.getLon()>GPSArea[3]);
+				.filter(g -> Math.abs(g.getLat() - lat) < 0.00904371732 &&
+						Math.abs(g.getLon() - lon) < teta);
 		if( filteredGasStations == null ) {
 			return new ArrayList<GasStationDto>();
 		}
