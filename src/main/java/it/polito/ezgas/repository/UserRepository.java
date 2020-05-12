@@ -11,6 +11,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	void deleteAll();
 	Boolean existsByAdminTrue();
 	List<User> findAll();
-	User findByUserId(Integer id);
+	User findByUserId(Integer id); 
 	
 }
