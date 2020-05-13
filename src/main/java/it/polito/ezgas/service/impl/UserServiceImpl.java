@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 		User user;
 		if(userId==null || userId<0)
 			throw new InvalidUserException("ERROR:USER ID ISN'T VALID!");
-		user=userRepository.findOne(userId);
+		user=userRepository.findByUserId(userId);
 		if(user==null)
 			return null;
 		return UserConverter.toUserDto(user);
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 	public List<UserDto> getAllUsers() {
 		ArrayList<UserDto> list= new ArrayList<UserDto>();
 		List<User> listUser;
-		listUser=(List<User>) userRepository.findAll();
+		listUser=userRepository.findAll();
 		if(listUser==null)
 			return list;
 		listUser.forEach((user)->list.add(UserConverter.toUserDto(user)));
@@ -66,9 +66,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public LoginDto login(IdPw credentials) throws InvalidLoginDataException {
-		User user= userRepository.findByCredentials(credentials.getUser(), credentials.getPw());
+		User user=userRepository.findByUserName(credentials.getUser());
 		if(user==null)
-			throw new InvalidLoginDataException("WRONG LOGIN CREDITINAL");
+			throw new InvalidLoginDataException("WRONG USERNAME");
+		if(user.getPassword()!= credentials.getPw())
+			throw new InvalidLoginDataException("WRONG PASSWORD");
 		return UserConverter.toLoginDto(user);
 	}
 
@@ -77,10 +79,10 @@ public class UserServiceImpl implements UserService {
 		Integer newreputation=-6;
 		if(userId==null || userId<0)
 			throw new InvalidUserException("ERROR:USER ID ISN'T VALID!");
-		User user= userRepository.findOne(userId);
+		User user=userRepository.findByUserId(userId);
 		if(user==null)
 			return null;
-		newreputation= user.getReputation()+1;
+		newreputation=user.getReputation()+1;
 		user.setReputation(newreputation);
 		user=userRepository.save(user);
 		return user.getReputation();
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
 		Integer newreputation=-6;
 		if(userId==null || userId<0)
 			throw new InvalidUserException("ERROR:USER ID ISN'T VALID!");
-		User user= userRepository.findOne(userId);
+		User user= userRepository.findByUserId(userId);
 		if(user==null)
 			return null;
 		newreputation= user.getReputation()-1;
