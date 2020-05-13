@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import exception.GPSDataException;
@@ -24,6 +25,7 @@ import it.polito.ezgas.service.GasStationService;
  */
 @Service
 public class GasStationServiceImpl implements GasStationService {
+	@Autowired
 	GasStationRepository repo;
 	@Override
 	public GasStationDto getGasStationById(Integer gasStationId) throws InvalidGasStationException {
@@ -32,7 +34,7 @@ public class GasStationServiceImpl implements GasStationService {
 			throw new InvalidGasStationException("Invalid Gas Station ID!");
 		}
 		//retrieve gas station
-		GasStation gasStation = repo.findOne(gasStationId);
+		GasStation gasStation = repo.findByGasStationId(gasStationId);
 		if( gasStation == null ) {
 			return null;
 		} 	
