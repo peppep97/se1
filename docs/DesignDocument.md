@@ -3,9 +3,13 @@
 
 Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
-Date: 03/05/2020
+Date: 06/05/2020
 
-Version: 1
+Version: 2
+
+| Version | Changes                                                     |
+| ------- | :---------------------------------------------------------- |
+| 2       | Fixed GasStationDto Class                                |
 
 
 # Contents
@@ -272,12 +276,6 @@ class GasStationDto {
  hasPremiumGasoline : Boolean
  hasLPG : Boolean
  hasMethane : Boolean
- dieselPrice : Double
- gasolinePrice : Double
- premiumDieselPrice : Double
- premiumGasolinePrice : Double
- LPGPrice : Double
- methanePrice : Double
 }
 
 class CarSharingCompanyDto {
