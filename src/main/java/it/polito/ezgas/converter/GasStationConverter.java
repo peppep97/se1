@@ -21,16 +21,16 @@ public class GasStationConverter {
 		gasStation.setHasDiesel(gasStationDto.getHasDiesel());
 		gasStation.setHasSuper(gasStationDto.getHasSuper());
 		gasStation.setLon(gasStationDto.getLon());
-		gasStation.setDieselPrice(gasStationDto.getDieselPrice());
-		gasStation.setSuperPrice(gasStationDto.getSuperPrice());
-		gasStation.setSuperPlusPrice(gasStationDto.getSuperPlusPrice());
-		gasStation.setGasPrice(gasStationDto.getGasPrice());
+		//gasStation.setDieselPrice(gasStationDto.getDieselPrice());
+		//gasStation.setSuperPrice(gasStationDto.getSuperPrice());
+		//gasStation.setSuperPlusPrice(gasStationDto.getSuperPlusPrice());
+		//gasStation.setGasPrice(gasStationDto.getGasPrice());
 		gasStation.setHasSuperPlus(gasStationDto.getHasSuperPlus());
-		gasStation.setUser(UserConverter.toUser(gasStationDto.getUserDto()));
-		gasStation.setReportTimestamp(gasStationDto.getReportTimestamp());
-		gasStation.setReportDependability(gasStationDto.getReportDependability());
-		gasStation.setMethanePrice(gasStationDto.getMethanePrice());
-		gasStation.setReportUser(gasStationDto.getReportUser());
+		//gasStation.setUser(UserConverter.toUser(gasStationDto.getUserDto()));
+		//gasStation.setReportTimestamp(gasStationDto.getReportTimestamp());
+		//gasStation.setReportDependability(gasStationDto.getReportDependability());
+		//gasStation.setMethanePrice(gasStationDto.getMethanePrice());
+		//gasStation.setReportUser(gasStationDto.getReportUser());
 		return gasStation;
 	}
 

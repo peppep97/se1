@@ -44,10 +44,10 @@ public class GasStationServiceImpl implements GasStationService {
 	@Override
 	public GasStationDto saveGasStation(GasStationDto gasStationDto) throws PriceException, GPSDataException {
 		//price validation
-		if(gasStationDto.getDieselPrice()<0 || gasStationDto.getSuperPrice()<0 ||
+		/*if(gasStationDto.getDieselPrice()<0 || gasStationDto.getSuperPrice()<0 ||
 		  gasStationDto.getSuperPlusPrice()<0 || gasStationDto.getMethanePrice()<0 ) {
 			throw new PriceException("Invalid price values!");
-		}
+		}*/
 		//GPS error handling
 		if(gasStationDto.getLat()>90 || gasStationDto.getLat()<-90) {
 			throw new GPSDataException("Latitude out of boundaries!");
@@ -234,7 +234,7 @@ public class GasStationServiceImpl implements GasStationService {
 			throw new InvalidGasStationException("Invalid Gas Station ID!");
 		}
 		//price error handling
-		if(dieselPrice <0 || superPrice<0 || superPlusPrice<0 || methanePrice<0 ) {
+		if(dieselPrice <0 || superPrice<0 || superPlusPrice<0 || gasPrice<0 || methanePrice<0 ) {
 			throw new PriceException("Invalid price values!");
 		}
 		//user id error handling
@@ -288,21 +288,21 @@ public class GasStationServiceImpl implements GasStationService {
 		Stream<GasStation> filteredGasStations = null;
 		if( gasolinetype != null ) {
 			//filter by gasoline
-			if( gasolinetype.compareTo("diesel") == 0 ) {
+			if( gasolinetype.compareTo("Diesel") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasDiesel())
 												.sorted(Comparator.comparingDouble(GasStation::getDieselPrice));
-			} else if( gasolinetype.compareTo("super") == 0 ) {
+			} else if( gasolinetype.compareTo("Duper") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasSuper())
 												.sorted(Comparator.comparingDouble(GasStation::getSuperPrice));
-			} else if( gasolinetype.compareTo("superplus") == 0 ) {
+			} else if( gasolinetype.compareTo("Superplus") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasSuperPlus())
 												.sorted(Comparator.comparingDouble(GasStation::getSuperPlusPrice));;
-			} else if( gasolinetype.compareTo("methane") == 0 ) {
+			} else if( gasolinetype.compareTo("Methane") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasMethane())
 												.sorted(Comparator.comparingDouble(GasStation::getMethanePrice));;
 			} else {
 				//gasoline type error handling
-				throw new InvalidGasTypeException(gasolinetype + "is an invalid gas type!");
+				throw new InvalidGasTypeException(gasolinetype + " is an invalid gas type!");
 			}
 		}
 		return filteredGasStations;
