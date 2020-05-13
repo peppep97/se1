@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.catalina.startup.ClassLoaderFactory.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import it.polito.ezgas.service.UserService;
  */
 @Service
 public class UserServiceImpl implements UserService {
+	@Autowired
 	UserRepository userRepository;
 	@Override
 	public UserDto getUserById(Integer userId) throws InvalidUserException {
@@ -66,10 +68,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public LoginDto login(IdPw credentials) throws InvalidLoginDataException {
-		User user=userRepository.findByUserName(credentials.getUser());
+		User user=userRepository.findByEmail(credentials.getUser());
 		if(user==null)
 			throw new InvalidLoginDataException("WRONG USERNAME");
-		if(user.getPassword()!= credentials.getPw())
+		if(!user.getPassword().equals(credentials.getPw()))
 			throw new InvalidLoginDataException("WRONG PASSWORD");
 		return UserConverter.toLoginDto(user);
 	}
