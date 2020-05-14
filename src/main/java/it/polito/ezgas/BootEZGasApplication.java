@@ -3,8 +3,6 @@ package it.polito.ezgas;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import it.polito.ezgas.entity.User;
 import it.polito.ezgas.repository.UserRepository;
-import it.polito.ezgas.entity.GasStation;
 import it.polito.ezgas.repository.GasStationRepository;
 
 

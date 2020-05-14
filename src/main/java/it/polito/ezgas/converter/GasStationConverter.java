@@ -22,7 +22,7 @@ public class GasStationConverter {
 		return gasStationDto;
 	}
 
-	public static GasStation toGasStation(GasStationDto gasStationDto) {
+	public static GasStation toGasStation(GasStationDto gasStationDto, Boolean report) {
 		GasStation gasStation = new GasStation();
 		gasStation.setGasStationId(gasStationDto.getGasStationId());
 		gasStation.setGasStationName(gasStationDto.getGasStationName());
@@ -36,17 +36,25 @@ public class GasStationConverter {
 		gasStation.setLat(gasStationDto.getLat());
 		gasStation.setLon(gasStationDto.getLon());
 		
-		//gasStation.setDieselPrice(gasStationDto.getDieselPrice());
-		//gasStation.setSuperPrice(gasStationDto.getSuperPrice());
-		//gasStation.setSuperPlusPrice(gasStationDto.getSuperPlusPrice());
-		//gasStation.setGasPrice(gasStationDto.getGasPrice());
-		//gasStation.setUser(UserConverter.toUser(gasStationDto.getUserDto()));
-		//gasStation.setReportTimestamp(gasStationDto.getReportTimestamp());
-		//gasStation.setReportDependability(gasStationDto.getReportDependability());
-		//gasStation.setMethanePrice(gasStationDto.getMethanePrice());
-		//gasStation.setReportUser(gasStationDto.getReportUser());
-		
+		if(report) {
+			if(gasStationDto.getDieselPrice()>0)
+				gasStation.setDieselPrice(gasStationDto.getDieselPrice());
+			if(gasStationDto.getSuperPrice()>0)
+				gasStation.setSuperPrice(gasStationDto.getSuperPrice());
+			if(gasStationDto.getSuperPlusPrice()>0)
+				gasStation.setSuperPlusPrice(gasStationDto.getSuperPlusPrice());
+			if(gasStationDto.getGasPrice()>0)
+				gasStation.setGasPrice(gasStationDto.getGasPrice());
+			if(gasStationDto.getMethanePrice()>0)
+				gasStation.setMethanePrice(gasStationDto.getMethanePrice());
+			
+			gasStation.setReportUser(gasStationDto.getReportUser());
+			//gasStation.setReportTimestamp(gasStationDto.getReportTimestamp());
+			//gasStation.setReportDependability(gasStationDto.getReportDependability());
+			//gasStation.setReportUser(gasStationDto.getReportUser());
+		}
 		return gasStation;
 	}
+	
 
 }

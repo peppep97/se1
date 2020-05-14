@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 	
+	@SuppressWarnings("unchecked")
 	User save(User user);
 	void delete(User user);
 	void deleteAll();

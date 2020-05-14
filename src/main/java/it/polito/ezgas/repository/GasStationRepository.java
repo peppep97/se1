@@ -7,6 +7,7 @@ import it.polito.ezgas.entity.GasStation;
 
 public interface GasStationRepository extends CrudRepository<GasStation, Integer> {
 	
+	@SuppressWarnings("unchecked")
 	GasStation save(GasStation gasStation);
 	void delete(GasStation gasStation);
 	void deleteAll();
