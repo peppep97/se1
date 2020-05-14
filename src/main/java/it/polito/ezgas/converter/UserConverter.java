@@ -7,13 +7,21 @@ import it.polito.ezgas.entity.User;
 public class UserConverter {
 
 	public static User toUser(UserDto userDto) {
-		User user = new User();				
+		User user = new User();		
+		
+		if(userDto.getUserId()<0)
+			return user;
+		
         user.setUserId(userDto.getUserId());
 		user.setAdmin(userDto.getAdmin());
 		user.setUserName(userDto.getUserName());
 		user.setPassword(userDto.getPassword());
 		user.setEmail(userDto.getEmail());
-		user.setReputation(userDto.getReputation());
+		
+		if(userDto.getReputation()!=null)
+			user.setReputation(userDto.getReputation());
+		else
+			user.setReputation(0);
 		
 		return user;
 	}
@@ -21,12 +29,19 @@ public class UserConverter {
 	public static UserDto toUserDto(User user) {
 		UserDto userDto = new UserDto();
 		
+		if(user.getUserId()<0)
+			return userDto;
+		
 		userDto.setUserId(user.getUserId());
 		userDto.setAdmin(user.getAdmin());
 		userDto.setUserName(user.getUserName());
 		userDto.setPassword(user.getPassword());
 		userDto.setEmail(user.getEmail());
-		userDto.setReputation(user.getReputation());
+		
+		if(user.getReputation()!=null)
+			userDto.setReputation(user.getReputation());
+		else
+			userDto.setReputation(0);
 		
 		return userDto;
 	}

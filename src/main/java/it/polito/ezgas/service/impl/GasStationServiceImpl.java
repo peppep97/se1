@@ -2,6 +2,7 @@ package it.polito.ezgas.service.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,6 +33,8 @@ public class GasStationServiceImpl implements GasStationService {
 	GasStationRepository repo;
 	@Autowired
 	UserRepository urepo;
+	
+	
 	@Override
 	public GasStationDto getGasStationById(Integer gasStationId) throws InvalidGasStationException {
 		//id error handling
@@ -39,11 +42,11 @@ public class GasStationServiceImpl implements GasStationService {
 			throw new InvalidGasStationException("Invalid Gas Station ID!");
 		}
 		//retrieve gas station
-		GasStation gasStation = repo.findByGasStationId(gasStationId);
-		if( gasStation == null ) {
+		GasStationDto gasStationDto = GasStationConverter.toGasStationDto(repo.findByGasStationId(gasStationId));
+		if( gasStationDto == null ) {
 			return null;
 		} 	
-		return GasStationConverter.toGasStationDto(gasStation);
+		return gasStationDto;
 	}
 
 	@Override
@@ -61,7 +64,7 @@ public class GasStationServiceImpl implements GasStationService {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
 		//inserting new gas station or updating an existing one
-		GasStation gasStation = repo.save(GasStationConverter.toGasStation(gasStationDto, false));
+		GasStation gasStation = repo.save(GasStationConverter.toGasStation(gasStationDto));
 		return GasStationConverter.toGasStationDto(gasStation);
 	}
 
@@ -81,9 +84,10 @@ public class GasStationServiceImpl implements GasStationService {
 	public Boolean deleteGasStation(Integer gasStationId) throws InvalidGasStationException {
 		if(gasStationId==null || gasStationId<0)
 			throw new InvalidGasStationException("ERROR:GasStation ID ISN'T VALID!");
-		if(!repo.exists(gasStationId))
+		GasStation gasStation = repo.findByGasStationId(gasStationId);
+		if(gasStation == null)
 			return false;
-		repo.delete(gasStationId);
+		repo.delete(gasStation);
 		if(repo.exists(gasStationId))
 			return false;
 		return true;
@@ -91,14 +95,12 @@ public class GasStationServiceImpl implements GasStationService {
 
 	@Override
 	public List<GasStationDto> getGasStationsByGasolineType(String gasolinetype) throws InvalidGasTypeException {
-		String gasoline = gasolinetype.toLowerCase();
 		//retrieving all gas stations
 		List<GasStation> gasStations = repo.findAll();
 		if( gasStations == null ) {
 			return null;
 		}
-		//getGasStationsByGasolineType(gasolinetype);
-		Stream<GasStation> filteredGasStations = filterGasStationByGasolineType (gasoline, gasStations);
+		Stream<GasStation> filteredGasStations = filterGasStationByGasolineType(gasolinetype, gasStations);
 		return filteredGasStations
 				.map( g -> GasStationConverter.toGasStationDto(g))	//converting each GasStation to GasStationDto
 				.collect(Collectors.toList());
@@ -189,35 +191,43 @@ public class GasStationServiceImpl implements GasStationService {
 			throws InvalidGasTypeException {
 		//retrieving all gas stations
 		List<GasStation> gasStations = repo.findAll();
-		if( gasStations == null ) {
+		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
 		
-		Stream<GasStation> filteredGasStations = gasStations.stream();
-		if( gasolinetype != null ) {
+		Stream<GasStation> filteredGasStations = filterGasStationByGasolineType(gasolinetype, gasStations);
+		/*if( gasolinetype != null ) {
 			//filter by gasoline
-			if( gasolinetype.compareTo("diesel") == 0 ) {
+			if( gasolinetype.compareTo("Diesel") == 0 ) {
 				filteredGasStations = filteredGasStations.filter(g -> g.getHasDiesel())
 												.sorted(Comparator.comparingDouble(GasStation::getDieselPrice));
-			} else if( gasolinetype.compareTo("super") == 0 ) {
+			} 
+			else if( gasolinetype.compareTo("Super") == 0 ) {
 				filteredGasStations = filteredGasStations.filter(g -> g.getHasSuper())
 												.sorted(Comparator.comparingDouble(GasStation::getSuperPrice));
-			} else if( gasolinetype.compareTo("superplus") == 0 ) {
+			} 
+			else if( gasolinetype.compareTo("SuperPlus") == 0 ) {
 				filteredGasStations = filteredGasStations.filter(g -> g.getHasSuperPlus())
 												.sorted(Comparator.comparingDouble(GasStation::getSuperPlusPrice));;
-			} else if( gasolinetype.compareTo("methane") == 0 ) {
+			}
+			else if( gasolinetype.compareTo("Gas") == 0 ) {
+				filteredGasStations = gasStations.stream().filter(g -> g.getHasGas())
+												.sorted(Comparator.comparingDouble(GasStation::getGasPrice));;
+			}
+			else if( gasolinetype.compareTo("Methane") == 0 ) {
 				filteredGasStations = filteredGasStations.filter(g -> g.getHasMethane())
 												.sorted(Comparator.comparingDouble(GasStation::getMethanePrice));;
-			} else {
+			}
+			else {
 				//gasoline type error handling
 				throw new InvalidGasTypeException(gasolinetype + "is an invalid gas type!");
 			}
 			if( filteredGasStations == null ) {
 				return new ArrayList<GasStationDto>();
 			}
-		}
+		}*/
 		
-		if( carsharing != null ) {
+		if(carsharing != null) {
 			//filter by carsharing
 			filteredGasStations = filteredGasStations.filter( g -> g.getCarSharing().compareTo(carsharing) == 0);
 			if( filteredGasStations == null ) {
@@ -264,6 +274,10 @@ public class GasStationServiceImpl implements GasStationService {
 		gasStationDto.setReportUser(userId);
 		UserDto userDto = UserConverter.toUserDto(urepo.findByUserId(userId));
 		gasStationDto.setUserDto(userDto);
+		gasStationDto.setReportDependability(userDto.getReputation());
+		Date now = new Date();
+		gasStationDto.setReportTimestamp(String.valueOf(now));
+		
 		// TODO which timestamp and what is dependability and we have to set UserDto?
 		//gasStation.setReportTimestamp(reportTimestamp);
 		//gasStation.setReportDependability(reportDependability);
@@ -271,7 +285,7 @@ public class GasStationServiceImpl implements GasStationService {
 		//gasStation.setUserDto(user)
 		
 		//updating an existing one
-		repo.save(GasStationConverter.toGasStation(gasStationDto, true));
+		repo.save(GasStationConverter.toGasStation(gasStationDto));
 		
 	}
 
@@ -300,22 +314,27 @@ public class GasStationServiceImpl implements GasStationService {
 		Stream<GasStation> filteredGasStations = null;
 		if( gasolinetype != null ) {
 			//filter by gasoline
-			if( gasolinetype.compareTo("diesel") == 0 ) {
+			if( gasolinetype.compareTo("Diesel") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasDiesel())
 												.sorted(Comparator.comparingDouble(GasStation::getDieselPrice));
-			} else if( gasolinetype.compareTo("super") == 0 ) {
+			} 
+			else if( gasolinetype.compareTo("Super") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasSuper())
 												.sorted(Comparator.comparingDouble(GasStation::getSuperPrice));
-			} else if( gasolinetype.compareTo("superplus") == 0 ) {
+			} 
+			else if( gasolinetype.compareTo("SuperPlus") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasSuperPlus())
 												.sorted(Comparator.comparingDouble(GasStation::getSuperPlusPrice));;
-			} else if( gasolinetype.compareTo("gas") == 0 ) {
+			} 
+			else if( gasolinetype.compareTo("Gas") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasGas())
 												.sorted(Comparator.comparingDouble(GasStation::getGasPrice));;
-			} else if( gasolinetype.compareTo("methane") == 0 ) {
+			} 
+			else if( gasolinetype.compareTo("Methane") == 0 ) {
 				filteredGasStations = gasStations.stream().filter(g -> g.getHasMethane())
 												.sorted(Comparator.comparingDouble(GasStation::getMethanePrice));;
-			} else {
+			} 
+			else {
 				//gasoline type error handling
 				throw new InvalidGasTypeException(gasolinetype + " is an invalid gas type!");
 			}
