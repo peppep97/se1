@@ -9,8 +9,8 @@ public class UserConverter {
 	public static User toUser(UserDto userDto) {
 		User user = new User();		
 		
-		if(userDto.getUserId()<0)
-			return user;
+		if(userDto==null)
+			return null;
 		
         user.setUserId(userDto.getUserId());
 		user.setAdmin(userDto.getAdmin());
@@ -29,8 +29,8 @@ public class UserConverter {
 	public static UserDto toUserDto(User user) {
 		UserDto userDto = new UserDto();
 		
-		if(user.getUserId()<0)
-			return userDto;
+		if(user==null)
+			return null;
 		
 		userDto.setUserId(user.getUserId());
 		userDto.setAdmin(user.getAdmin());

@@ -1,5 +1,10 @@
 package it.polito.ezgas.converter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
 import it.polito.ezgas.dto.GasStationDto;
 import it.polito.ezgas.entity.GasStation;
 
@@ -26,7 +31,8 @@ public class GasStationConverter {
 		gasStationDto.setUserDto(UserConverter.toUserDto(gasStation.getUser()));
 		gasStationDto.setReportUser(gasStation.getReportUser());
 		gasStationDto.setReportTimestamp(gasStation.getReportTimestamp());
-		gasStationDto.setReportDependability(gasStation.getReportDependability());
+		if(gasStation.getReportTimestamp() != null)
+			gasStationDto.setReportDependability(dependabilityCalculator(gasStation.getReportTimestamp(), gasStation.getUser().getReputation()));
 		
 		return gasStationDto;
 	}
@@ -52,9 +58,35 @@ public class GasStationConverter {
 		gasStation.setUser(UserConverter.toUser(gasStationDto.getUserDto()));
 		gasStation.setReportUser(gasStationDto.getReportUser());
 		gasStation.setReportTimestamp(gasStationDto.getReportTimestamp());
-		gasStation.setReportDependability(gasStationDto.getReportDependability());
+		if(gasStationDto.getReportTimestamp() != null)
+			gasStation.setReportDependability(dependabilityCalculator(gasStationDto.getReportTimestamp(), gasStationDto.getUserDto().getReputation()));
 
 		return gasStation;
+	}
+	
+	
+	public static double dependabilityCalculator(String timestamp, Integer trust) {
+		
+		
+		GregorianCalendar now = new GregorianCalendar();
+		GregorianCalendar cal = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy - HH:mm:ss", Locale.ITALY);
+		try {
+			cal.setTime(sdf.parse(timestamp));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		long msNow = now.getTimeInMillis();
+		long msReportTime = cal.getTimeInMillis();
+		
+		long diff = msNow - msReportTime;
+		double obs = 0;
+		if((diff / (24 * 60 * 60 * 1000))<=7) 
+			obs = 1 - ((double)(diff / (24 * 60 * 60 * 1000)) / 7);
+		
+		
+		return Math.floor(50 * (trust +5)/10 + 50 * obs);
 	}
 	
 

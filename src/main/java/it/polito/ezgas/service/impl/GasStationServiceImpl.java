@@ -1,9 +1,11 @@
 package it.polito.ezgas.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -274,15 +276,12 @@ public class GasStationServiceImpl implements GasStationService {
 		gasStationDto.setReportUser(userId);
 		UserDto userDto = UserConverter.toUserDto(urepo.findByUserId(userId));
 		gasStationDto.setUserDto(userDto);
-		gasStationDto.setReportDependability(userDto.getReputation());
+		gasStationDto.setReportDependability(50 * (userDto.getReputation() + 5) / 10 + 50);
+		//Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy - HH:mm:ss", Locale.ITALY);
 		Date now = new Date();
-		gasStationDto.setReportTimestamp(String.valueOf(now));
-		
-		// TODO which timestamp and what is dependability and we have to set UserDto?
-		//gasStation.setReportTimestamp(reportTimestamp);
-		//gasStation.setReportDependability(reportDependability);
-		//UserDto user = getUserById(userId)
-		//gasStation.setUserDto(user)
+		gasStationDto.setReportTimestamp(sdf.format(now));
+		//gasStationDto.setReportTimestamp("13/apr/2020 - 09:51:27");
 		
 		//updating an existing one
 		repo.save(GasStationConverter.toGasStation(gasStationDto));
