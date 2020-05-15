@@ -21,15 +21,21 @@ import it.polito.ezgas.service.UserService;
  */
 @Service
 public class UserServiceImpl implements UserService {
+	
+	// Repository of users
 	@Autowired
 	UserRepository userRepository;
+	
+	
 	@Override
 	public UserDto getUserById(Integer userId) throws InvalidUserException {
 		User user;
-		if(userId==null || userId<0)
-			throw new InvalidUserException("ERROR:USER ID ISN'T VALID!");
-		user=userRepository.findByUserId(userId);
-		if(user==null)
+		// Check if user is not valid
+		if(userId == null || userId<0)
+			throw new InvalidUserException("ERROR: USER ID ISN'T VALID!");
+		// Search for user into the repository
+		user = userRepository.findByUserId(userId);
+		if(user == null)
 			return null;
 		return UserConverter.toUserDto(user);
 	}
@@ -44,8 +50,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserDto> getAllUsers() {
 		ArrayList<UserDto> list= new ArrayList<UserDto>();
-		List<User> listUser;
-		listUser=userRepository.findAll();
+		// Retrieving all users from repository
+		List<User> listUser = userRepository.findAll();
 		if(listUser==null)
 			return list;
 		listUser.forEach((user)->list.add(UserConverter.toUserDto(user)));
@@ -66,9 +72,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public LoginDto login(IdPw credentials) throws InvalidLoginDataException {
+		// Search user by email
 		User user=userRepository.findByEmail(credentials.getUser());
 		if(user==null)
-			throw new InvalidLoginDataException("WRONG USERNAME");
+			throw new InvalidLoginDataException("WRONG EMAIL");
+		// Check if pwd is correct
 		if(!user.getPassword().equals(credentials.getPw()))
 			throw new InvalidLoginDataException("WRONG PASSWORD");
 		return UserConverter.toLoginDto(user);
@@ -76,12 +84,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Integer increaseUserReputation(Integer userId) throws InvalidUserException {
-		Integer newreputation=-6;
+		Integer newreputation;
+		
 		if(userId==null || userId<0)
-			throw new InvalidUserException("ERROR:USER ID ISN'T VALID!");
+			throw new InvalidUserException("ERROR: USER ID ISN'T VALID!");
+		// Search user into the repository
 		User user=userRepository.findByUserId(userId);
 		if(user==null)
 			return null;
+		// Increase reputation if is not already the max
 		if(user.getReputation() < 5) {
 			newreputation=user.getReputation()+1;
 			user.setReputation(newreputation);
@@ -92,12 +103,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Integer decreaseUserReputation(Integer userId) throws InvalidUserException {
-		Integer newreputation=-6;
+		Integer newreputation;
+		// Check if user is valid
 		if(userId==null || userId<0)
-			throw new InvalidUserException("ERROR:USER ID ISN'T VALID!");
+			throw new InvalidUserException("ERROR: USER ID ISN'T VALID!");
+		// Search user into the repository
 		User user= userRepository.findByUserId(userId);
 		if(user==null)
 			return null;
+		// Decrease reputation if is not already the min
 		if(user.getReputation() > -5) {
 			newreputation= user.getReputation()-1;
 			user.setReputation(newreputation);
