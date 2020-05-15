@@ -82,9 +82,11 @@ public class UserServiceImpl implements UserService {
 		User user=userRepository.findByUserId(userId);
 		if(user==null)
 			return null;
-		newreputation=user.getReputation()+1;
-		user.setReputation(newreputation);
-		user=userRepository.save(user);
+		if(user.getReputation() < 5) {
+			newreputation=user.getReputation()+1;
+			user.setReputation(newreputation);
+			user=userRepository.save(user);
+		}
 		return user.getReputation();
 	}
 
@@ -96,9 +98,11 @@ public class UserServiceImpl implements UserService {
 		User user= userRepository.findByUserId(userId);
 		if(user==null)
 			return null;
-		newreputation= user.getReputation()-1;
-		user.setReputation(newreputation);
-		user=userRepository.save(user);
+		if(user.getReputation() > -5) {
+			newreputation= user.getReputation()-1;
+			user.setReputation(newreputation);
+			user=userRepository.save(user);
+		}
 		return user.getReputation();
 	}
 	
