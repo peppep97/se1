@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 @Entity
 public class PriceReport {
 	
-    @SuppressWarnings("unused")
 	private static final long serialVersionUID = 0x62A6DA99AABDA8A9L;
 
     @Column
