@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserDto> getAllUsers() {
 		ArrayList<UserDto> list= new ArrayList<UserDto>();
-		// Retrieving all users from repository
+		// Retrieve all users from repository
 		List<User> listUser = userRepository.findAll();
 		if(listUser==null)
 			return list;

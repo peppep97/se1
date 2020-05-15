@@ -72,7 +72,7 @@ public class GasStationServiceImpl implements GasStationService {
 	@Override
 	public List<GasStationDto> getAllGasStations() {
 		ArrayList<GasStationDto> list= new ArrayList<GasStationDto>();
-		// Retrieving all gas stations from repository
+		// Retrieve all gas stations from repository
 		List<GasStation> listGasStation = gasStationRepository.findAll();
 		if(listGasStation == null) {
 			return null;
@@ -97,7 +97,7 @@ public class GasStationServiceImpl implements GasStationService {
 
 	@Override
 	public List<GasStationDto> getGasStationsByGasolineType(String gasolinetype) throws InvalidGasTypeException {
-		// Retrieving all gas stations
+		// Retrieve all gas stations
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if( gasStations == null ) {
 			return null;
@@ -117,7 +117,7 @@ public class GasStationServiceImpl implements GasStationService {
 		if(lon > 180 || lon < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
-		// Retrieving all gas stations from repository
+		// Retrieve all gas stations from repository
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
@@ -146,7 +146,7 @@ public class GasStationServiceImpl implements GasStationService {
 		if(lon > 180 || lon < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
-		// Retrieving all gas stations from repository
+		// Retrieve all gas stations from repository
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
@@ -178,7 +178,7 @@ public class GasStationServiceImpl implements GasStationService {
 	@Override
 	public List<GasStationDto> getGasStationsWithoutCoordinates(String gasolinetype, String carsharing)
 			throws InvalidGasTypeException {
-		// Retrieving all gas stations from repository
+		// Retrieve all gas stations from repository
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
@@ -276,7 +276,7 @@ public class GasStationServiceImpl implements GasStationService {
 
 	@Override
 	public List<GasStationDto> getGasStationByCarSharing(String carSharing) {
-		// Retrieving all gas stations
+		// Retrieve all gas stations
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();

@@ -6,13 +6,20 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 	
+	// Save a user 
 	@SuppressWarnings("unchecked")
 	User save(User user);
+	// Delete a User
 	void delete(User user);
+	// Delete all users
 	void deleteAll();
+	// Return true if an admin exists 
 	Boolean existsByAdminTrue();
+	// Retrieve all users
 	List<User> findAll();
-	User findByUserId(Integer id); 
-	User findByEmail(String userName);
+	// Search user by id
+	User findByUserId(Integer id);
+	// Search user by email
+	User findByEmail(String userEmail);
 	
 }
