@@ -89,7 +89,7 @@ public class GasStationConverter {
 			// Calculate obsolescence
 			obs = 1 - ((double)(diff / (24 * 60 * 60 * 1000)) / 7);
 		
-		return Math.floor(50 * (trust +5)/10 + 50 * obs);
+		return Double.parseDouble(String.format("%.2f%n", (50 * (trust +5)/10 + 50 * obs)).replace(',', '.'));
 	}
 	
 

@@ -47,6 +47,7 @@ public class GasStationServiceImpl implements GasStationService {
 		if(gasStationId==null || gasStationId<0) {
 			throw new InvalidGasStationException("Invalid Gas Station ID!");
 		}
+		
 		// Search for gas station into the repository
 		GasStationDto gasStationDto = GasStationConverter.toGasStationDto(gasStationRepository.findByGasStationId(gasStationId));
 		if(gasStationDto == null) {
@@ -66,6 +67,7 @@ public class GasStationServiceImpl implements GasStationService {
 		if(gasStationDto.getLon() > 180 || gasStationDto.getLon() < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
+		
 		// Inserting new gas station or updating an existing one
 		GasStation gasStation = gasStationRepository.save(GasStationConverter.toGasStation(gasStationDto));
 		
@@ -76,11 +78,13 @@ public class GasStationServiceImpl implements GasStationService {
 	public List<GasStationDto> getAllGasStations() {
 		
 		ArrayList<GasStationDto> list= new ArrayList<GasStationDto>();
+		
 		// Retrieve all gas stations from repository
 		List<GasStation> listGasStation = gasStationRepository.findAll();
 		if(listGasStation == null) {
 			return null;
 		}
+		
 		// Converting each GasStation to GasStationDto
 		listGasStation.forEach((gasStation)->list.add(GasStationConverter.toGasStationDto(gasStation)));
 		
@@ -125,7 +129,7 @@ public class GasStationServiceImpl implements GasStationService {
 			case "Methane":
 				gasStations = gasStationRepository.findByHasMethaneTrue();
 			break;
-			case "null":
+			case "null": case "Select gasoline type":
 				gasStations = gasStationRepository.findAll();
 			break;
 			default:
@@ -146,12 +150,12 @@ public class GasStationServiceImpl implements GasStationService {
 		if(lon > 180 || lon < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
+		
 		// Retrieve all gas stations from repository
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
-		
 		// some info about lat, lon, kilometers and decimal degrees
 		// 1km (lat) = 0.00904371732 dd
 		// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
@@ -180,11 +184,11 @@ public class GasStationServiceImpl implements GasStationService {
 		if(lon > 180 || lon < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
-		System.out.println(carsharing + "!!!!!!!");
+		
 		List<GasStation> gasStations = new ArrayList<GasStation>();
 		
 		// Filter Gas station by gasoline types
-		if(carsharing == null) {
+		if((carsharing == null) || (carsharing.compareTo("null") == 0)) {
 			switch(gasolinetype){
 				case "Diesel":
 					gasStations = gasStationRepository.findByHasDieselTrue();
@@ -201,14 +205,14 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrue();
 				break;
-				case "null":
+				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findAll();
 				break;
 				default:
 					throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
 			}
 		}
-		else {
+		else{
 			switch(gasolinetype){
 				case "Diesel":
 					gasStations = gasStationRepository.findByHasDieselTrueAndCarSharing(carsharing);
@@ -225,7 +229,7 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrueAndCarSharing(carsharing);
 				break;
-				case "null":
+				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findAll();
 				break;
 				default:
@@ -241,7 +245,6 @@ public class GasStationServiceImpl implements GasStationService {
 		// Filter gas station for the coordinates inside the limits of 1km
 		Stream<GasStation> filteredGasStations = gasStations.stream()
 				.filter(g -> Math.abs(g.getLat() - lat) < 0.00904371732 && Math.abs(g.getLon() - lon) < teta);
-		
 		if(filteredGasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
@@ -259,8 +262,8 @@ public class GasStationServiceImpl implements GasStationService {
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
+		
 		// Filter gas stations by gasoline type
-		//Stream<GasStation> filteredGasStations = filterGasStationByGasolineType(gasolinetype, gasStations);
 		if(carsharing != null) {
 			switch(gasolinetype){
 				case "Diesel":
@@ -278,7 +281,7 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrueAndCarSharing(carsharing);
 				break;
-				case "null":
+				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findAll();
 				break;
 				default:
@@ -302,7 +305,7 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrue();
 				break;
-				case "null":
+				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findAll();
 				break;
 				default:
@@ -327,16 +330,26 @@ public class GasStationServiceImpl implements GasStationService {
 		if(gasStationDto == null) {
 			return;
 		}
+		
 		// Check if prices are not valid
 		if((gasStationDto.getHasDiesel() && dieselPrice < 0) || (gasStationDto.getHasSuper() && superPrice < 0) || 
 				(gasStationDto.getHasSuperPlus() && superPlusPrice < 0) || (gasStationDto.getHasGas() && gasPrice < 0) || 
 				(gasStationDto.getHasMethane() && methanePrice < 0)) {
 			throw new PriceException("ERROR: PRICE VALUES AREN'T VALID!");
 		}
+		
 		// Check if user is not valid
 		if(userId < 0) {
 			throw new InvalidUserException("ERROR: USER ID ISN'T VALID!");
 		}
+		
+		// Round all prices to 3 decimal
+		dieselPrice = Double.parseDouble(String.format("%.3f%n", dieselPrice).replace(',', '.'));
+		superPrice = Double.parseDouble(String.format("%.3f%n", superPrice).replace(',', '.'));
+		superPlusPrice = Double.parseDouble(String.format("%.3f%n", superPlusPrice).replace(',', '.'));
+		gasPrice = Double.parseDouble(String.format("%.3f%n", gasPrice).replace(',', '.'));
+		methanePrice = Double.parseDouble(String.format("%.3f%n", methanePrice).replace(',', '.'));
+
 		// Update prices only if the gas station has that type of gasoline
 		if(gasStationDto.getHasDiesel())
 			gasStationDto.setDieselPrice(dieselPrice);
@@ -348,16 +361,23 @@ public class GasStationServiceImpl implements GasStationService {
 			gasStationDto.setGasPrice(gasPrice);
 		if(gasStationDto.getHasMethane())
 			gasStationDto.setMethanePrice(methanePrice);
-		// Update information about user, timestamp and dependability
+		
+		// Update information about user...
 		gasStationDto.setReportUser(userId);
 		UserDto userDto = UserConverter.toUserDto(userRepository.findByUserId(userId));
 		gasStationDto.setUserDto(userDto);
-		gasStationDto.setReportDependability(50 * (userDto.getReputation() + 5) / 10 + 50);
-		//Date now = new Date();
+		
+		// ...timestamp...
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy - HH:mm:ss", Locale.ITALY);
 		Date now = new Date();
 		gasStationDto.setReportTimestamp(sdf.format(now));
-		//gasStationDto.setReportTimestamp("13/apr/2020 - 09:51:27");
+		// Try to calculate the dependability with this line below
+				//gasStationDto.setReportTimestamp("13/mag/2020 - 09:51:27");
+		
+		//...and dependability
+		// First time dependability depends only on user reputation -> obsolescence = 1
+		gasStationDto.setReportDependability(50 * (userDto.getReputation() + 5) / 10 + 50);
+		
 		// Update existing gas station
 		gasStationRepository.save(GasStationConverter.toGasStation(gasStationDto));
 	}
@@ -370,6 +390,7 @@ public class GasStationServiceImpl implements GasStationService {
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
+		
 		// Filter gas stations by car sharing
 		Stream<GasStation> filteredGasStations = 
 				gasStations.stream().filter(g -> g.getCarSharing().compareTo(carSharing) == 0);
