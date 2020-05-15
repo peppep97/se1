@@ -43,6 +43,7 @@ public class GasStationServiceImpl implements GasStationService {
 	
 	@Override
 	public GasStationDto getGasStationById(Integer gasStationId) throws InvalidGasStationException {
+		
 		// Check if gas station is not valid
 		if(gasStationId==null || gasStationId<0) {
 			throw new InvalidGasStationException("Invalid Gas Station ID!");
@@ -52,11 +53,13 @@ public class GasStationServiceImpl implements GasStationService {
 		if(gasStationDto == null) {
 			return null;
 		} 	
+		
 		return gasStationDto;
 	}
 
 	@Override
 	public GasStationDto saveGasStation(GasStationDto gasStationDto) throws PriceException, GPSDataException {
+		
 		// Check if coordinates are not valid
 		if(gasStationDto.getLat() > 90 || gasStationDto.getLat() < -90) {
 			throw new GPSDataException("Latitude out of boundaries!");
@@ -66,11 +69,13 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		// Inserting new gas station or updating an existing one
 		GasStation gasStation = gasStationRepository.save(GasStationConverter.toGasStation(gasStationDto));
+		
 		return GasStationConverter.toGasStationDto(gasStation);
 	}
 
 	@Override
 	public List<GasStationDto> getAllGasStations() {
+		
 		ArrayList<GasStationDto> list= new ArrayList<GasStationDto>();
 		// Retrieve all gas stations from repository
 		List<GasStation> listGasStation = gasStationRepository.findAll();
@@ -79,11 +84,13 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		// Converting each GasStation to GasStationDto
 		listGasStation.forEach((gasStation)->list.add(GasStationConverter.toGasStationDto(gasStation)));
+		
 		return list;
 	}
 
 	@Override
 	public Boolean deleteGasStation(Integer gasStationId) throws InvalidGasStationException {
+		
 		if(gasStationId==null || gasStationId<0)
 			throw new InvalidGasStationException("ERROR:GasStation ID ISN'T VALID!");
 		GasStation gasStation = gasStationRepository.findByGasStationId(gasStationId);
@@ -92,11 +99,13 @@ public class GasStationServiceImpl implements GasStationService {
 		gasStationRepository.delete(gasStation);
 		if(gasStationRepository.exists(gasStationId))
 			return false;
+		
 		return true;
 	}
 
 	@Override
 	public List<GasStationDto> getGasStationsByGasolineType(String gasolinetype) throws InvalidGasTypeException {
+		
 		// Retrieve all gas stations
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if( gasStations == null ) {
@@ -104,12 +113,14 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		// Filter gas stations by type of gasoline
 		Stream<GasStation> filteredGasStations = filterGasStationByGasolineType(gasolinetype, gasStations);
+		
 		// Converting each GasStation to GasStationDto
 		return filteredGasStations.map( g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<GasStationDto> getGasStationsByProximity(double lat, double lon) throws GPSDataException {
+		
 		// Check if coordinates are not valid
 		if(lat > 90 || lat < -90) {
 			throw new GPSDataException("Latitude out of boundaries!");
@@ -132,6 +143,7 @@ public class GasStationServiceImpl implements GasStationService {
 		if(filteredGasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
+		
 		// Converting each GasStation to GasStationDto
 		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
@@ -139,6 +151,7 @@ public class GasStationServiceImpl implements GasStationService {
 	@Override
 	public List<GasStationDto> getGasStationsWithCoordinates(double lat, double lon, String gasolinetype,
 			String carsharing) throws InvalidGasTypeException, GPSDataException {
+		
 		// Check if coordinates are not valid
 		if(lat > 90 || lat < -90) {
 			throw new GPSDataException("Latitude out of boundaries!");
@@ -171,6 +184,7 @@ public class GasStationServiceImpl implements GasStationService {
 				return new ArrayList<GasStationDto>();
 			}
 		}
+		
 		// Converting each GasStation to GasStationDto
 		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
@@ -178,6 +192,7 @@ public class GasStationServiceImpl implements GasStationService {
 	@Override
 	public List<GasStationDto> getGasStationsWithoutCoordinates(String gasolinetype, String carsharing)
 			throws InvalidGasTypeException {
+		
 		// Retrieve all gas stations from repository
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
@@ -223,6 +238,7 @@ public class GasStationServiceImpl implements GasStationService {
 				return new ArrayList<GasStationDto>();
 			}
 		}
+		
 		// Converting each GasStation to GasStationDto
 		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
@@ -231,6 +247,7 @@ public class GasStationServiceImpl implements GasStationService {
 	public void setReport(Integer gasStationId, double dieselPrice, double superPrice, double superPlusPrice,
 			double gasPrice, double methanePrice, Integer userId)
 			throws InvalidGasStationException, PriceException, InvalidUserException {
+		
 		// Check if gas station is not valid
 		if(gasStationId < 0) {
 			throw new InvalidGasStationException("ERROR: GAS STATION ID ISN'T VALID!");
@@ -276,6 +293,7 @@ public class GasStationServiceImpl implements GasStationService {
 
 	@Override
 	public List<GasStationDto> getGasStationByCarSharing(String carSharing) {
+		
 		// Retrieve all gas stations
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
@@ -287,12 +305,14 @@ public class GasStationServiceImpl implements GasStationService {
 		if(filteredGasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
+		
 		// Converting each GasStation to GasStationDto
 		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
 	
 	@Override
 	public Stream<GasStation> filterGasStationByGasolineType (String gasolinetype, List<GasStation> gasStations) throws InvalidGasTypeException{
+		
 		Stream<GasStation> filteredGasStations = null;
 		if( gasolinetype != null ) {
 			//filter by gasoline
@@ -321,10 +341,8 @@ public class GasStationServiceImpl implements GasStationService {
 				throw new InvalidGasTypeException(gasolinetype + " is an invalid gas type!");
 			}
 		}
+		
 		return filteredGasStations;
 	}
 	
-	
-	
-
 }

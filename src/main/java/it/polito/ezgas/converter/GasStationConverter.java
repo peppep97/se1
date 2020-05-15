@@ -9,35 +9,10 @@ import it.polito.ezgas.dto.GasStationDto;
 import it.polito.ezgas.entity.GasStation;
 
 public class GasStationConverter {
-
-	public static GasStationDto toGasStationDto(GasStation gasStation) {
-		GasStationDto gasStationDto =new GasStationDto();
-		gasStationDto.setGasStationId(gasStation.getGasStationId());
-		gasStationDto.setGasStationName(gasStation.getGasStationName());
-		gasStationDto.setGasStationAddress(gasStation.getGasStationAddress());
-		gasStationDto.setHasDiesel(gasStation.getHasDiesel());
-		gasStationDto.setHasSuper(gasStation.getHasSuper());
-		gasStationDto.setHasSuperPlus(gasStation.getHasSuperPlus());
-		gasStationDto.setHasGas(gasStation.getHasGas());
-		gasStationDto.setHasMethane(gasStation.getHasMethane());
-		gasStationDto.setCarSharing(gasStation.getCarSharing());
-		gasStationDto.setLat(gasStation.getLat());
-		gasStationDto.setLon(gasStation.getLon());
-		gasStationDto.setDieselPrice(gasStation.getDieselPrice());
-		gasStationDto.setSuperPrice(gasStation.getSuperPrice());
-		gasStationDto.setSuperPlusPrice(gasStation.getSuperPlusPrice());
-		gasStationDto.setGasPrice(gasStation.getGasPrice());
-		gasStationDto.setMethanePrice(gasStation.getMethanePrice());
-		gasStationDto.setUserDto(UserConverter.toUserDto(gasStation.getUser()));
-		gasStationDto.setReportUser(gasStation.getReportUser());
-		gasStationDto.setReportTimestamp(gasStation.getReportTimestamp());
-		if(gasStation.getReportTimestamp() != null)
-			gasStationDto.setReportDependability(dependabilityCalculator(gasStation.getReportTimestamp(), gasStation.getUser().getReputation()));
-		
-		return gasStationDto;
-	}
-
+	
+	// Convert from gasstatiodto to gasstation
 	public static GasStation toGasStation(GasStationDto gasStationDto) {
+		
 		GasStation gasStation = new GasStation();
 		gasStation.setGasStationId(gasStationDto.getGasStationId());
 		gasStation.setGasStationName(gasStationDto.getGasStationName());
@@ -58,33 +33,61 @@ public class GasStationConverter {
 		gasStation.setUser(UserConverter.toUser(gasStationDto.getUserDto()));
 		gasStation.setReportUser(gasStationDto.getReportUser());
 		gasStation.setReportTimestamp(gasStationDto.getReportTimestamp());
+		// Check if gas station has a price report
 		if(gasStationDto.getReportTimestamp() != null)
 			gasStation.setReportDependability(dependabilityCalculator(gasStationDto.getReportTimestamp(), gasStationDto.getUserDto().getReputation()));
-
+		
 		return gasStation;
 	}
 	
-	
-	public static double dependabilityCalculator(String timestamp, Integer trust) {
+	// Convert from gasstation to gasstationdto
+	public static GasStationDto toGasStationDto(GasStation gasStation) {
 		
+		GasStationDto gasStationDto =new GasStationDto();
+		gasStationDto.setGasStationId(gasStation.getGasStationId());
+		gasStationDto.setGasStationName(gasStation.getGasStationName());
+		gasStationDto.setGasStationAddress(gasStation.getGasStationAddress());
+		gasStationDto.setHasDiesel(gasStation.getHasDiesel());
+		gasStationDto.setHasSuper(gasStation.getHasSuper());
+		gasStationDto.setHasSuperPlus(gasStation.getHasSuperPlus());
+		gasStationDto.setHasGas(gasStation.getHasGas());
+		gasStationDto.setHasMethane(gasStation.getHasMethane());
+		gasStationDto.setCarSharing(gasStation.getCarSharing());
+		gasStationDto.setLat(gasStation.getLat());
+		gasStationDto.setLon(gasStation.getLon());
+		gasStationDto.setDieselPrice(gasStation.getDieselPrice());
+		gasStationDto.setSuperPrice(gasStation.getSuperPrice());
+		gasStationDto.setSuperPlusPrice(gasStation.getSuperPlusPrice());
+		gasStationDto.setGasPrice(gasStation.getGasPrice());
+		gasStationDto.setMethanePrice(gasStation.getMethanePrice());
+		gasStationDto.setUserDto(UserConverter.toUserDto(gasStation.getUser()));
+		gasStationDto.setReportUser(gasStation.getReportUser());
+		gasStationDto.setReportTimestamp(gasStation.getReportTimestamp());
+		// Check if gas station has a price report
+		if(gasStation.getReportTimestamp() != null)
+			gasStationDto.setReportDependability(dependabilityCalculator(gasStation.getReportTimestamp(), gasStation.getUser().getReputation()));
+		
+		return gasStationDto;
+	}
+	
+	// Calculate the value of dependability
+	public static double dependabilityCalculator(String timestamp, Integer trust) {
 		
 		GregorianCalendar now = new GregorianCalendar();
 		GregorianCalendar cal = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy - HH:mm:ss", Locale.ITALY);
-		try {
-			cal.setTime(sdf.parse(timestamp));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
+		// Try to convert timestamp into GregorianCalendar format
+		try { cal.setTime(sdf.parse(timestamp)); } catch (ParseException e) { e.printStackTrace(); }
+		// Convert timestamps in milliseconds
 		long msNow = now.getTimeInMillis();
 		long msReportTime = cal.getTimeInMillis();
-		
+		// Calculate difference 
 		long diff = msNow - msReportTime;
 		double obs = 0;
+		// Check if report timestamp is not older than 7 days
 		if((diff / (24 * 60 * 60 * 1000))<=7) 
+			// Calculate obsolescence
 			obs = 1 - ((double)(diff / (24 * 60 * 60 * 1000)) / 7);
-		
 		
 		return Math.floor(50 * (trust +5)/10 + 50 * obs);
 	}
