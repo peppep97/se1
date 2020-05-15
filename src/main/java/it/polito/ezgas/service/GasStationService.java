@@ -1,15 +1,13 @@
 package it.polito.ezgas.service;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import exception.GPSDataException;
 import exception.InvalidGasStationException;
 import exception.InvalidGasTypeException;
 import exception.InvalidUserException;
 import exception.PriceException;
-import it.polito.ezgas.dto.GasStationDto;
-import it.polito.ezgas.entity.GasStation; 
+import it.polito.ezgas.dto.GasStationDto; 
 
 /** 
  *
@@ -87,10 +85,5 @@ public interface GasStationService {
      * Throws an exception if an invalid value is given for latitude and/or longitude
 	 */
 	List<GasStationDto> getGasStationByCarSharing(String carSharing);
-	
-	
-	/*Filter GasStations by Gasoline Type
-	 */
-	Stream<GasStation> filterGasStationByGasolineType (String gasolinetype, List<GasStation> insertedGasStaions) throws InvalidGasTypeException;
 
 }

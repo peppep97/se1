@@ -2,7 +2,6 @@ package it.polito.ezgas.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -107,15 +106,34 @@ public class GasStationServiceImpl implements GasStationService {
 	public List<GasStationDto> getGasStationsByGasolineType(String gasolinetype) throws InvalidGasTypeException {
 		
 		// Retrieve all gas stations
-		List<GasStation> gasStations = gasStationRepository.findAll();
-		if( gasStations == null ) {
-			return null;
-		}
+		List<GasStation> gasStations = new ArrayList<GasStation>();
+		
 		// Filter gas stations by type of gasoline
-		Stream<GasStation> filteredGasStations = filterGasStationByGasolineType(gasolinetype, gasStations);
+		switch(gasolinetype){
+			case "Diesel":
+				gasStations = gasStationRepository.findByHasDieselTrue();
+			break;
+			case "Super":
+				gasStations = gasStationRepository.findByHasSuperTrue();
+			break;
+			case "SuperPlus":
+				gasStations = gasStationRepository.findByHasSuperPlusTrue();
+			break;
+			case "Gas":
+				gasStations = gasStationRepository.findByHasGasTrue();
+			break;
+			case "Methane":
+				gasStations = gasStationRepository.findByHasMethaneTrue();
+			break;
+			case "null":
+				gasStations = gasStationRepository.findAll();
+			break;
+			default:
+				throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
+		}
 		
 		// Converting each GasStation to GasStationDto
-		return filteredGasStations.map( g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
+		return gasStations.stream().map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -133,13 +151,16 @@ public class GasStationServiceImpl implements GasStationService {
 		if(gasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
+		
 		// some info about lat, lon, kilometers and decimal degrees
 		// 1km (lat) = 0.00904371732 dd
 		// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
 		double teta = 0.00898311175 / Math.cos(lat*Math.PI/180);
+		
 		// Filter gas stations for the coordinates inside the limits of 1km
 		Stream<GasStation> filteredGasStations = gasStations.stream()
 				.filter(g -> Math.abs(g.getLat() - lat) < 0.00904371732 && Math.abs(g.getLon() - lon) < teta);
+		
 		if(filteredGasStations == null) {
 			return new ArrayList<GasStationDto>();
 		}
@@ -159,30 +180,70 @@ public class GasStationServiceImpl implements GasStationService {
 		if(lon > 180 || lon < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
-		// Retrieve all gas stations from repository
-		List<GasStation> gasStations = gasStationRepository.findAll();
-		if(gasStations == null) {
-			return new ArrayList<GasStationDto>();
+		System.out.println(carsharing + "!!!!!!!");
+		List<GasStation> gasStations = new ArrayList<GasStation>();
+		
+		// Filter Gas station by gasoline types
+		if(carsharing == null) {
+			switch(gasolinetype){
+				case "Diesel":
+					gasStations = gasStationRepository.findByHasDieselTrue();
+				break;
+				case "Super":
+					gasStations = gasStationRepository.findByHasSuperTrue();
+				break;
+				case "SuperPlus":
+					gasStations = gasStationRepository.findByHasSuperPlusTrue();
+				break;
+				case "Gas":
+					gasStations = gasStationRepository.findByHasGasTrue();
+				break;
+				case "Methane":
+					gasStations = gasStationRepository.findByHasMethaneTrue();
+				break;
+				case "null":
+					gasStations = gasStationRepository.findAll();
+				break;
+				default:
+					throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
+			}
 		}
+		else {
+			switch(gasolinetype){
+				case "Diesel":
+					gasStations = gasStationRepository.findByHasDieselTrueAndCarSharing(carsharing);
+				break;
+				case "Super":
+					gasStations = gasStationRepository.findByHasSuperTrueAndCarSharing(carsharing);
+				break;
+				case "SuperPlus":
+					gasStations = gasStationRepository.findByHasSuperPlusTrueAndCarSharing(carsharing);
+				break;
+				case "Gas":
+					gasStations = gasStationRepository.findByHasGasTrueAndCarSharing(carsharing);
+				break;
+				case "Methane":
+					gasStations = gasStationRepository.findByHasMethaneTrueAndCarSharing(carsharing);
+				break;
+				case "null":
+					gasStations = gasStationRepository.findAll();
+				break;
+				default:
+					throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
+			}
+		}
+		
 		// some info about lat, lon, kilometers and decimal degrees
 		// 1km (lat) = 0.00904371732 dd
 		// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
 		double teta = 0.00898311175 / Math.cos(lat*Math.PI/180);
+		
 		// Filter gas station for the coordinates inside the limits of 1km
 		Stream<GasStation> filteredGasStations = gasStations.stream()
 				.filter(g -> Math.abs(g.getLat() - lat) < 0.00904371732 && Math.abs(g.getLon() - lon) < teta);
+		
 		if(filteredGasStations == null) {
 			return new ArrayList<GasStationDto>();
-		}
-		// Filter Gas station by gasoline types
-		filteredGasStations = filterGasStationByGasolineType (gasolinetype,filteredGasStations.collect(Collectors.toList()));
-		
-		if(carsharing != null) {
-			// Filter Gas station by car sharing
-			filteredGasStations = filteredGasStations.filter(g -> g.getCarSharing().compareTo(carsharing) == 0);
-			if( filteredGasStations == null ) {
-				return new ArrayList<GasStationDto>();
-			}
 		}
 		
 		// Converting each GasStation to GasStationDto
@@ -199,48 +260,58 @@ public class GasStationServiceImpl implements GasStationService {
 			return new ArrayList<GasStationDto>();
 		}
 		// Filter gas stations by gasoline type
-		Stream<GasStation> filteredGasStations = filterGasStationByGasolineType(gasolinetype, gasStations);
-		/*if( gasolinetype != null ) {
-			//filter by gasoline
-			if( gasolinetype.compareTo("Diesel") == 0 ) {
-				filteredGasStations = filteredGasStations.filter(g -> g.getHasDiesel())
-												.sorted(Comparator.comparingDouble(GasStation::getDieselPrice));
-			} 
-			else if( gasolinetype.compareTo("Super") == 0 ) {
-				filteredGasStations = filteredGasStations.filter(g -> g.getHasSuper())
-												.sorted(Comparator.comparingDouble(GasStation::getSuperPrice));
-			} 
-			else if( gasolinetype.compareTo("SuperPlus") == 0 ) {
-				filteredGasStations = filteredGasStations.filter(g -> g.getHasSuperPlus())
-												.sorted(Comparator.comparingDouble(GasStation::getSuperPlusPrice));;
-			}
-			else if( gasolinetype.compareTo("Gas") == 0 ) {
-				filteredGasStations = gasStations.stream().filter(g -> g.getHasGas())
-												.sorted(Comparator.comparingDouble(GasStation::getGasPrice));;
-			}
-			else if( gasolinetype.compareTo("Methane") == 0 ) {
-				filteredGasStations = filteredGasStations.filter(g -> g.getHasMethane())
-												.sorted(Comparator.comparingDouble(GasStation::getMethanePrice));;
-			}
-			else {
-				//gasoline type error handling
-				throw new InvalidGasTypeException(gasolinetype + "is an invalid gas type!");
-			}
-			if( filteredGasStations == null ) {
-				return new ArrayList<GasStationDto>();
-			}
-		}*/
-		
+		//Stream<GasStation> filteredGasStations = filterGasStationByGasolineType(gasolinetype, gasStations);
 		if(carsharing != null) {
-			// Filter Gas station by car sharing
-			filteredGasStations = filteredGasStations.filter(g -> g.getCarSharing().compareTo(carsharing) == 0);
-			if(filteredGasStations == null) {
-				return new ArrayList<GasStationDto>();
+			switch(gasolinetype){
+				case "Diesel":
+					gasStations = gasStationRepository.findByHasDieselTrueAndCarSharing(carsharing);
+				break;
+				case "Super":
+					gasStations = gasStationRepository.findByHasSuperTrueAndCarSharing(carsharing);
+				break;
+				case "SuperPlus":
+					gasStations = gasStationRepository.findByHasSuperPlusTrueAndCarSharing(carsharing);
+				break;
+				case "Gas":
+					gasStations = gasStationRepository.findByHasGasTrueAndCarSharing(carsharing);
+				break;
+				case "Methane":
+					gasStations = gasStationRepository.findByHasMethaneTrueAndCarSharing(carsharing);
+				break;
+				case "null":
+					gasStations = gasStationRepository.findAll();
+				break;
+				default:
+					throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
+			}
+		}
+		else {
+			switch(gasolinetype){
+				case "Diesel":
+					gasStations = gasStationRepository.findByHasDieselTrue();
+				break;
+				case "Super":
+					gasStations = gasStationRepository.findByHasSuperTrue();
+				break;
+				case "SuperPlus":
+					gasStations = gasStationRepository.findByHasSuperPlusTrue();
+				break;
+				case "Gas":
+					gasStations = gasStationRepository.findByHasGasTrue();
+				break;
+				case "Methane":
+					gasStations = gasStationRepository.findByHasMethaneTrue();
+				break;
+				case "null":
+					gasStations = gasStationRepository.findAll();
+				break;
+				default:
+					throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
 			}
 		}
 		
 		// Converting each GasStation to GasStationDto
-		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
+		return gasStations.stream().map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -309,40 +380,5 @@ public class GasStationServiceImpl implements GasStationService {
 		// Converting each GasStation to GasStationDto
 		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
 	}
-	
-	@Override
-	public Stream<GasStation> filterGasStationByGasolineType (String gasolinetype, List<GasStation> gasStations) throws InvalidGasTypeException{
 		
-		Stream<GasStation> filteredGasStations = null;
-		if( gasolinetype != null ) {
-			//filter by gasoline
-			if( gasolinetype.compareTo("Diesel") == 0 ) {
-				filteredGasStations = gasStations.stream().filter(g -> g.getHasDiesel())
-												.sorted(Comparator.comparingDouble(GasStation::getDieselPrice));
-			} 
-			else if( gasolinetype.compareTo("Super") == 0 ) {
-				filteredGasStations = gasStations.stream().filter(g -> g.getHasSuper())
-												.sorted(Comparator.comparingDouble(GasStation::getSuperPrice));
-			} 
-			else if( gasolinetype.compareTo("SuperPlus") == 0 ) {
-				filteredGasStations = gasStations.stream().filter(g -> g.getHasSuperPlus())
-												.sorted(Comparator.comparingDouble(GasStation::getSuperPlusPrice));;
-			} 
-			else if( gasolinetype.compareTo("Gas") == 0 ) {
-				filteredGasStations = gasStations.stream().filter(g -> g.getHasGas())
-												.sorted(Comparator.comparingDouble(GasStation::getGasPrice));;
-			} 
-			else if( gasolinetype.compareTo("Methane") == 0 ) {
-				filteredGasStations = gasStations.stream().filter(g -> g.getHasMethane())
-												.sorted(Comparator.comparingDouble(GasStation::getMethanePrice));;
-			} 
-			else {
-				//gasoline type error handling
-				throw new InvalidGasTypeException(gasolinetype + " is an invalid gas type!");
-			}
-		}
-		
-		return filteredGasStations;
-	}
-	
 }
