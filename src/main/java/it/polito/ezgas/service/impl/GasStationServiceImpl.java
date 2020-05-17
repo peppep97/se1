@@ -179,11 +179,12 @@ public class GasStationServiceImpl implements GasStationService {
 		if(lon > 180 || lon < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
-		
+		System.out.println(carsharing + " " + gasolinetype);
 		List<GasStation> gasStations;
 		
 		// Filter Gas station by gasoline types
 		if((carsharing == null) || (carsharing.compareTo("null") == 0)) {
+			System.out.println("wrong");
 			switch(gasolinetype){
 				case "Diesel":
 					gasStations = gasStationRepository.findByHasDieselTrue();
@@ -208,6 +209,7 @@ public class GasStationServiceImpl implements GasStationService {
 			}
 		}
 		else{
+			System.out.println("right");
 			switch(gasolinetype){
 				case "Diesel":
 					gasStations = gasStationRepository.findByHasDieselTrueAndCarSharing(carsharing);
@@ -225,7 +227,7 @@ public class GasStationServiceImpl implements GasStationService {
 					gasStations = gasStationRepository.findByHasMethaneTrueAndCarSharing(carsharing);
 				break;
 				case "null": case "Select gasoline type":
-					gasStations = gasStationRepository.findAll();
+					gasStations = gasStationRepository.findByCarSharing(carsharing);
 				break;
 				default:
 					throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
