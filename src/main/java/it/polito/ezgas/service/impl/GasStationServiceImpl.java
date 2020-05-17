@@ -381,17 +381,13 @@ public class GasStationServiceImpl implements GasStationService {
 	public List<GasStationDto> getGasStationByCarSharing(String carSharing) {
 		
 		// Retrieve all gas stations
-		List<GasStation> gasStations = gasStationRepository.findAll();
+		List<GasStation> gasStations = gasStationRepository.findByCarSharing(carSharing);
 		if(gasStations == null) {
 			return new ArrayList<>();
 		}
-		
-		// Filter gas stations by car sharing
-		Stream<GasStation> filteredGasStations = 
-				gasStations.stream().filter(g -> g.getCarSharing().compareTo(carSharing) == 0);
 
 		// Converting each GasStation to GasStationDto
-		return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
+		return gasStations.stream().map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
 		
 }
