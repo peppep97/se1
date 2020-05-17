@@ -1,10 +1,7 @@
 package it.polito.ezgas.service.impl;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,18 +40,15 @@ public class GasStationServiceImpl implements GasStationService {
 	@Override
 	public GasStationDto getGasStationById(Integer gasStationId) throws InvalidGasStationException {
 		
-		// Check if gas station is not valid
-		if(gasStationId==null || gasStationId<0) {
-			throw new InvalidGasStationException("Invalid Gas Station ID!");
+		// Check if gas station id is not valid
+		if(gasStationId == null || gasStationId < 0) {
+			throw new InvalidGasStationException("Invalid GasStation Id!");
 		}
 		
 		// Search for gas station into the repository
-		GasStationDto gasStationDto = GasStationConverter.toGasStationDto(gasStationRepository.findByGasStationId(gasStationId));
-		if(gasStationDto == null) {
-			return null;
-		} 	
-		
-		return gasStationDto;
+		GasStation gasStation = gasStationRepository.findByGasStationId(gasStationId);
+
+		return GasStationConverter.toGasStationDto(gasStation);
 	}
 
 	@Override
@@ -70,15 +64,13 @@ public class GasStationServiceImpl implements GasStationService {
 		
 		// Inserting new gas station or updating an existing one
 		GasStation gasStation = gasStationRepository.save(GasStationConverter.toGasStation(gasStationDto));
-		
+
 		return GasStationConverter.toGasStationDto(gasStation);
 	}
 
 	@Override
 	public List<GasStationDto> getAllGasStations() {
-		
-		ArrayList<GasStationDto> list= new ArrayList<GasStationDto>();
-		
+
 		// Retrieve all gas stations from repository
 		List<GasStation> listGasStation = gasStationRepository.findAll();
 		if(listGasStation == null) {
@@ -86,49 +78,54 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		
 		// Converting each GasStation to GasStationDto
-		listGasStation.forEach((gasStation)->list.add(GasStationConverter.toGasStationDto(gasStation)));
-		
-		return list;
+		return listGasStation.stream().map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
 
 	@Override
 	public Boolean deleteGasStation(Integer gasStationId) throws InvalidGasStationException {
-		
-		if(gasStationId==null || gasStationId<0)
-			throw new InvalidGasStationException("ERROR:GasStation ID ISN'T VALID!");
+
+		// Check if gas station id is not valid
+		if(gasStationId == null || gasStationId < 0)
+			throw new InvalidGasStationException("Invalid GasStation Id!");
 		GasStation gasStation = gasStationRepository.findByGasStationId(gasStationId);
+
 		if(gasStation == null)
 			return false;
 		gasStationRepository.delete(gasStation);
-		if(gasStationRepository.exists(gasStationId))
-			return false;
-		
-		return true;
+
+		return !gasStationRepository.exists(gasStationId);
 	}
 
 	@Override
 	public List<GasStationDto> getGasStationsByGasolineType(String gasolinetype) throws InvalidGasTypeException {
 		
 		// Retrieve all gas stations
-		List<GasStation> gasStations = new ArrayList<GasStation>();
+		List<GasStation> gasStations;
 		
 		// Filter gas stations by type of gasoline
+		// and sort them out by ascending order
 		switch(gasolinetype){
 			case "Diesel":
 				gasStations = gasStationRepository.findByHasDieselTrue();
+				gasStations.sort(Comparator.comparingDouble(GasStation::getDieselPrice));
 			break;
 			case "Super":
 				gasStations = gasStationRepository.findByHasSuperTrue();
+				gasStations.sort(Comparator.comparingDouble(GasStation::getSuperPrice));
 			break;
 			case "SuperPlus":
 				gasStations = gasStationRepository.findByHasSuperPlusTrue();
+				gasStations.sort(Comparator.comparingDouble(GasStation::getSuperPlusPrice));
 			break;
 			case "Gas":
 				gasStations = gasStationRepository.findByHasGasTrue();
+				gasStations.sort(Comparator.comparingDouble(GasStation::getGasPrice));
 			break;
 			case "Methane":
 				gasStations = gasStationRepository.findByHasMethaneTrue();
+				gasStations.sort(Comparator.comparingDouble(GasStation::getMethanePrice));
 			break;
+			// TODO: check this case, it should throw exception(?)
 			case "null": case "Select gasoline type":
 				gasStations = gasStationRepository.findAll();
 			break;
@@ -137,7 +134,7 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		
 		// Converting each GasStation to GasStationDto
-		return gasStations.stream().map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
+		return gasStations.stream().map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
 
 	@Override
@@ -154,23 +151,21 @@ public class GasStationServiceImpl implements GasStationService {
 		// Retrieve all gas stations from repository
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
-			return new ArrayList<GasStationDto>();
+			return new ArrayList<>();
 		}
+
 		// some info about lat, lon, kilometers and decimal degrees
 		// 1km (lat) = 0.00904371732 dd
 		// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
-		double teta = 0.00898311175 / Math.cos(lat*Math.PI/180);
-		
-		// Filter gas stations for the coordinates inside the limits of 1km
+		double teta = 0.0089 / Math.cos(lat*Math.PI/180);
+
+		// Filter gas station for the coordinates inside the limits of 1km
 		Stream<GasStation> filteredGasStations = gasStations.stream()
-				.filter(g -> Math.abs(g.getLat() - lat) < 0.00904371732 && Math.abs(g.getLon() - lon) < teta);
-		
-		if(filteredGasStations == null) {
-			return new ArrayList<GasStationDto>();
-		}
-		
+				.filter(g -> Math.abs(g.getLat() - lat) < 0.009)
+				.filter(g -> Math.abs(g.getLon() - lon) < teta);
+
 		// Converting each GasStation to GasStationDto
-		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
+		return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
 
 	@Override
@@ -185,7 +180,7 @@ public class GasStationServiceImpl implements GasStationService {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
 		
-		List<GasStation> gasStations = new ArrayList<GasStation>();
+		List<GasStation> gasStations;
 		
 		// Filter Gas station by gasoline types
 		if((carsharing == null) || (carsharing.compareTo("null") == 0)) {
@@ -236,21 +231,16 @@ public class GasStationServiceImpl implements GasStationService {
 					throw new InvalidGasTypeException(gasolinetype + " ISN'T A VALID GAS TYPE!");				
 			}
 		}
-		
-		// some info about lat, lon, kilometers and decimal degrees
-		// 1km (lat) = 0.00904371732 dd
-		// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
-		double teta = 0.00898311175 / Math.cos(lat*Math.PI/180);
+
+		double teta = 0.0089 / Math.cos(lat*Math.PI/180);
 		
 		// Filter gas station for the coordinates inside the limits of 1km
 		Stream<GasStation> filteredGasStations = gasStations.stream()
-				.filter(g -> Math.abs(g.getLat() - lat) < 0.00904371732 && Math.abs(g.getLon() - lon) < teta);
-		if(filteredGasStations == null) {
-			return new ArrayList<GasStationDto>();
-		}
-		
+				.filter(g -> Math.abs(g.getLat() - lat) < 0.009)
+				.filter(g -> Math.abs(g.getLon() - lon) < teta);
+
 		// Converting each GasStation to GasStationDto
-		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
+		return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
 
 	@Override
@@ -260,7 +250,7 @@ public class GasStationServiceImpl implements GasStationService {
 		// Retrieve all gas stations from repository
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
-			return new ArrayList<GasStationDto>();
+			return new ArrayList<>();
 		}
 		
 		// Filter gas stations by gasoline type
@@ -314,7 +304,7 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		
 		// Converting each GasStation to GasStationDto
-		return gasStations.stream().map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
+		return gasStations.stream().map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
 
 	@Override
@@ -376,7 +366,10 @@ public class GasStationServiceImpl implements GasStationService {
 		
 		//...and dependability
 		// First time dependability depends only on user reputation -> obsolescence = 1
-		gasStationDto.setReportDependability(50 * (userDto.getReputation() + 5) / 10 + 50);
+		// TODO: user null case action
+		if (userDto == null)
+			return;
+		gasStationDto.setReportDependability(50 * (userDto.getReputation() + 5) / 10.0 + 50);
 		
 		// Update existing gas station
 		gasStationRepository.save(GasStationConverter.toGasStation(gasStationDto));
@@ -388,18 +381,15 @@ public class GasStationServiceImpl implements GasStationService {
 		// Retrieve all gas stations
 		List<GasStation> gasStations = gasStationRepository.findAll();
 		if(gasStations == null) {
-			return new ArrayList<GasStationDto>();
+			return new ArrayList<>();
 		}
 		
 		// Filter gas stations by car sharing
 		Stream<GasStation> filteredGasStations = 
 				gasStations.stream().filter(g -> g.getCarSharing().compareTo(carSharing) == 0);
-		if(filteredGasStations == null) {
-			return new ArrayList<GasStationDto>();
-		}
-		
+
 		// Converting each GasStation to GasStationDto
-		return filteredGasStations.map(g -> GasStationConverter.toGasStationDto(g)).collect(Collectors.toList());
+		return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
 		
 }
