@@ -1,87 +1,95 @@
 package it.polito.ezgas;
 
-import exception.GPSDataException;
-import exception.InvalidGasStationException;
-import exception.InvalidGasTypeException;
-import exception.PriceException;
 import it.polito.ezgas.dto.GasStationDto;
-import it.polito.ezgas.repository.GasStationRepository;
-import it.polito.ezgas.service.GasStationService;
-import it.polito.ezgas.service.impl.GasStationServiceImpl;
+import it.polito.ezgas.dto.UserDto;
+import it.polito.ezgas.entity.GasStation;
+import it.polito.ezgas.entity.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.jnlp.ServiceManager;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EZGasApplicationTests {
-
-	// It's bad practice to test Service using real Repository implementation (?)
-
-	@Autowired
-	private GasStationService gasStationService;
-
-	@Autowired
-	private GasStationRepository gasStationRepository;
 
 	@Test
 	public void contextLoads() {
 	}
 
 	@Test
-	public void testGas() throws PriceException, GPSDataException {
+	public void testGasStation() {
 
-		gasStationRepository.deleteAll();
+		GasStation gasStation = new GasStation();
 
-		GasStationDto given = new GasStationDto();
-		given.setGasStationName("nome");
-		given.setHasGas(true);
-		given.setLat(45.3);
-		given.setLon(7.2);
-		given.setGasStationAddress("chissadove");
+		gasStation.setCarSharing("company_name");
+		assert gasStation.getCarSharing().equals("company_name");
 
-		GasStationDto found = gasStationService.saveGasStation(given);
-		assert found.getGasStationName().equals(given.getGasStationName());
+		gasStation.setGasStationAddress("station_address");
+		assert gasStation.getGasStationAddress().equals("station_address");
+
+		gasStation.setLat(40.2);
+		assert gasStation.getLat() == 40.2;
+
+		gasStation.setLon(8.15);
+		assert gasStation.getLon() == 8.15;
+
+		gasStation.setGasStationId(-1);
+		assert gasStation.getGasStationId() == -1;
+
+		gasStation.setReportTimestamp("timestamp");
+		assert gasStation.getReportTimestamp().equals("timestamp");
+
+		gasStation.setHasDiesel(true);
+		assert gasStation.getHasDiesel();
+
+		gasStation.setHasSuperPlus(false);
+		assert !gasStation.getHasSuperPlus();
+
+		gasStation.setGasPrice(1.567);
+		assert gasStation.getGasPrice() == 1.567;
+
+		gasStation.setSuperPrice(2);
+		assert gasStation.getSuperPrice() == 2;
+
+		gasStation.setReportUser(0);
+		assert gasStation.getReportUser() == 0;
+
+		gasStation.setReportDependability(48.0);
+		assert gasStation.getReportDependability() == 48.0;
 
 	}
 
 	@Test
-	public void testDieselSortPrice() throws PriceException, GPSDataException, InvalidGasTypeException {
+	public void testUser() {
 
-		gasStationRepository.deleteAll();
+		User user = new User();
 
-		GasStationDto cheap = new GasStationDto();
-		cheap.setGasStationName("dagigi");
-		cheap.setHasDiesel(true);
-		cheap.setLat(44.4);
-		cheap.setLon(8.1);
-		cheap.setGasStationAddress("torinoo, itaglia");
-		cheap.setDieselPrice(1.0);
+		user.setReputation(3);
+		assert user.getReputation() == 3;
 
-		gasStationService.saveGasStation(cheap);
+		user.setAdmin(true);
+		assert user.getAdmin();
 
-		GasStationDto notSoCheap = new GasStationDto();
-		notSoCheap.setGasStationName("Agrip");
-		notSoCheap.setHasDiesel(true);
-		notSoCheap.setLat(44.3);
-		notSoCheap.setLon(8.1);
-		notSoCheap.setGasStationAddress("corso francia, torino");
-		notSoCheap.setDieselPrice(2.0);
+		user.setEmail("mail_address");
+		assert user.getEmail().equals("mail_address");
 
-		gasStationService.saveGasStation(notSoCheap);
+		user.setPassword("long123");
+		assert user.getPassword().equals("long123");
 
-		List<GasStationDto> stations = gasStationService.getGasStationsByGasolineType("Diesel");
-		assert stations.get(0).getDieselPrice() < stations.get(1).getDieselPrice();
+		user.setUserId(3);
+		assert user.getUserId() == 3;
+
+		user.setUserName("mario");
+		assert user.getUserName().equals("mario");
+
+	}
+
+	@Test
+	public void testGasStationDto() {
+		GasStationDto gasStationDto = new GasStationDto();
+
 
 	}
 
