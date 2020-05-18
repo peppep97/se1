@@ -13,39 +13,39 @@ public class GasStationDtoTest {
         GasStationDto gasStationDto = new GasStationDto();
 
         gasStationDto.setCarSharing("company_name");
-        assert gasStationDto.getCarSharing().equals("company_name");
+        assertEquals("company_name", gasStationDto.getCarSharing());
 
         gasStationDto.setGasStationAddress("station_address");
-        assert gasStationDto.getGasStationAddress().equals("station_address");
+        assertEquals("station_address", gasStationDto.getGasStationAddress());
 
         gasStationDto.setLat(40.2);
-        assert gasStationDto.getLat() == 40.2;
+        assertEquals(40.2, gasStationDto.getLat(), 0.0001);
 
         gasStationDto.setLon(8.15);
-        assert gasStationDto.getLon() == 8.15;
+        assertEquals(8.15, gasStationDto.getLon(), 0.0001);
 
         gasStationDto.setGasStationId(-1);
-        assert gasStationDto.getGasStationId() == -1;
+        assertEquals(Integer.valueOf(-1), gasStationDto.getGasStationId());
 
         gasStationDto.setReportTimestamp("timestamp");
-        assert gasStationDto.getReportTimestamp().equals("timestamp");
+        assertEquals("timestamp", gasStationDto.getReportTimestamp());
 
         gasStationDto.setHasDiesel(true);
-        assert gasStationDto.getHasDiesel();
+        assertTrue(gasStationDto.getHasDiesel());
 
         gasStationDto.setHasSuperPlus(false);
-        assert !gasStationDto.getHasSuperPlus();
+        assertFalse(gasStationDto.getHasSuperPlus());
 
         gasStationDto.setGasPrice(1.567);
-        assert gasStationDto.getGasPrice() == 1.567;
+        assertEquals(1.567, gasStationDto.getGasPrice(), 0.001);
 
         gasStationDto.setSuperPrice(2);
-        assert gasStationDto.getSuperPrice() == 2;
+        assertEquals(2, gasStationDto.getSuperPrice(), 0.001);
 
         gasStationDto.setReportUser(0);
-        assert gasStationDto.getReportUser() == 0;
+        assertEquals(Integer.valueOf(0), gasStationDto.getReportUser());
 
         gasStationDto.setReportDependability(48.0);
-        assert gasStationDto.getReportDependability() == 48.0;
+        assertEquals(48.0, gasStationDto.getReportDependability(), 0.01);
     }
 }

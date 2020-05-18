@@ -12,40 +12,40 @@ public class GasStationTest {
         GasStation gasStation = new GasStation();
 
         gasStation.setCarSharing("company_name");
-        assert gasStation.getCarSharing().equals("company_name");
+        assertEquals("company_name", gasStation.getCarSharing());
 
         gasStation.setGasStationAddress("station_address");
-        assert gasStation.getGasStationAddress().equals("station_address");
+        assertEquals("station_address", gasStation.getGasStationAddress());
 
         gasStation.setLat(40.2);
-        assert gasStation.getLat() == 40.2;
+        assertEquals(40.2, gasStation.getLat(), 0.0001);
 
         gasStation.setLon(8.15);
-        assert gasStation.getLon() == 8.15;
+        assertEquals(8.15, gasStation.getLon(), 0.0001);
 
         gasStation.setGasStationId(-1);
-        assert gasStation.getGasStationId() == -1;
+        assertEquals(Integer.valueOf(-1), gasStation.getGasStationId());
 
         gasStation.setReportTimestamp("timestamp");
-        assert gasStation.getReportTimestamp().equals("timestamp");
+        assertEquals("timestamp", gasStation.getReportTimestamp());
 
         gasStation.setHasDiesel(true);
-        assert gasStation.getHasDiesel();
+        assertTrue(gasStation.getHasDiesel());
 
         gasStation.setHasSuperPlus(false);
-        assert !gasStation.getHasSuperPlus();
+        assertFalse(gasStation.getHasSuperPlus());
 
         gasStation.setGasPrice(1.567);
-        assert gasStation.getGasPrice() == 1.567;
+        assertEquals(1.567, gasStation.getGasPrice(), 0.001);
 
         gasStation.setSuperPrice(2);
-        assert gasStation.getSuperPrice() == 2;
+        assertEquals(2, gasStation.getSuperPrice(), 0.001);
 
         gasStation.setReportUser(0);
-        assert gasStation.getReportUser() == 0;
+        assertEquals(Integer.valueOf(0), gasStation.getReportUser());
 
         gasStation.setReportDependability(48.0);
-        assert gasStation.getReportDependability() == 48.0;
+        assertEquals(48.0, gasStation.getReportDependability(), 0.01);
 
     }
 }

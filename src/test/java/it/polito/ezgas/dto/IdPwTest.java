@@ -12,9 +12,9 @@ public class IdPwTest {
         IdPw idPw = new IdPw();
 
         idPw.setPw("<>><><<<>");
-        assert idPw.getPw().equals("<>><><<<>");
+        assertEquals("<>><><<<>", idPw.getPw());
 
         idPw.setUser("Mario");
-        assert idPw.getUser().equals("Mario");
+        assertEquals("Mario", idPw.getUser());
     }
 }

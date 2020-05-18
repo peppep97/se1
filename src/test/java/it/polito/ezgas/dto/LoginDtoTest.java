@@ -12,19 +12,19 @@ public class LoginDtoTest {
         LoginDto loginDto = new LoginDto();
 
         loginDto.setAdmin(true);
-        assert loginDto.getAdmin();
+        assertTrue(loginDto.getAdmin());
 
         loginDto.setEmail("a@@@@@@comcom");
-        assert loginDto.getEmail().equals("a@@@@@@comcom");
+        assertEquals("a@@@@@@comcom", loginDto.getEmail());
 
         loginDto.setReputation(-1);
-        assert loginDto.getReputation() == -1;
+        assertEquals(Integer.valueOf(-1), loginDto.getReputation());
 
         loginDto.setUserId(11);
-        assert loginDto.getUserId() == 11;
+        assertEquals(Integer.valueOf(11), loginDto.getUserId());
 
         loginDto.setUserName("assertEquals");
-        assert loginDto.getUserName().equals("assertEquals");
+        assertEquals("assertEquals", loginDto.getUserName());
 
     }
 }

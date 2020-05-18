@@ -11,23 +11,23 @@ public class UserDtoTest {
     public void testUserDto() {
         UserDto userDto = new UserDto();
 
-        userDto.setReputation(2);
-        assert userDto.getReputation() == 2;
+        userDto.setReputation(3);
+        assertEquals(Integer.valueOf(3), userDto.getReputation());
 
-        userDto.setAdmin(false);
-        assert !userDto.getAdmin();
+        userDto.setAdmin(true);
+        assertEquals(true, userDto.getAdmin());
 
-        userDto.setEmail("bipbop@v.c");
-        assert userDto.getEmail().equals("bipbop@v.c");
+        userDto.setEmail("mail_address");
+        assertEquals("mail_address", userDto.getEmail());
 
-        userDto.setPassword("xxxxxxxxxxx");
-        assert userDto.getPassword().equals("xxxxxxxxxxx");
+        userDto.setPassword("long123");
+        assertEquals("long123", userDto.getPassword());
 
-        userDto.setUserId(234);
-        assert userDto.getUserId() == 234;
+        userDto.setUserId(3);
+        assertEquals(Integer.valueOf(3), userDto.getUserId());
 
-        userDto.setUserName("nessuno");
-        assert userDto.getUserName().equals("nessuno");
+        userDto.setUserName("mario");
+        assertEquals("mario", userDto.getUserName());
     }
 
 }

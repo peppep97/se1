@@ -12,22 +12,22 @@ public class UserTest {
         User user = new User();
 
         user.setReputation(3);
-        assert user.getReputation() == 3;
+        assertEquals(Integer.valueOf(3), user.getReputation());
 
         user.setAdmin(true);
-        assert user.getAdmin();
+        assertEquals(true, user.getAdmin());
 
         user.setEmail("mail_address");
-        assert user.getEmail().equals("mail_address");
+        assertEquals("mail_address", user.getEmail());
 
         user.setPassword("long123");
-        assert user.getPassword().equals("long123");
+        assertEquals("long123", user.getPassword());
 
         user.setUserId(3);
-        assert user.getUserId() == 3;
+        assertEquals(Integer.valueOf(3), user.getUserId());
 
         user.setUserName("mario");
-        assert user.getUserName().equals("mario");
+        assertEquals("mario", user.getUserName());
 
     }
 }
