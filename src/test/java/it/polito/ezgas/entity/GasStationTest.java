@@ -47,5 +47,45 @@ public class GasStationTest {
         gasStation.setReportDependability(48.0);
         assertEquals(48.0, gasStation.getReportDependability(), 0.01);
 
+        GasStation gasStation1 = new GasStation("ENIO",
+                "Via vittoria 10",
+                true,
+                false,
+                true,
+                true,
+                true,
+                "boh",
+                45.002,
+                7.03,
+                1.0,
+                2.5,
+                2.3,
+                11.3,
+                0.003,
+                12,
+                "ora",
+                22.22);
+
+        gasStation1.setGasStationName("EnerCorp");
+        assertEquals("EnerCorp", gasStation1.getGasStationName());
+
+        gasStation1.setHasSuper(false);
+        assertFalse(gasStation1.getHasSuper());
+
+        gasStation1.setHasGas(true);
+        assertTrue(gasStation1.getHasGas());
+
+        gasStation1.setDieselPrice(3.4);
+        assertEquals(3.4, gasStation1.getDieselPrice(), 0.001);
+
+        gasStation1.setSuperPlusPrice(9.0);
+        assertEquals(9.0, gasStation1.getSuperPlusPrice(), 0.001);
+
+        gasStation1.setHasMethane(true);
+        assertTrue(gasStation1.getHasMethane());
+
+        gasStation1.setMethanePrice(4.20);
+        assertEquals(4.20, gasStation1.getMethanePrice(), 0.001);
+
     }
 }

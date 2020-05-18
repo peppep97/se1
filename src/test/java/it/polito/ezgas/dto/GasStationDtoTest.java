@@ -47,5 +47,46 @@ public class GasStationDtoTest {
 
         gasStationDto.setReportDependability(48.0);
         assertEquals(48.0, gasStationDto.getReportDependability(), 0.01);
+
+        GasStationDto gasStationDto1 = new GasStationDto(14,
+                "ENIO",
+                "Via vittoria 10",
+                true,
+                false,
+                true,
+                true,
+                true,
+                "boh",
+                45.002,
+                7.03,
+                1.0,
+                2.5,
+                2.3,
+                11.3,
+                0.003,
+                12,
+                "ora",
+                22.22);
+
+        gasStationDto1.setGasStationName("EnerCorp");
+        assertEquals("EnerCorp", gasStationDto1.getGasStationName());
+
+        gasStationDto1.setHasSuper(false);
+        assertFalse(gasStationDto1.getHasSuper());
+
+        gasStationDto1.setHasGas(true);
+        assertTrue(gasStationDto1.getHasGas());
+
+        gasStationDto1.setDieselPrice(3.4);
+        assertEquals(3.4, gasStationDto1.getDieselPrice(), 0.001);
+
+        gasStationDto1.setSuperPlusPrice(9.0);
+        assertEquals(9.0, gasStationDto1.getSuperPlusPrice(), 0.001);
+
+        gasStationDto1.setHasMethane(true);
+        assertTrue(gasStationDto1.getHasMethane());
+
+        gasStationDto1.setMethanePrice(4.20);
+        assertEquals(4.20, gasStationDto1.getMethanePrice(), 0.001);
     }
 }
