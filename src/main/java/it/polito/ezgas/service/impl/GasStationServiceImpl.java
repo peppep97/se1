@@ -170,7 +170,7 @@ public class GasStationServiceImpl implements GasStationService {
 	@Override
 	public List<GasStationDto> getGasStationsWithCoordinates(double lat, double lon, String gasolinetype,
 			String carsharing) throws InvalidGasTypeException, GPSDataException {
-		
+
 		// Check if coordinates are not valid
 		if(lat > 90 || lat < -90) {
 			throw new GPSDataException("Latitude out of boundaries!");
@@ -178,7 +178,6 @@ public class GasStationServiceImpl implements GasStationService {
 		if(lon > 180 || lon < -180) {
 			throw new GPSDataException("Longitude out of boundaries!");
 		}
-		System.out.println(carsharing + " " + gasolinetype);
 		List<GasStation> gasStations;
 		
 		// Filter Gas station by gasoline types
