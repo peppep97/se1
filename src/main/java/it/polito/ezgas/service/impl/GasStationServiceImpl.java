@@ -125,7 +125,6 @@ public class GasStationServiceImpl implements GasStationService {
 				gasStations = gasStationRepository.findByHasMethaneTrue();
 				gasStations.sort(Comparator.comparingDouble(GasStation::getMethanePrice));
 			break;
-			// TODO: check this case, it should throw exception(?)
 			case "null": case "Select gasoline type":
 				gasStations = gasStationRepository.findAll();
 			break;
@@ -184,7 +183,6 @@ public class GasStationServiceImpl implements GasStationService {
 		
 		// Filter Gas station by gasoline types
 		if((carsharing == null) || (carsharing.compareTo("null") == 0)) {
-			System.out.println("wrong");
 			switch(gasolinetype){
 				case "Diesel":
 					gasStations = gasStationRepository.findByHasDieselTrue();
@@ -209,7 +207,6 @@ public class GasStationServiceImpl implements GasStationService {
 			}
 		}
 		else{
-			System.out.println("right");
 			switch(gasolinetype){
 				case "Diesel":
 					gasStations = gasStationRepository.findByHasDieselTrueAndCarSharing(carsharing);
@@ -368,9 +365,6 @@ public class GasStationServiceImpl implements GasStationService {
 		
 		//...and dependability
 		// First time dependability depends only on user reputation -> obsolescence = 1
-		// TODO: user null case action
-		if (userDto == null)
-			return;
 		gasStationDto.setReportDependability(50 * (userDto.getReputation() + 5) / 10.0 + 50);
 		
 		// Update existing gas station
