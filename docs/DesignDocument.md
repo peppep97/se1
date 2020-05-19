@@ -3,9 +3,13 @@
 
 Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
-Date: 03/05/2020
+Date: 19/05/2020
 
-Version: 1
+Version: 2
+
+| Version | Changes                                                     |
+| ------- | :---------------------------------------------------------- |
+| 2       | Edited UML according to developed code                                |
 
 
 # Contents
@@ -227,73 +231,63 @@ Contains Service classes that implement the Service Interfaces in the Service pa
 
 package "it.polito.ezgas.converter" {
     class UserConverter {
-toUserDto(User user);
-toUser(UserDto userDto);
+toUser(UserDto userDto)
+toUserDto(User user)
+toLoginDto(User user)
 }
 
 class GasStationConverter {
-toGasStationDto(GasStation gasStation);
-toGasStation(GasStationDto gasStationDto);
+toGasStation(GasStationDto gasStationDto)
+toGasStationDto(GasStation gasStation)
+dependabilityCalculator(String timestamp, Integer trust)
 }
-
-class CarSharingCompanyConverter {
- toCarSharingCompanyDto(CarSharingCompany carSharing);
-toCarSharingCompany(CarSharingCompanyDto carSharingDto);
-}
-class PriceReportConverter {
- toPriceReportDto(PriceReport priceReport);
-toPriceReport(PriceReportDto priceReportDto);
-}
-
-GasStationConverter "*" -- "0..1" CarSharingCompanyConverter
-GasStationConverter  -- "0..1" PriceReportConverter
-UserConverter -- "*" PriceReportConverter
 }
 
 package "it.polito.ezgas.dto" {
 
-    class UserDto {
- account_name : String
- email : String
- trust_level : Integer
- admin: Boolean
+class UserDto {
+  userId : Integer
+  userName : String
+  password : String
+  email : String
+  reputation : Integer
+  admin : Boolean
 }
 
 class GasStationDto {
- name : String
- address : String
- brand : String
- carSharingName : String
+ gasStationId : Integer
+ gasStationName : String
+ gasStationAddress : String
+ hasDiesel : Boolean
+ hasSuper : Boolean
+ hasSuperPlus : Boolean
+ hasGas : Boolean
+ hasMethane : Boolean
+ carSharing : String
  lat : long
  lon : long
- hasDiesel : Boolean
- hasGasoline : Boolean
- hasPremiumDiesel : Boolean
- hasPremiumGasoline : Boolean
- hasLPG : Boolean
- hasMethane : Boolean
  dieselPrice : Double
- gasolinePrice : Double
- premiumDieselPrice : Double
- premiumGasolinePrice : Double
- LPGPrice : Double
+ superPrice : Double
+ superPlusPrice : Double
+ gasPrice : Double
  methanePrice : Double
+ reportUser : Integer
+ userDto : UserDto
+ reportTimestamp : String
+ reportDependability : Double
+ priceReportDtos : List<PriceReportDto>
 }
 
-class CarSharingCompanyDto {
- name : String
-}
+
 class PriceReportDto {
- time_tag: Long
+ priceReportId: Integer
+ user : User
  dieselPrice : Double
- gasolinePrice : Double
- premiumDieselPrice : Double
- premiumGasolinePrice : Double
- LPGPrice : Double
- methanePrice : Double
+ superPrice : Double
+ superPlusPrice : Double
+ gasPrice : Double
 }
 
-GasStationDto "*" -- "0..1" CarSharingCompanyDto
 GasStationDto  -- "0..1" PriceReportDto
 UserDto -- "*" PriceReportDto
 
@@ -302,49 +296,47 @@ UserDto -- "*" PriceReportDto
 package "it.polito.ezgas.entity" {
 
 class User {
- id: Integer
- account_name : String
- account_pwd : String
- email : String
- trust_level : Integer
+ userId: Integer
+ userName : String
+ password : String
+ reputation : String
  admin: Boolean
  prices : ArrayList<PriceList>
 }
 
 class GasStation {
- ID : Integer
- name : String
- address : String
- brand : String
- lat : long
- lon : long
+ gasStationId : Integer
+ gasStationName : String
+ gasStationAddress : String
  hasDiesel : Boolean
- hasGasoline : Boolean
- hasPremiumDiesel : Boolean
- hasPremiumGasoline : Boolean
- hasLPG : Boolean
+ hasSuper : Boolean
+ hasSuperPlus : Boolean
+ hasGas : Boolean
  hasMethane : Boolean
- carSharingCompany : CarSharingCompany
- priceReport : PriceReport
+ carSharing : String
+ lat : Double
+ lon : Double
+ dieselPrice : Double
+ superPrice : Double
+ superPlusPrice : Double
+ gasPrice : Double
+ methanePrice : Double
+ reportUser : Integer
+ reportTimestamp : String
+ reportDependability : Double
 }
 
-class CarSharingCompany {
- name : String
- gasStationList : List<GasStation>
-}
 class PriceReport {
- time_tag: Long
+ priceReportId: Integer
  dieselPrice : Double
- gasolinePrice : Double
- premiumDieselPrice : Double
- premiumGasolinePrice : Double
- LPGPrice : Double
+ superPrice : Double
+ superPlusPrice : Double
+ gasPrice : Double
  methanePrice : Double
  user : User
  gasStation : GasStation
 }
 
-GasStation "*" -- "0..1" CarSharingCompany
 GasStation  -- "0..1" PriceReport
 User -- "*" PriceReport
 
@@ -363,36 +355,27 @@ package "it.polito.ezgas.repository" {
 
 class GasStationRepository {
     save(GasStation gasStation);
-    findById(int id);
-    findByRadius(long radius);
-    findByGeoPoint(GeoPoint point);
-    findByCarSharing(String sharing);
-    findAll();
-    count();
-    delete(int id);
-    exists(int id);
+	delete(GasStation gasStation);
+	deleteAll();
+	findByGasStationId(Integer id);
+	findAll();
+	findByHasDieselTrue();
+	findByHasSuperTrue();
+	findByHasSuperPlusTrue();
+	findByHasGasTrue();
+	findByHasMethaneTrue();
+	findByHasDieselTrueAndCarSharing(String carSharing);
+	findByHasSuperTrueAndCarSharing(String carSharing);
+	findByHasSuperPlusTrueAndCarSharing(String carSharing);
+	findByHasGasTrueAndCarSharing(String carSharing);
+	findByHasMethaneTrueAndCarSharing(String carSharing);
+	findByCarSharing(String carSharing);
 }
 
-class CarSharingCompanyRepository {
-    save(CarSharingCompany company);
-    findByName(String name);
-    findAll();
-    count();
-    delete(CarSharingCompany company);
-    exists(String name);
-}
-class PriceReportRepository {
- save(PriceReport priceList);
- findByGasStation(GasStation gasStation);
- delete(PriceList priceList);
-}
-
-GasStationRepository "*" -- "0..1" CarSharingCompanyRepository
-GasStationRepository  -- "0..1" PriceReportRepository
-UserRepository -- "*" PriceReportRepository
 }
 @enduml
 ```
+
 
 ```plantuml
 @startuml
@@ -407,9 +390,9 @@ package "it.polito.ezgas.service"  as ps {
  saveUser(UserDto user);
  getAllUsers();
  deleteUser(int id);
+ login(IdPw credentials)
  increaseUserReputation(int id);
  decreaseUserReputation(int id);
- login(String user, String pswd);
 }
 
 class GasStationServiceImpl {
@@ -438,7 +421,7 @@ package "it.polito.ezgas.controller" {
  deleteUser(int id);
  increaseUserReputation(int id);
  decreaseUserReputation(int id);
- login(String user, String pswd);
+ login(IdPw credentials);
 }
 
 class GasStationController {
@@ -450,8 +433,7 @@ getGasStationsByGasolineType(String type);
 getGasStationsByProximity(double lat, double lon);
 getGasStationsWithCoordinates(double lat, double lon, String gasolinetype, String carsharing);
 getGasStationsWithoutCoordinates(String gasolinetype, String carsharing);
-setReport(Integer gasStationId, double dieselPrice, ..., Integer userId);
-getGasStationByCarSharing(String carSharing);
+setGasStationReport(Integer gasStationId, double dieselPrice, ..., Integer userId);
 }
 }
 @enduml
@@ -460,28 +442,28 @@ getGasStationByCarSharing(String carSharing);
 # Verification traceability matrix
 
 
-| 		| User  | GasStation | PriceReport | CarSharingCompany |  UserDto  | GasStationDto | PriceReportDto | CarSharingCompanyDto | UserRepository  | GasStationRepository | PriceReportRepository | CarSharingCompanyRepository | UserServiceImpl | GasStationServiceImpl |  UserController | GasStationController |
+| 		| User  | GasStation | PriceReport |  UserDto  | GasStationDto | PriceReportDto | UserRepository  | GasStationRepository | PriceReportRepository | UserServiceImpl | GasStationServiceImpl |  UserController | GasStationController |
 | ---------- |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:| :-----:|:-----:|:-----:|:-----:|
-| FR1  	|x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
-| FR1.1 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
-| FR1.2 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
-| FR1.3 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
-| FR1.4 |x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
-| FR2  	|x  |	|  	|  	|x 	|   |	|  	|x  |   |  	|	|x 	|   |x  | 	|
-| FR3  	|   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
-| FR3.1 |   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
-| FR3.2 |   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
-| FR3.3	|   |x	|   |  	|  	|x  |	|  	|  	|x  | 	|	|  	|x 	|   |x 	|
-| FR4	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
-| FR4.1 |   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
-| FR4.2	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
-| FR4.3	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
-| FR4.4	|   |x	|x  |  	|  	|x  |x	|  	|  	|x  |x 	|	|  	|x 	|   |x 	|
-| FR4.5	|   |x	|x  |x 	|  	|x  |x	|x 	|  	|x  |x 	|x	|  	|x 	|   |x 	|
-| FR5	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
-| FR5.1	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
-| FR5.2	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
-| FR5.3	|x  |x	|x  |  	|x  |x  |x	|  	|x 	|x  |x 	|	|x 	|x 	|x  |x 	|
+| FR1  	|x  |	|  	|x 	|   |	|x  |   |  	|x 	|   |x  | 	|
+| FR1.1 |x  |	|  	|x 	|   |	|x  |   |  	|x 	|   |x  | 	|
+| FR1.2 |x  |	|  	|x 	|   |	|x  |   |  	|x 	|   |x  | 	|
+| FR1.3 |x  |	|  	|x 	|   |	|x  |   |  	|x 	|   |x  | 	|
+| FR1.4 |x  |	|  	|x 	|   |	|x  |   |  	|x 	|   |x  | 	|
+| FR2  	|x  |	|  	|x 	|   |	|x  |   |  	|x 	|   |x  | 	|
+| FR3  	|   |x	|   |  	|x  |	|  	|x  | 	|  	|x 	|   |x 	|
+| FR3.1 |   |x	|   |  	|x  |	|  	|x  | 	|  	|x 	|   |x 	|
+| FR3.2 |   |x	|   |  	|x  |	|  	|x  | 	|  	|x 	|   |x 	|
+| FR3.3	|   |x	|   |  	|x  |	|  	|x  | 	|  	|x 	|   |x 	|
+| FR4	|   |x	|x  |  	|x  |x	|  	|x  |x 	|  	|x 	|   |x 	|
+| FR4.1 |   |x	|x  |  	|x  |x	|  	|x  |x 	|  	|x 	|   |x 	|
+| FR4.2	|   |x	|x  |  	|x  |x	|  	|x  |x 	|  	|x 	|   |x 	|
+| FR4.3	|   |x	|x  |  	|x  |x	|  	|x  |x 	|  	|x 	|   |x 	|
+| FR4.4	|   |x	|x  |  	|x  |x	|  	|x  |x 	|  	|x 	|   |x 	|
+| FR4.5	|   |x	|x  |  	|x  |x	|  	|x  |x 	|  	|x 	|   |x 	|
+| FR5	|x  |x	|x  |x  |x  |x	|x 	|x  |x 	|x 	|x 	|x  |x 	|
+| FR5.1	|x  |x	|x  |x  |x  |x	|x 	|x  |x 	|x 	|x 	|x  |x 	|
+| FR5.2	|x  |x	|x  |x  |x  |x	|x 	|x  |x 	|x 	|x 	|x  |x 	|
+| FR5.3	|x  |x	|x  |x  |x  |x	|x 	|x  |x 	|x 	|x 	|x  |x 	|
 
 
 # Verification sequence diagrams 
