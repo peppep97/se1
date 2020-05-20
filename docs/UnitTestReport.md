@@ -1,10 +1,10 @@
 # Unit Testing Documentation
 
-Authors:
+Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
-Date:
+Date: 19/05/2020
 
-Version:
+Version: 1
 
 # Contents
 
