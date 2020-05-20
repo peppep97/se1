@@ -37,7 +37,7 @@ Version: 1
  - Value of reputation
 
 
-**Predicates for method *name*:**
+**Predicates for method *setReputation*:**
 
 | Criteria | Predicate |
 | -------- | --------- |
@@ -56,7 +56,6 @@ Version: 1
 | Criteria | Boundary values |
 | -------- | --------------- |
 |    Value of reputation      |       minInt, maxInt, minInt + 1, maxInt + 1          |
-
 
 
 **Combination of predicates**:
@@ -80,7 +79,7 @@ Version: 1
  - Value of admin
 
 
-**Predicates for method *name*:**
+**Predicates for method *setAdmin*:**
 
 | Criteria | Predicate |
 | -------- | --------- |
@@ -137,6 +136,81 @@ Version: 1
 | String | V | setEmail("email@mail.com") --> OK | it.polito.ezgas.entity.UserTest.java|
 | String | I | setEmail(3343) --> Exception | it.polito.ezgas.entity.UserTest.java|
 
+### **Class *GasStation* - method *setLat (setLon)***
+
+
+
+**Criteria for method *setLat (setLon)*:**
+
+ - Type of lat
+ - Sign of lat
+ - Value of lat
+
+
+**Predicates for method *setLat (setLon)*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|Sign of lat | > 0|
+|          |        < 0    |
+|    Type of lat      |      Double     |
+|          |      All others     |
+|     Value of reputation     |     >= minDouble && <= maxDouble      |
+|          |     > maxDouble      |
+|          |     < minDouble      |
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+|    Value of reputation      |       minDouble, maxDouble, minDouble + 1, maxDouble + 1          |
+
+### **Class *GasStation* - method *setGasPrice (and similar)***
+
+
+
+**Criteria for method *setGasPrice*:**
+
+ - Type of price
+ - Sign of price
+ - Value of price
+
+
+**Predicates for method *setGasPrice*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|Sign of price | > 0|
+|          |        < 0    |
+|    Type of price      |      Double     |
+|          |      All others     |
+|     Value of price     |     >= minDouble && <= maxDouble      |
+|          |     > maxDouble      |
+|          |     < minDouble      |
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+|    Value of price      |       minDouble, maxDouble, minDouble + 1, maxDouble + 1          |
+
+
+**Combination of predicates**:
+
+
+| Type of reputation | Sign of reputation | Value of reputation | Valid / Invalid | Description of the test case | JUnit test case |
+|-------|-------|-------|-------|-------|-------|
+| Double | > 0 | >= minDouble && <= maxDouble | V | setGasPrice(1.567) --> OK | it.polito.ezgas.entity.GasStationTest.java|
+| Double | > 0 | > maxDouble | I | setGasPrice(99999999) --> Exception | it.polito.ezgas.entity.GasStationTest.java|
+| Double | < 0 | >= minDouble && <= maxDouble | I | setGasPrice(-3.2) --> Exception | it.polito.ezgas.entity.GasStationTest.java|
+| Double| < 0 | < minDouble | I | setGasPrice(-99999999) --> Exception | it.polito.ezgas.entity.GasStationTest.java|
+| All others | ... | ... | I | setGasPrice("price123") --> Exception | it.polito.ezgas.entity.GasStationTest.java|
+
+
 # White Box Unit Tests
 
 ### Test cases definition
@@ -148,9 +222,13 @@ Version: 1
 
 | Unit name | JUnit test case |
 |--|--|
-|||
-|||
-||||
+|GasStation |it.polito.ezgas.entity.GasStationTest.java (testGasStation()) |
+|User |it.polito.ezgas.entity.UserTest.java (testUser()) |
+|GasStationDto |it.polito.ezgas.dto.GasStationDtoTest.java (testGasStationDto()) |
+|IdPw |it.polito.ezgas.dto.IdPwTest.java (testIdPw()) |
+|LoginDto |it.polito.ezgas.dto.LoginDtoTest.java (testLoginDto()) |
+|UserDto |it.polito.ezgas.dto.UserDtoTest.java (testUserDto()) |
+
 
 ### Code coverage report
 
