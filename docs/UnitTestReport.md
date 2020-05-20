@@ -208,11 +208,6 @@ Version: 1
 # White Box Unit Tests
 
 ### Test cases definition
-    
-    <JUnit test classes must be in src/test/java/it/polito/ezgas>
-    <Report here all the created JUnit test cases, and the units/classes under test >
-    <For traceability write the class and method name that contains the test case>
-
 
 | Unit name | JUnit test case |
 |--|--|
@@ -226,9 +221,9 @@ Version: 1
 
 ### Code coverage report
 
-![Coverage1](images/coverage1.JPG)
-![Coverage2](images/coverage2.JPG)
-![Coverage3](images/coverage3.JPG)
+![Coverage1](images/coverage1.jpg)
+![Coverage2](images/coverage2.jpg)
+![Coverage3](images/coverage3.jpg)
 
 
 ### Loop coverage analysis
