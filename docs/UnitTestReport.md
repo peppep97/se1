@@ -18,13 +18,7 @@ Version: 1
 
 # Black Box Unit Tests
 
-    <Define here criteria, predicates and the combination of predicates for each function of each class.
-    Define test cases to cover all equivalence classes and boundary conditions.
-    In the table, report the description of the black box test case and (traceability) the correspondence with the JUnit test case writing the 
-    class and method name that contains the test case>
-    <JUnit test classes must be in src/test/java/it/polito/ezgas   You find here, and you can use,  class EZGasApplicationTests.java that is executed before 
-    the set up of all Spring components
-    >
+    Since most of tests are related to setter methods, which are really similar among them (set boolean, double, String values) just few methods are reported here.
 
  ### **Class *User* - method *setReputation***
 
@@ -232,8 +226,9 @@ Version: 1
 
 ### Code coverage report
 
-    <Add here the screenshot report of the statement and branch coverage obtained using
-    the Eclemma tool. >
+![Coverage1](images/coverage1.JPG)
+![Coverage2](images/coverage2.JPG)
+![Coverage3](images/coverage3.JPG)
 
 
 ### Loop coverage analysis
