@@ -8,9 +8,19 @@ Version:
 
 # Contents
 
-- [Dependency graph](#dependency graph)
-
-- [Integration approach](#integration)
+- [Integration and API Test Documentation](#integration-and-api-test-documentation)
+- [Contents](#contents)
+- [Dependency graph](#dependency-graph)
+- [Integration approach](#integration-approach)
+- [Tests](#tests)
+  - [Step 1](#step-1)
+  - [Step 2](#step-2)
+  - [Step n API Tests](#step-n-api-tests)
+- [Scenarios](#scenarios)
+  - [Scenario UCx.y](#scenario-ucxy)
+- [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
+- [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
+    - [](#)
 
 - [Tests](#tests)
 
@@ -23,7 +33,53 @@ Version:
 
 # Dependency graph 
 
-     <report the here the dependency graph of the classes in it/polito/Ezgas, using plantuml>
+   ```plantuml
+   skinparam linetype ortho
+
+     class User
+     class UserRepository
+     class BootEzGasApplication
+     class GasStationController
+     interface GasStationService
+     interface UserService
+     class HomeController
+     class UserController
+     class GasStationConverter
+     class GasStation
+     class GasStationDto
+     class UserConverter
+     class UserDto
+     class LoginDto
+     class GasStationServiceImpl
+     class GasStationRepository
+     class UserServiceImpl
+
+   User <.up. BootEzGasApplication
+   UserRepository <.up. BootEzGasApplication
+   GasStationService <.up. GasStationController
+   UserService <.up. UserController
+   GasStation <.up. GasStationConverter
+   GasStationDto <.up. GasStationConverter
+   User <.up. UserConverter
+   UserDto <.up. UserConverter
+   LoginDto <.up. UserConverter
+   GasStationDto <.up. GasStationService
+   UserDto <.up. UserService
+   LoginDto <.up. UserService
+   GasStation <.up. GasStationRepository
+   User <.up. UserRepository
+   GasStationService <.up. GasStationServiceImpl
+   GasStationRepository <.up. GasStationServiceImpl
+   UserRepository <.up. GasStationServiceImpl
+   GasStation <.up. GasStationServiceImpl
+   GasStationConverter <.up. GasStationServiceImpl
+   GasStationDto <.up. GasStationServiceImpl 
+   UserService <.up. UserServiceImpl 
+   UserRepository <.up. UserServiceImpl 
+   UserDto <.up. UserServiceImpl 
+   User <.up. UserServiceImpl 
+   UserConverter <.up. UserServiceImpl 
+   ```
      
 # Integration approach
 
