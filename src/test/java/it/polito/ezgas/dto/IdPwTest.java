@@ -16,5 +16,9 @@ public class IdPwTest {
 
         idPw.setUser("Mario");
         assertEquals("Mario", idPw.getUser());
+        
+        IdPw idPw1 = new IdPw("id", "pass");
+        assertEquals("id", idPw1.getUser());
+        assertEquals("pass", idPw1.getPw());
     }
 }

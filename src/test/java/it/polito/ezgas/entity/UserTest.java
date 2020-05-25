@@ -28,6 +28,12 @@ public class UserTest {
 
         user.setUserName("mario");
         assertEquals("mario", user.getUserName());
+        
+    	User user1 = new User("admin", "admin", "admin@gmail.com", 1);
+    	assertEquals("admin", user1.getUserName());
+    	assertEquals("admin", user1.getPassword());
+    	assertEquals("admin@gmail.com", user1.getEmail());
+    	assertEquals(Integer.valueOf(1), user1.getReputation());
 
     }
 }

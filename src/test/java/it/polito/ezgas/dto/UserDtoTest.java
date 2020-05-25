@@ -28,6 +28,16 @@ public class UserDtoTest {
 
         userDto.setUserName("mario");
         assertEquals("mario", userDto.getUserName());
+        
+        UserDto userDto1 = new UserDto(1, "test", "test", "test@test.com", 1);
+        assertEquals(Integer.valueOf(1), userDto1.getUserId());
+        assertEquals("test", userDto1.getUserName());
+        assertEquals("test", userDto1.getPassword());
+        assertEquals("test@test.com", userDto1.getEmail());
+        assertEquals(Integer.valueOf(1), userDto1.getReputation());
+        
+        UserDto userDto2 = new UserDto(2, "test", "test", "test@test.com", 1, true);
+        assertEquals(true, userDto2.getAdmin());
     }
 
 }

@@ -35,7 +35,7 @@ public class BootEZGasApplication {
 		
 		//if admin does not exist then create and save it
 		if(!urepository.existsByAdminTrue()) {
-			User user= new User("admin", "admin", "admin@ezgas.com", 5);
+			User user = new User("admin", "admin", "admin@ezgas.com", 5);
 			user.setAdmin(true);
 			urepository.save(user);
 		}

@@ -96,7 +96,7 @@ public class GasStation implements Serializable {
     }
     
     public GasStation(String gasStationName, String gasStationAddress, boolean hasDiesel, boolean hasSuper, boolean hasSuperPlus, boolean hasGas, boolean hasMethane, String carSharing, double lat, double lon, double dieselPrice, double superPrice, double superPlusPrice, double gasPrice, double methanePrice, Integer reportUser, String reportTimestamp, double reportDependability) {
-        this.gasStationName = gasStationName;
+    	this.gasStationName = gasStationName;
         this.gasStationAddress = gasStationAddress;
         this.carSharing = carSharing;
 		this.hasDiesel = hasDiesel;
