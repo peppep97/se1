@@ -1,4 +1,4 @@
-package it.polito.ezgas.service.mock;
+package it.polito.ezgas.service.impl.mock;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
