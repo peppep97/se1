@@ -42,9 +42,9 @@ public class UserServiceImplMockTest {
 		mockedRepo = Mockito.mock(UserRepository.class);
 		Mockito.when(mockedRepo.findAll()).thenReturn(list);
 		Mockito.when(mockedRepo.findByUserId(Mockito.anyInt())).thenReturn(a);
-		Mockito.when(mockedRepo.findByEmail("bob@ezgas.com")).thenReturn(b);
+		Mockito.when(mockedRepo.findByEmail(Mockito.anyString())).thenReturn(b);
 		Mockito.when(mockedRepo.save(Mockito.any(User.class))).thenReturn(c);
-		//Mockito.when(mockedRepo.exists(Mockito.anyInt())).thenReturn(true);
+		Mockito.when(mockedRepo.exists(Mockito.anyInt())).thenReturn(true);
 		test = new UserServiceImpl(mockedRepo);
 		
 	}
