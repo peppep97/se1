@@ -1,8 +1,5 @@
 package it.polito.ezgas.service.impl.mock;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
 
 import exception.InvalidLoginDataException;
 import exception.InvalidUserException;
@@ -12,11 +9,16 @@ import it.polito.ezgas.dto.LoginDto;
 import it.polito.ezgas.entity.User;
 import it.polito.ezgas.repository.UserRepository;
 import it.polito.ezgas.service.impl.UserServiceImpl;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserServiceImplMockTest {
 	
@@ -42,13 +44,13 @@ public class UserServiceImplMockTest {
 		Mockito.when(mockedRepo.findByUserId(Mockito.anyInt())).thenReturn(a);
 		Mockito.when(mockedRepo.findByEmail("bob@ezgas.com")).thenReturn(b);
 		Mockito.when(mockedRepo.save(Mockito.any(User.class))).thenReturn(c);
-		Mockito.when(mockedRepo.exists(Mockito.anyInt())).thenReturn(true);
+		//Mockito.when(mockedRepo.exists(Mockito.anyInt())).thenReturn(true);
 		test = new UserServiceImpl(mockedRepo);
 		
 	}
 	
 	@Test
-	public void testGetUserById() throws InvalidUserException {	
+	public void testGetUserById() throws InvalidUserException {
 		
 		User u = UserConverter.toUser(test.getUserById(1));
 		assertTrue(compareUsers(u, a));
@@ -129,6 +131,5 @@ private boolean compareLogins(LoginDto a, LoginDto b) {
 		else
 			return false;
 	}
-	
 
 }
