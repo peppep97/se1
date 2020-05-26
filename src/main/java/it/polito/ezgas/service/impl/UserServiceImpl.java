@@ -3,7 +3,6 @@ package it.polito.ezgas.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import exception.InvalidLoginDataException;
@@ -23,9 +22,12 @@ import it.polito.ezgas.service.UserService;
 public class UserServiceImpl implements UserService {
 	
 	// Repository of users
-	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
+	// Constructor for integration tests
+	public UserServiceImpl(UserRepository userRepo){
+		this.userRepository = userRepo;
+	}
 	
 	@Override
 	public UserDto getUserById(Integer userId) throws InvalidUserException {
@@ -112,7 +114,7 @@ public class UserServiceImpl implements UserService {
 		if(user.getReputation() < 5) {
 			newreputation=user.getReputation()+1;
 			user.setReputation(newreputation);
-			user=userRepository.save(user);
+			userRepository.save(user);
 		}
 		
 		return user.getReputation();
@@ -136,7 +138,7 @@ public class UserServiceImpl implements UserService {
 		if(user.getReputation() > -5) {
 			newreputation= user.getReputation()-1;
 			user.setReputation(newreputation);
-			user=userRepository.save(user);
+			userRepository.save(user);
 		}
 		
 		return user.getReputation();
