@@ -26,7 +26,7 @@ public class UserServiceImplMockTest {
 	User a = new User("Alice", "Alice", "alice@ezgas.com", 0);
 	User b = new User("Bob", "Bob", "bob@ezgas.com", 0);
 	User c = new User("Charlie", "Charlie", "charlie@ezgas.com", 0);
-	List<User> list = new ArrayList<>();
+	List<User> list = new ArrayList<User>();
 	IdPw credential = new IdPw("bob@ezgas.com", "Bob");
 	LoginDto login = new LoginDto(2, "Bob", "init_token", "bob@ezgas.com", 0);
 	
@@ -51,7 +51,6 @@ public class UserServiceImplMockTest {
 	public void testGetUserById() throws InvalidUserException {	
 		
 		User u = UserConverter.toUser(test.getUserById(1));
-		assertNotNull(u);
 		assertTrue(compareUsers(u, a));
 		
 	}
@@ -60,7 +59,6 @@ public class UserServiceImplMockTest {
 	public void testSaveUser() throws InvalidUserException {
 		
 		User u = UserConverter.toUser(test.saveUser(UserConverter.toUserDto(c)));
-		assertNotNull(u);
 		assertTrue(compareUsers(u, c));
 		
 	}
@@ -96,7 +94,7 @@ public class UserServiceImplMockTest {
 		
 		a.setReputation(0);
 		Integer i = test.increaseUserReputation(1);
-		assertEquals(i, Integer.valueOf(1));
+		assertTrue(i.equals(Integer.valueOf(1)));
 		
 	}
 
@@ -105,23 +103,31 @@ public class UserServiceImplMockTest {
 		
 		a.setReputation(0);
 		Integer i = test.decreaseUserReputation(1);
-		assertEquals(i, Integer.valueOf(-1));
+		assertTrue(i.equals(Integer.valueOf(-1)));
 		
 	}
 	
 	
 	private boolean compareUsers(User a, User b) {
-
-		return a.getUserId().equals(b.getUserId()) && a.getUserName().compareTo(b.getUserName()) == 0 &&
+		
+		if(a.getUserId() == b.getUserId() && a.getUserName().compareTo(b.getUserName()) == 0 && 
 				a.getEmail().compareTo(b.getEmail()) == 0 && a.getPassword().compareTo(b.getPassword()) == 0 &&
-				a.getReputation().equals(b.getReputation());
+				a.getReputation() == b.getReputation())
+			return true;
+		
+		else
+			return false;
 	}
 	
 private boolean compareLogins(LoginDto a, LoginDto b) {
-
-	return a.getUserName().compareTo(b.getUserName()) == 0 &&
-			a.getEmail().compareTo(b.getEmail()) == 0 && a.getToken().compareTo(b.getToken()) == 0 &&
-			a.getReputation().equals(b.getReputation());
+		
+		if(a.getUserName().compareTo(b.getUserName()) == 0 && 
+				a.getEmail().compareTo(b.getEmail()) == 0 && a.getToken().compareTo(b.getToken()) == 0 &&
+				a.getReputation() == b.getReputation())
+			return true;
+		
+		else
+			return false;
 	}
 	
 
