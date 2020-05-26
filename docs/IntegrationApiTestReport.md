@@ -186,14 +186,13 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 | Scenario ID | Functional Requirements covered | JUnit  Test(s) | 
 | ----------- | ------------------------------- | ----------- | 
-|  10.1         | FR4 - FR4.1 - FR4.2 - FR4.3 - FR4.4 - FR4.5 - FR5 - FR5.2                             | it.polito.ezgas.service.impl.GasStationServiceImplTest.java            |
-|           |                              | it.polito.ezgas.service.impl.UserServiceImplTest.java            |             
-|  10.2        | FR4 - FR4.1 - FR4.2 - FR4.3 - FR4.4 - FR4.5 - FR5 - FR5.2                             |     it.polito.ezgas.service.impl.GasStationServiceImplTest.java        |             
+|  10.1         | FR4 - FR5 - FR5.2                             | it.polito.ezgas.service.impl.GasStationServiceImplTest.java            |
+|           |                         | it.polito.ezgas.service.impl.UserServiceImplTest.java         |             
+|  10.2        | FR4 - FR5 - FR5.2    |     it.polito.ezgas.service.impl.GasStationServiceImplTest.java        |             
 |           |                              | it.polito.ezgas.service.impl.UserServiceImplTest.java            |            |             
-| UC4.1         |                                 |             |             
-| ...         |                                 |             |             
-| ...         |                                 |             |             
-
+| UC4.1         |     FR3 - FR3.1    |     it.polito.ezgas.service.impl.GasStationServiceImplTest.java        |
+| UC7.1         |  FR4 - FR5 - FR5.1      | it.polito.ezgas.service.impl.GasStationServiceImplTest.java |     
+| UC8.1        |   FR4 - FR4.2 - FR4.3    | it.polito.ezgas.service.impl.GasStationServiceImplTest.java    |             
 
 
 # Coverage of Non Functional Requirements
@@ -206,6 +205,6 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 | Non Functional Requirement | Test name |
 | -------------------------- | --------- |
-|                            |           |
+| Performance | (All tests are executed in less than 0.5s) |
 
 
