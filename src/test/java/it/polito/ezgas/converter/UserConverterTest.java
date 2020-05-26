@@ -1,15 +1,12 @@
 package it.polito.ezgas.converter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import it.polito.ezgas.dto.LoginDto;
 import it.polito.ezgas.dto.UserDto;
 import it.polito.ezgas.entity.User;
+
+import static org.junit.Assert.*;
 
 public class UserConverterTest {
 
@@ -20,6 +17,7 @@ public class UserConverterTest {
 
 		User u = UserConverter.toUser(userDto);
 
+		assertNotNull(u);
 		assertEquals(Integer.valueOf(1), u.getUserId());
 		assertEquals("test", u.getUserName());
 		assertEquals("test", u.getPassword());
@@ -33,6 +31,7 @@ public class UserConverterTest {
 		UserDto userDto2 = new UserDto(1, "test", "test", "test@test.com", null);
 
 		User u2 = UserConverter.toUser(userDto2);
+		assertNotNull(u2);
 		assertEquals(Integer.valueOf(0), u2.getReputation());
 	}
 
@@ -42,7 +41,7 @@ public class UserConverterTest {
 		user.setAdmin(false);
 		
 		UserDto u = UserConverter.toUserDto(user);
-		
+		assertNotNull(u);
     	assertEquals("admin", u.getUserName());
     	assertEquals("admin", u.getPassword());
     	assertEquals("admin@gmail.com", u.getEmail());
@@ -55,6 +54,7 @@ public class UserConverterTest {
     	User user2 = new User("test", "test", "test@test.com", null);
 
     	UserDto u2 = UserConverter.toUserDto(user2);
+    	assertNotNull(u2);
 		assertEquals(Integer.valueOf(0), u2.getReputation());
   
 	}
