@@ -3,6 +3,7 @@ package it.polito.ezgas.service.impl.mock;
 import exception.*;
 import it.polito.ezgas.converter.GasStationConverter;
 import it.polito.ezgas.converter.UserConverter;
+import it.polito.ezgas.dto.GasStationDto;
 import it.polito.ezgas.dto.IdPw;
 import it.polito.ezgas.dto.LoginDto;
 import it.polito.ezgas.entity.GasStation;
@@ -61,7 +62,7 @@ public class GasStationServiceImplMockTest {
             true,
             true,
             "Bcar",
-            45.001,
+            46.001,
             8.0,
             1.0,
             1.2,
@@ -79,7 +80,7 @@ public class GasStationServiceImplMockTest {
             true,
             true,
             "Ciccar",
-            45.002,
+            47.002,
             7.0,
             1.0,
             1.2,
@@ -155,7 +156,9 @@ public class GasStationServiceImplMockTest {
     }
 
     @Test
-    public void getGasStationsByProximity() {
+    public void getGasStationsByProximity() throws GPSDataException {
+        List<GasStationDto> l = test.getGasStationsByProximity(45.0, 7.0);
+        assertEquals("Agippo", l.get(0).getGasStationName());
     }
 
     @Test
@@ -167,7 +170,9 @@ public class GasStationServiceImplMockTest {
     }
 
     @Test
-    public void setReport() {
+    public void setReport() throws PriceException, InvalidUserException, InvalidGasStationException {
+        test.setReport(0, 1.1, 1.2, 1.3, 0.4, 0.5, 0);
+        //assertEquals(0.4, test.getGasStationById(0).getGasPrice(), 0.01);
     }
 
     @Test
