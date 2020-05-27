@@ -116,11 +116,13 @@ public class GasStationServiceImplMockTest {
         list.add(a);
         list.add(b);
         list.add(c);
+
         mockedRepo = Mockito.mock(GasStationRepository.class);
         Mockito.when(mockedRepo.findAll()).thenReturn(list);
         Mockito.when(mockedRepo.findByGasStationId(Mockito.anyInt())).thenReturn(a);
         Mockito.doAnswer(i -> {a.setGasPrice(0.4); return c;}).when(mockedRepo).save(Mockito.any(GasStation.class));
         Mockito.when(mockedRepo.exists(Mockito.anyInt())).thenReturn(true);
+        Mockito.when(mockedRepo.findByCarSharing(Mockito.anyString())).thenReturn(list);
         test = new GasStationServiceImpl(mockedRepo, mockedUserRepo);
 
     }
@@ -177,6 +179,9 @@ public class GasStationServiceImplMockTest {
 
     @Test
     public void getGasStationByCarSharing() {
+        List<GasStationDto> l = test.getGasStationByCarSharing("Acar");
+
+        assertEquals("Acar", l.get(0).getCarSharing());
     }
 
     private boolean compareGasStations(GasStation a, GasStation b) {

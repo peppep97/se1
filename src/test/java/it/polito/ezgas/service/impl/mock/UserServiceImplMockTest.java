@@ -38,13 +38,15 @@ public class UserServiceImplMockTest {
 	User a = new User("Alice", "Alice", "alice@ezgas.com", 0);
 	User b = new User("Bob", "Bob", "bob@ezgas.com", 0);
 	User c = new User("Charlie", "Charlie", "charlie@ezgas.com", 0);
-	List<User> list = new ArrayList<User>();
+	List<User> list = new ArrayList<>();
 	IdPw credential = new IdPw("bob@ezgas.com", "Bob");
 	LoginDto login = new LoginDto(2, "Bob", "init_token", "bob@ezgas.com", 0);
 	
 	
 	@Before
 	public void setUp() {
+
+		b.setUserId(2);
 
 		list.add(a);
 		list.add(b);
@@ -100,8 +102,6 @@ public class UserServiceImplMockTest {
 	public void testLogin() throws InvalidLoginDataException {
 		
 		LoginDto log = test.login(credential);
-		System.out.println(log.getUserId() + " " + log.getUserName() + " " + log.getEmail() + " " + log.getReputation() +
-				"\n" + login.getUserId() + " " +login.getUserName() + " " + login.getEmail() + " " + login.getReputation());
 		assertNotNull(log);
 		assertTrue(compareLogins(log, login));
 		
