@@ -4,7 +4,11 @@ Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
 Date: 19/05/2020
 
-Version: 1
+Version: 2
+
+| Version | Changes                                                     |
+| ------- | :---------------------------------------------------------- |
+| 2       | Increased Unit tests coverage                                |
 
 # Contents
 

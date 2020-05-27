@@ -43,7 +43,7 @@ public class GasStationConverter {
 	// Convert from gasstation to gasstationdto
 	public static GasStationDto toGasStationDto(GasStation gasStation) {
 		
-		GasStationDto gasStationDto =new GasStationDto();
+		GasStationDto gasStationDto = new GasStationDto();
 		gasStationDto.setGasStationId(gasStation.getGasStationId());
 		gasStationDto.setGasStationName(gasStation.getGasStationName());
 		gasStationDto.setGasStationAddress(gasStation.getGasStationAddress());

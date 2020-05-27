@@ -24,8 +24,12 @@ public class UserServiceImpl implements UserService {
 	
 	// Repository of users
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
+	// Constructor for integration tests
+	public UserServiceImpl(UserRepository userRepo){
+		this.userRepository = userRepo;
+	}
 	
 	@Override
 	public UserDto getUserById(Integer userId) throws InvalidUserException {
@@ -85,9 +89,11 @@ public class UserServiceImpl implements UserService {
 	public LoginDto login(IdPw credentials) throws InvalidLoginDataException {
 		
 		// Search user by email
-		User user=userRepository.findByEmail(credentials.getUser());
-		if(user==null)
+		User user = userRepository.findByEmail(credentials.getUser());
+		if(user == null)
 			throw new InvalidLoginDataException("WRONG EMAIL");
+
+
 		
 		// Check if pwd is correct
 		if(!user.getPassword().equals(credentials.getPw()))
@@ -112,7 +118,7 @@ public class UserServiceImpl implements UserService {
 		if(user.getReputation() < 5) {
 			newreputation=user.getReputation()+1;
 			user.setReputation(newreputation);
-			user=userRepository.save(user);
+			userRepository.save(user);
 		}
 		
 		return user.getReputation();
@@ -136,7 +142,7 @@ public class UserServiceImpl implements UserService {
 		if(user.getReputation() > -5) {
 			newreputation= user.getReputation()-1;
 			user.setReputation(newreputation);
-			user=userRepository.save(user);
+			userRepository.save(user);
 		}
 		
 		return user.getReputation();
