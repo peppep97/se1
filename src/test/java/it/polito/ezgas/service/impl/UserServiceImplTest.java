@@ -1,7 +1,6 @@
 package it.polito.ezgas.service.impl;
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.junit.Before;
@@ -18,7 +17,6 @@ import it.polito.ezgas.entity.User;
 import it.polito.ezgas.repository.UserRepository;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import java.util.List;
