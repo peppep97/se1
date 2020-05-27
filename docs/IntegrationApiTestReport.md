@@ -86,11 +86,6 @@ Version: 1
      
 # Integration approach
 
-  <!-- <Write here the integration sequence you adopted, in general terms (top down, bottom up, mixed) and as sequence
-  (ex: step1: class A, step 2: class A+B, step 3: class A+B+C, etc)> 
-  <The last integration step corresponds to API testing at level of Service package>
-  <Tests at level of Controller package will be done later> -->
-
     We have followed a mixed approach.
     Step 1: test of converters
     Step 2: test of services (with mocked repositories)
@@ -98,9 +93,6 @@ Version: 1
     Step 4: test of services
 
 #  Tests
-
-   <define below a table for each integration step. For each integration step report the group of classes under test, and the names of
-     JUnit test cases applied to them>
 
 ## Step 1
 | Classes  | JUnit test cases |
@@ -124,18 +116,12 @@ Version: 1
 
 ## Step 4 API Tests
 
-   <The last integration step  should correspond to API testing, or tests applied to all classes implementing the APIs defined in the Service package>
-
 | Classes  | JUnit test cases |
 |--|--|
 |GasStationServiceImpl|it.polito.ezgas.service.impl.GasStationServiceImplTest.java| 
 |UserServiceImpl|it.polito.ezgas.service.impl.UserServiceImplTest.java|
 
 # Scenarios
-
-
-<If needed, define here additional scenarios for the application. Scenarios should be named
- referring the UC they detail>
 
 ## Scenario UC4.1
 
