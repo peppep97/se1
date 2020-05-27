@@ -82,7 +82,7 @@ public class UserServiceImplMockTest {
 	}
 
 	@Test	
-	public void testLogin() throws InvalidUserException, InvalidLoginDataException {
+	public void testLogin() throws InvalidLoginDataException {
 		
 		LoginDto log = test.login(credential);
 		assertTrue(compareLogins(log, login));
