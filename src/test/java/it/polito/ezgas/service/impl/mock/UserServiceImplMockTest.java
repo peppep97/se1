@@ -11,7 +11,11 @@ import it.polito.ezgas.repository.UserRepository;
 import it.polito.ezgas.service.impl.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +23,16 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UserServiceImplMockTest {
 	
+	@Autowired
 	UserRepository mockedRepo;
+	
 	UserServiceImpl test;
 	
 	User a = new User("Alice", "Alice", "alice@ezgas.com", 0);
@@ -61,6 +71,7 @@ public class UserServiceImplMockTest {
 	public void testSaveUser() throws InvalidUserException {
 		
 		User u = UserConverter.toUser(test.saveUser(UserConverter.toUserDto(c)));
+		assertNotNull(u);
 		assertTrue(compareUsers(u, c));
 		
 	}
@@ -69,6 +80,7 @@ public class UserServiceImplMockTest {
 	public void testGetAllUsers() throws InvalidUserException {
 		
 		List<User> l = test.getAllUsers().stream().map(UserConverter::toUser).collect(Collectors.toList());
+		assertNotNull(l);
 		assertTrue(compareUsers(l.get(0), a));
 		assertTrue(compareUsers(l.get(1), b));
 		assertTrue(compareUsers(l.get(2), c));
@@ -79,6 +91,7 @@ public class UserServiceImplMockTest {
 	public void testDeleteUsers() throws InvalidUserException {
 		
 		Boolean c = test.deleteUser(1);
+		assertNotNull(c);
 		assertFalse(c);	// Because the mockedRepo.exists() returns true and in the UserServiceImpl if it is true, the delete method returns false
 		
 	}
@@ -87,6 +100,9 @@ public class UserServiceImplMockTest {
 	public void testLogin() throws InvalidLoginDataException {
 		
 		LoginDto log = test.login(credential);
+		System.out.println(log.getUserId() + " " + log.getUserName() + " " + log.getEmail() + " " + log.getReputation() +
+				"\n" + login.getUserId() + " " +login.getUserName() + " " + login.getEmail() + " " + login.getReputation());
+		assertNotNull(log);
 		assertTrue(compareLogins(log, login));
 		
 	}
@@ -96,7 +112,8 @@ public class UserServiceImplMockTest {
 		
 		a.setReputation(0);
 		Integer i = test.increaseUserReputation(1);
-		assertTrue(i.equals(Integer.valueOf(1)));
+		assertNotNull(i);
+		assertEquals(Integer.valueOf(i), Integer.valueOf(1));
 		
 	}
 
@@ -105,7 +122,8 @@ public class UserServiceImplMockTest {
 		
 		a.setReputation(0);
 		Integer i = test.decreaseUserReputation(1);
-		assertTrue(i.equals(Integer.valueOf(-1)));
+		assertNotNull(i);
+		assertEquals(Integer.valueOf(i), Integer.valueOf(-1));
 		
 	}
 	
@@ -123,7 +141,7 @@ public class UserServiceImplMockTest {
 	
 private boolean compareLogins(LoginDto a, LoginDto b) {
 		
-		if(a.getUserName().compareTo(b.getUserName()) == 0 && 
+		if(a.getUserId().compareTo( b.getUserId()) == 0 && a.getUserName().compareTo(b.getUserName()) == 0 && 
 				a.getEmail().compareTo(b.getEmail()) == 0 && a.getToken().compareTo(b.getToken()) == 0 &&
 				a.getReputation() == b.getReputation())
 			return true;
