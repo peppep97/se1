@@ -10,6 +10,7 @@ import org.junit.Test;
 import it.polito.ezgas.dto.GasStationDto;
 import it.polito.ezgas.dto.UserDto;
 import it.polito.ezgas.entity.GasStation;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 public class GasStationConverterTest {
 
