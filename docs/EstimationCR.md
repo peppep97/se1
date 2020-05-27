@@ -27,3 +27,4 @@ update of documents. Consider only effort on the back end (changes to all packag
 | CR4   | 4| 4| 
 | CR5   | 3| 15| 
 | CR6   | 3| 15| 
+| CR7   | 2| 4| 
