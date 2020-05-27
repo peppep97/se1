@@ -134,7 +134,7 @@ public class GasStationServiceImplTest {
     }
 
     @Test
-    public void deleteGasStation() throws InvalidGasStationException {
+    public void testDeleteGasStation() throws InvalidGasStationException {
 
         Boolean res = gasStationService.deleteGasStation(aId);
 
@@ -207,7 +207,6 @@ public class GasStationServiceImplTest {
     @Test
     public void testGetGasStationsWithoutCoordinates() throws InvalidGasTypeException, GPSDataException {
         List<GasStationDto> gasStations;
-        double lat = 45, lon = 7;
 
         gasStations = gasStationService.getGasStationsWithoutCoordinates("Diesel", null);
         assertEquals(3, gasStations.size());

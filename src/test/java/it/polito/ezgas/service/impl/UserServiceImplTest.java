@@ -63,9 +63,6 @@ public class UserServiceImplTest {
 		User u = UserConverter.toUser(userService.getUserById(a.getUserId()));
 		assertNotNull(u);
 		assertTrue(compareUsers(u, a));
-		
-		
-		
 	}
 	
 	@Test
@@ -101,8 +98,6 @@ public class UserServiceImplTest {
 	public void testLogin() throws  InvalidLoginDataException {
 		
 		LoginDto log = userService.login(credential);
-		System.out.println(log.getUserId() + " " + log.getUserName() + " " + log.getEmail() + " " + log.getReputation() +
-				"\n" + login.getUserId() + " " +login.getUserName() + " " + login.getEmail() + " " + login.getReputation());
 		assertNotNull(log);
 		assertTrue(compareLogins(log, login));
 		

@@ -90,7 +90,6 @@ public class UserServiceImpl implements UserService {
 		
 		// Search user by email
 		User user = userRepository.findByEmail(credentials.getUser());
-		System.out.println("UserServiceId: " + user.getUserId());
 		if(user == null)
 			throw new InvalidLoginDataException("WRONG EMAIL");
 

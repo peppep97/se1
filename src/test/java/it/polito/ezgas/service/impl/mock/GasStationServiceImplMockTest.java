@@ -33,8 +33,6 @@ public class GasStationServiceImplMockTest {
     User user1 = new User("Bob", "Bob", "bob@ezgas.com", 0);
     User user2 = new User("Charlie", "Charlie", "charlie@ezgas.com", 0);
     List<User> userList = new ArrayList<>();
-    IdPw credential = new IdPw("bob@ezgas.com", "Bob");
-    LoginDto login = new LoginDto(2, "Bob", "init_token", "bob@ezgas.com", 0);
 
     GasStation a = new GasStation("Agippo",
             "Via Agrippa",
@@ -92,7 +90,7 @@ public class GasStationServiceImplMockTest {
             60.0);
 
     List<GasStation> list = new ArrayList<>();
-
+    List<GasStation> list1 = new ArrayList<>();
 
     @Before
     public void setUp() {
@@ -117,12 +115,25 @@ public class GasStationServiceImplMockTest {
         list.add(b);
         list.add(c);
 
+        list1.add(a);
+
         mockedRepo = Mockito.mock(GasStationRepository.class);
         Mockito.when(mockedRepo.findAll()).thenReturn(list);
         Mockito.when(mockedRepo.findByGasStationId(Mockito.anyInt())).thenReturn(a);
         Mockito.doAnswer(i -> {a.setGasPrice(0.4); return c;}).when(mockedRepo).save(Mockito.any(GasStation.class));
         Mockito.when(mockedRepo.exists(Mockito.anyInt())).thenReturn(true);
         Mockito.when(mockedRepo.findByCarSharing(Mockito.anyString())).thenReturn(list);
+        Mockito.when(mockedRepo.findByHasDieselTrue()).thenReturn(list);
+        Mockito.when(mockedRepo.findByHasSuperTrue()).thenReturn(list);
+        Mockito.when(mockedRepo.findByHasSuperPlusTrue()).thenReturn(list);
+        Mockito.when(mockedRepo.findByHasGasTrue()).thenReturn(list);
+        Mockito.when(mockedRepo.findByHasMethaneTrue()).thenReturn(list);
+
+        Mockito.when(mockedRepo.findByHasDieselTrueAndCarSharing(Mockito.anyString())).thenReturn(list1);
+        Mockito.when(mockedRepo.findByHasSuperTrueAndCarSharing(Mockito.anyString())).thenReturn(list1);
+        Mockito.when(mockedRepo.findByHasSuperPlusTrueAndCarSharing(Mockito.anyString())).thenReturn(list1);
+        Mockito.when(mockedRepo.findByHasGasTrueAndCarSharing(Mockito.anyString())).thenReturn(list1);
+        Mockito.when(mockedRepo.findByHasMethaneTrueAndCarSharing(Mockito.anyString())).thenReturn(list1);
         test = new GasStationServiceImpl(mockedRepo, mockedUserRepo);
 
     }
@@ -154,7 +165,24 @@ public class GasStationServiceImplMockTest {
     }
 
     @Test
-    public void getGasStationsByGasolineType() {
+    public void getGasStationsByGasolineType() throws InvalidGasTypeException{
+
+        List<GasStationDto> gasStations;
+
+        gasStations = test.getGasStationsByGasolineType("Diesel");
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsByGasolineType("Super");
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsByGasolineType("SuperPlus");
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsByGasolineType("Gas");
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsByGasolineType("Methane");
+        assertEquals(3, gasStations.size());
     }
 
     @Test
@@ -164,11 +192,76 @@ public class GasStationServiceImplMockTest {
     }
 
     @Test
-    public void getGasStationsWithCoordinates() {
+    public void getGasStationsWithCoordinates() throws InvalidGasTypeException, GPSDataException{
+
+        List<GasStationDto> gasStations;
+        double lat = 45, lon = 7;
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Diesel", null);
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Super", null);
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "SuperPlus", null);
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Gas", null);
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Methane", null);
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Diesel", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Super", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "SuperPlus", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Gas", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Methane", "Bcar");
+        assertEquals(1, gasStations.size());
     }
 
     @Test
-    public void getGasStationsWithoutCoordinates() {
+    public void getGasStationsWithoutCoordinates() throws InvalidGasTypeException{
+
+        List<GasStationDto> gasStations;
+
+        gasStations = test.getGasStationsWithoutCoordinates("Diesel", null);
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("Super", null);
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("SuperPlus", null);
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("Gas", null);
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("Methane", null);
+        assertEquals(3, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("Diesel", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("Super", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("SuperPlus", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("Gas", "Bcar");
+        assertEquals(1, gasStations.size());
+
+        gasStations = test.getGasStationsWithoutCoordinates("Methane", "Bcar");
+        assertEquals(1, gasStations.size());
     }
 
     @Test
