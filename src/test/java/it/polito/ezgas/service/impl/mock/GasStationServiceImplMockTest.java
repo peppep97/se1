@@ -119,7 +119,7 @@ public class GasStationServiceImplMockTest {
         mockedRepo = Mockito.mock(GasStationRepository.class);
         Mockito.when(mockedRepo.findAll()).thenReturn(list);
         Mockito.when(mockedRepo.findByGasStationId(Mockito.anyInt())).thenReturn(a);
-        Mockito.when(mockedRepo.save(Mockito.any(GasStation.class))).thenReturn(c);
+        Mockito.doAnswer(i -> {a.setGasPrice(0.4); return c;}).when(mockedRepo).save(Mockito.any(GasStation.class));
         Mockito.when(mockedRepo.exists(Mockito.anyInt())).thenReturn(true);
         test = new GasStationServiceImpl(mockedRepo, mockedUserRepo);
 
@@ -172,7 +172,7 @@ public class GasStationServiceImplMockTest {
     @Test
     public void setReport() throws PriceException, InvalidUserException, InvalidGasStationException {
         test.setReport(0, 1.1, 1.2, 1.3, 0.4, 0.5, 0);
-        //assertEquals(0.4, test.getGasStationById(0).getGasPrice(), 0.01);
+        assertEquals(0.4, test.getGasStationById(0).getGasPrice(), 0.01);
     }
 
     @Test
