@@ -35,6 +35,12 @@ public class GasStationServiceImpl implements GasStationService {
 	// Repository of users
 	@Autowired
 	UserRepository userRepository;
+
+	// Constructor for integration tests
+	public GasStationServiceImpl(GasStationRepository gasStationRepo, UserRepository mockedUserRepo){
+		this.userRepository = mockedUserRepo;
+		this.gasStationRepository = gasStationRepo;
+	}
 	
 	
 	@Override
