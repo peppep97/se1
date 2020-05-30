@@ -1,10 +1,10 @@
 # GUI  Testing Documentation 
 
-Authors:
+Author: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
-Date:
+Date: 30/05/2020
 
-Version:
+Version: 1
 
 # GUI testing
 
@@ -20,12 +20,16 @@ This part of the document reports about testing at the GUI level. Tests are end 
 
 | Scenario ID | Functional Requirements covered | GUI Test(s) |
 | ----------- | ------------------------------- | ----------- | 
-| 1           | FRx                             |             |             
-| 2           | FRy                             |             |             
-| ...         |                                 |             |         
-| ...         |                                 |             |             
-| ...         |                                 |             |             
-| ...         |                                 |             |             
+| UC1         | FR1 - FR1.1                     | uc1.py      |             
+| UC2         | FR1 - FR1.1                     | uc2.py      |       
+| UC4         | FR3 - FR3.1                     | uc4.py      |            
+| UC5         | FR3 - FR3.1                     | uc5.py      |   
+| UC6         | FR3 - FR3.2                     | uc6.py      |   
+| UC7         | FR5 - FR5.1                     | uc7.py      |   
+| UC8         | FR4 - FR4.1 - FR4.2 - FR4.3 - FR4.4 - FR4.5                             | uc8.py      |   
+| UC9         | FR5 - FR5.2                     | uc9.py      |   
+| UC10        | FR5 - FR5.3                     | uc10.py     |   
+            
 
 
 # REST  API  Testing
