@@ -1,10 +1,10 @@
 click("1590786705590.png")
 wait(1)
-click(Location(663, 244))
+click("1590854355199.png")
 type("a", KeyModifier.CTRL) # select all text
 type(Key.BACKSPACE) # delete selection
 type("newtest")
-type(Location(662, 336), "test")
+type("1590854439753.png", "test")
 click("1590786723933.png")
 wait(1)
 click("1590787763199.png")
