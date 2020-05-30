@@ -64,6 +64,7 @@ public class GasStationConverter {
 		gasStationDto.setReportUser(gasStation.getReportUser());
 		gasStationDto.setReportTimestamp(gasStation.getReportTimestamp());
 		// Check if gas station has a price report
+
 		if(gasStation.getReportTimestamp() != null)
 			gasStationDto.setReportDependability(dependabilityCalculator(gasStation.getReportTimestamp(), gasStation.getUser().getReputation()));
 		

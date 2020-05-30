@@ -79,10 +79,11 @@ public class GasStationServiceImpl implements GasStationService {
 
 		// Retrieve all gas stations from repository
 		List<GasStation> listGasStation = gasStationRepository.findAll();
+
 		if(listGasStation == null) {
 			return null;
 		}
-		
+
 		// Converting each GasStation to GasStationDto
 		return listGasStation.stream().map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
