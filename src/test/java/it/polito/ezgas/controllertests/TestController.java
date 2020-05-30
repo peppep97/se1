@@ -63,7 +63,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		UserDto userDto = mapper.readValue(jsonFromResponse, UserDto.class);
 
-		assertEquals("test", userDto.getUserName());
+		assert(userDto.getUserName().equals("test"));
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		UserDto[] userList = mapper.readValue(jsonFromResponse, UserDto[].class);
 
-		assertEquals(2, userList.length);
+		assert(userList.length == 2);
 	}
 	
 	@Test
