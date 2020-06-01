@@ -16,7 +16,7 @@ Version: 1
   - [Step 1](#step-1)
   - [Step 2](#step-2)
   - [Step 3](#step-3)
-  - [Step 4 API Tests](#step-4-api-tests)
+  - [Step 4](#step-4)
 - [Scenarios](#scenarios)
   - [Scenario UC4.1](#scenario-uc41)
   - [Scenario UC7.1](#scenario-uc71)
@@ -114,7 +114,7 @@ Version: 1
 
 
 
-## Step 4 API Tests
+## Step 4
 
 | Classes  | JUnit test cases |
 |--|--|
