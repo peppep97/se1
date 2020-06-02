@@ -35,13 +35,10 @@ Tests should cover each function of classes in the Controller package
 
 ## Coverage of Controller methods
 
-
-<Report in this table the test cases defined to cover all methods in Controller classes >
-
 | class.method name | Functional Requirements covered |REST  API Test(s) | 
 | ----------- | ------------------------------- | ----------- | 
-|  UserController.getUserById  | FR1 - FR1.4    |testGetUser|     
-|  UserController.getAllUsers  | FR1 - FR1.3    |testGetAllUsers|     
+| UserController.getUserById  | FR1 - FR1.4    |testGetUser|     
+| UserController.getAllUsers  | FR1 - FR1.3    |testGetAllUsers|     
 | UserController.saveUser      | FR1 - FR1.1    |testSaveUser|             
 | UserController.deleteUser    | FR1 - FR1.2    |testDeleteUser|             
 | UserController.increaseUserReputation| FR5 - FR5.2             |testIncreaseUserReputation|             
