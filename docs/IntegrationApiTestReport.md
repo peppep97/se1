@@ -4,7 +4,11 @@ Author: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
 Date: 26/05/2020
 
-Version: 1
+Version: 2
+
+| Version | Changes                                                     |
+| ------- | :---------------------------------------------------------- |
+| 2       | Fix Coverage of scenarios and FR                            |
 
 # Contents
 
@@ -16,7 +20,7 @@ Version: 1
   - [Step 1](#step-1)
   - [Step 2](#step-2)
   - [Step 3](#step-3)
-  - [Step 4 API Tests](#step-4-api-tests)
+  - [Step 4](#step-4)
 - [Scenarios](#scenarios)
   - [Scenario UC4.1](#scenario-uc41)
   - [Scenario UC7.1](#scenario-uc71)
@@ -114,7 +118,7 @@ Version: 1
 
 
 
-## Step 4 API Tests
+## Step 4
 
 | Classes  | JUnit test cases |
 |--|--|
@@ -139,53 +143,49 @@ Version: 1
 
 | Scenario |  report gas station fuel price |
 | ------------- |:-------------:| 
-|  Precondition     | Gas station G  |
-|| User U is registered in the system|
+|  Precondition     | Gas station G   |
+|| User U is registered in the system |
 | Post condition   |                  Price list P is created                   |
-|                  |   P.time_tag is set to the current timestamp of the system   |
-|                  |                     P is attached to G                  |
-|                  |                     U is attached to P  |
-| Step#        | Description  |
-|  1     |  U selects Gas Station G|  
-|  2     |  U fills New Report form|
-|  3    |  System retrieves gas station G, set new prices, attach user U to G, save modified gas station G|
+|                  |   P.time_tag is set to the current timestamp of the system |
+|                  |                     P is attached to G                     |
+|                  |                     U is attached to P                     |
+| Step#  | Description              |
+|  1     |  U selects Gas Station G |  
+|  2     |  U fills New Report form |
+|  3     |  System retrieves gas station G, set new prices, attach user U to G, save modified gas station G |
 
 ## Scenario UC8.1
 
 | Scenario |  list gas stations near a given address |
 | ------------- |:-------------:| 
-|  Precondition     | - |
+|  Precondition       | - |
 |  Post condition     | List of gas stations is retrieved  |
 | Step#        | Description  |
-|  1     |  U specifies an address |  
-|  2    |  System searches gas stations close to the address (in range of 1km)|
+| 1 |  U specifies an address |  
+| 2 |  System searches gas stations close to the address (in range of 1km)|
 | 3 | System returns list of gas stations|
 
 # Coverage of Scenarios and FR
 
 
-<Report in the following table the coverage of  scenarios (from official requirements and from above) vs FR. 
-Report also for each of the scenarios the (one or more) API JUnit tests that cover it. >
-
-
-
-
 | Scenario ID | Functional Requirements covered | JUnit  Test(s) | 
 | ----------- | ------------------------------- | ----------- | 
-|  10.1         | FR4 - FR5 - FR5.2       | it.polito.ezgas.service.impl.GasStationServiceImplTest.java        |
-|               |                         | it.polito.ezgas.service.impl.UserServiceImplTest.java              |             
-|  10.2         | FR4 - FR5 - FR5.2       |     it.polito.ezgas.service.impl.GasStationServiceImplTest.java    |             
-|               |                         | it.polito.ezgas.service.impl.UserServiceImplTest.java              |                      
-| UC4.1         |     FR3 - FR3.1         |     it.polito.ezgas.service.impl.GasStationServiceImplTest.java    |
-| UC7.1         |  FR4 - FR5 - FR5.1      | it.polito.ezgas.service.impl.GasStationServiceImplTest.java        |     
-| UC8.1         |  FR4 - FR4.2 - FR4.3    | it.polito.ezgas.service.impl.GasStationServiceImplTest.java        |             
+| UC1         | FR1 - FR1.1                     | UserServiceImplTest.java (saveUser())      |             
+| UC2         | FR1 - FR1.1                     | UserServiceImplTest.java (saveUser())      |  
+| UC3         | FR1 - FR1.2                     | UserServiceImplTest.java (deleteUser())    |           
+| UC4         | FR3 - FR3.1                     | GasStationServiceImplTest.java (saveGasStation()) |            
+| UC5         | FR3 - FR3.1                     | GasStationServiceImplTest.java (saveGasStation()) |  
+| UC6         | FR3 - FR3.2                     | GasStationServiceImplTest.java (deleteGasStation()) |  
+| UC7         | FR5 - FR5.1                     | GasStationServiceImplTest.java (setReport()) |
+| UC8         | FR4 - FR4.1 - FR4.2 - FR4.3 - FR4.4 - FR4.5   | GasStationServiceImplTest.java (getGasStationsByGasolineType() - getGasStationsByProximity() - getGasStationsWithCoordinates() - getGasStationsWithoutCoordinates() - getGasStationByCarSharing()) |  
+| UC9         | FR5 - FR5.2                     | GasStationServiceImplTest.java (increaseUserReputation() - decreaseUserReputation()) |   
+| UC10        | FR5 - FR5.3                     | GasStationServiceImplTest.java (increaseUserReputation() - decreaseUserReputation()) |                        
+| UC4.1       |  FR3 - FR3.1                    | GasStationServiceImplTest.java (saveUser())  |
+| UC7.1       |  FR4 - FR5 - FR5.1              | GasStationServiceImplTest.java (setReport()) |     
+| UC8.1       |  FR4 - FR4.2 - FR4.3            | GasStationServiceImplTest.java (getGasStationsByProximity()) |             
 
 
 # Coverage of Non Functional Requirements
-
-
-<Report in the following table the coverage of the Non Functional Requirements of the application - only those that can be tested with automated testing frameworks.>
-
 
 ### 
 

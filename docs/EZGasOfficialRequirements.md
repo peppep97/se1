@@ -264,13 +264,13 @@ a --> (Manage gas station)
 
 
 ### Use case 9, UC9 - Update trust level of price list
-| Actors Involved  |                     Anonymous User                             |
+| Actors Involved  |                     Anonymous User                           |
 | ---------------- | :----------------------------------------------------------: |
-| Precondition     |     price list P is attached to user U         -              |
+| Precondition     |     price list P is attached to user U         -             |
 | Post condition   |      P.trust_level = 50 * (U.trust_level +5)/10 + 50 * obsolescence  |
 | |  obsolescence = 0 if (today - P.time_tag) > 7 days |
 | |     otherwise obsolescence = 1 - (today - P.time_tag)/7 |
-| Nominal Scenario |  compute and update  trust level of price list P|
+| Nominal Scenario |  compute and update  trust level of price list P |
 
 
 ### Use case 10, UC10 - Evaluate price

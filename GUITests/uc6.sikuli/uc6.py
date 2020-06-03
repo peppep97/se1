@@ -1,0 +1,6 @@
+click("1590827941300.png")
+wait(1)
+type(Key.PAGE_DOWN)
+wait(1)
+click("1590827969479.png")
+wait("1590827990799.png")

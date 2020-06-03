@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto saveUser(UserDto userDto) {
 		
-		User user=UserConverter.toUser(userDto);
-		user=userRepository.save(user);
+		User user = UserConverter.toUser(userDto);
+		user = userRepository.save(user);
 		
 		return UserConverter.toUserDto(user);
 	}
@@ -90,6 +90,7 @@ public class UserServiceImpl implements UserService {
 		
 		// Search user by email
 		User user = userRepository.findByEmail(credentials.getUser());
+
 		if(user == null)
 			throw new InvalidLoginDataException("WRONG EMAIL");
 

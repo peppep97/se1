@@ -13,8 +13,6 @@ import it.polito.ezgas.entity.User;
 import it.polito.ezgas.repository.UserRepository;
 import it.polito.ezgas.repository.GasStationRepository;
 
-
-
 @SpringBootApplication
 public class BootEZGasApplication {
 	
