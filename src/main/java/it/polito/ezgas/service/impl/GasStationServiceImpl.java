@@ -363,7 +363,7 @@ public class GasStationServiceImpl implements GasStationService {
 		gasStationDto.setUserDto(userDto);
 		
 		// ...timestamp...
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy - HH:mm:ss", Locale.ITALY);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.ITALY);
 		Date now = new Date();
 		gasStationDto.setReportTimestamp(sdf.format(now));
 		// Try to calculate the dependability with this line below

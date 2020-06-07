@@ -22,7 +22,10 @@ public class GasStationConverter {
 		gasStation.setHasSuperPlus(gasStationDto.getHasSuperPlus());
 		gasStation.setHasMethane(gasStationDto.getHasMethane());
 		gasStation.setHasGas(gasStationDto.getHasGas());
-		gasStation.setCarSharing(gasStationDto.getCarSharing());
+		if(gasStationDto.getCarSharing() == null)
+			gasStation.setCarSharing("null");
+		else
+			gasStation.setCarSharing(gasStationDto.getCarSharing());
 		gasStation.setLat(gasStationDto.getLat());
 		gasStation.setLon(gasStationDto.getLon());
 		gasStation.setDieselPrice(gasStationDto.getDieselPrice());
@@ -52,7 +55,10 @@ public class GasStationConverter {
 		gasStationDto.setHasSuperPlus(gasStation.getHasSuperPlus());
 		gasStationDto.setHasGas(gasStation.getHasGas());
 		gasStationDto.setHasMethane(gasStation.getHasMethane());
-		gasStationDto.setCarSharing(gasStation.getCarSharing());
+		if(gasStation.getCarSharing().compareTo("null") == 0)
+			gasStationDto.setCarSharing(null);
+		else
+			gasStationDto.setCarSharing(gasStation.getCarSharing());
 		gasStationDto.setLat(gasStation.getLat());
 		gasStationDto.setLon(gasStation.getLon());
 		gasStationDto.setDieselPrice(gasStation.getDieselPrice());
@@ -76,7 +82,7 @@ public class GasStationConverter {
 		
 		GregorianCalendar now = new GregorianCalendar();
 		GregorianCalendar cal = new GregorianCalendar();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy - HH:mm:ss", Locale.ITALY);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.ITALY);
 		// Try to convert timestamp into GregorianCalendar format
 		try { cal.setTime(sdf.parse(timestamp)); } catch (ParseException e) { e.printStackTrace(); }
 		// Convert timestamps in milliseconds
