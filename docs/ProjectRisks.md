@@ -9,7 +9,7 @@ List below the most likely risks, ranked by probability * impact>
 
 |  Risk type (technical, project, business) | Risk description | Probability (high, medium, low) | Impact (high, medium, low)|
 | ------ | ------ | ---------- | --------------- | 
-| business | New competitor arised | medium | مخص |
+| business | New competitor arised | medium | low |
 | project | Delays to required infrastructure | low |medium |
 | project | Delays to training affect the project | low | medium |
 | project | Hardware unavailability | low | medium |
