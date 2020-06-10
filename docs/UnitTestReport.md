@@ -2,13 +2,14 @@
 
 Authors: Filippo Fontan, Giuseppe Pipero, Iman Ostovar, Matteo Pappadà
 
-Date: 19/05/2020
+Date: 09/06/2020
 
-Version: 2
+Version: 3
 
 | Version | Changes                                                     |
 | ------- | :---------------------------------------------------------- |
 | 2       | Increased Unit tests coverage                                |
+| 3       | Increased Black Box Unit tests coverage                      |
 
 # Contents
 
@@ -134,24 +135,160 @@ Version: 2
 | String | V | setEmail("email@mail.com") --> OK | it.polito.ezgas.entity.UserTest.java|
 | String | I | setEmail(3343) --> Exception | it.polito.ezgas.entity.UserTest.java|
 
-### **Class *GasStation* - method *setLat (setLon)***
+### **Class *User* - method *setPassword***
 
 
 
-**Criteria for method *setLat (setLon)*:**
+**Criteria for method *setPassword*:**
+
+ - Type of password
+
+
+**Predicates for method *setPassword*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|Type of password| String|
+|          |        All others    |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Type of email | Valid / Invalid | Description of the test case | JUnit test case |
+|-------|-------|-------|-------|
+| String | V | setPassword("h0d29324f") --> OK | it.polito.ezgas.entity.UserTest.java|
+| String | I | setPassword(0) --> Exception | it.polito.ezgas.entity.UserTest.java|
+
+
+### **Class *User* - method *setUserId***
+
+
+
+**Criteria for method *setUserId*:**
+	
+ - Sign of userId
+ - Type of userId
+ - Value of userId
+
+
+**Predicates for method *setUserId*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|Sign of userId| > 0|
+|          |        < 0    |
+|    Type of userId      |      Integer     |
+|          |      All others     |
+|     Value of userId     |     >= minInt && <= maxInt      |
+|          |     > maxInt      |
+|          |     < minInt      |
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+|    Value of userId      |       minInt, maxInt, minInt + 1, maxInt + 1          |
+
+
+**Combination of predicates**:
+
+
+| Type of reputation | Sign of reputation | Value of reputation | Valid / Invalid | Description of the test case | JUnit test case |
+|-------|-------|-------|-------|-------|-------|
+| Integer | > 0 | >= minInt && <= maxInt | V | setUserId(3) --> OK | it.polito.ezgas.entity.UserTest.java|
+| Integer | > 0 | > maxInt | I | setUserId(3) --> Exception | it.polito.ezgas.entity.UserTest.java|
+| Integer | < 0 | >= minInt && <= maxInt | V | setUserId(-3) --> OK | it.polito.ezgas.entity.UserTest.java|
+| Integer| < 0 | < minInt | I | setUserId(-99.0) --> Exception | it.polito.ezgas.entity.UserTest.java|
+| All others | ... | ... | I | setUserId("bella") --> Exception | it.polito.ezgas.entity.UserTest.java|
+
+### **Class *User* - method *setUserName***
+
+
+
+**Criteria for method *setUserName*:**
+
+ - Type of userName
+
+
+**Predicates for method *setUserName*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|Type of userName| String|
+|          |        All others    |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Type of email | Valid / Invalid | Description of the test case | JUnit test case |
+|-------|-------|-------|-------|
+| String | V | setUserName("rolando") --> OK | it.polito.ezgas.entity.UserTest.java|
+| String | I | setUserName(0) --> Exception | it.polito.ezgas.entity.UserTest.java|
+
+
+### **Class *GasStation* - method *setLat***
+
+
+
+**Criteria for method *setLat*:**
 
  - Type of lat
  - Sign of lat
  - Value of lat
 
 
-**Predicates for method *setLat (setLon)*:**
+**Predicates for method *setLat*:**
 
 | Criteria | Predicate |
 | -------- | --------- |
 |Sign of lat | > 0|
 |          |        < 0    |
 |    Type of lat      |      Double     |
+|          |      All others     |
+|     Value of reputation     |     >= minDouble && <= maxDouble      |
+|          |     > maxDouble      |
+|          |     < minDouble      |
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+|    Value of reputation      |       minDouble, maxDouble, minDouble + 1, maxDouble + 1          |
+
+### **Class *GasStation* - method *setLon***
+
+
+
+**Criteria for method *setLon*:**
+
+ - Type of lon
+ - Sign of lon
+ - Value of lon
+
+
+**Predicates for method *setLon*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|Sign of lon | > 0|
+|          |        < 0    |
+|    Type of lon      |      Double     |
 |          |      All others     |
 |     Value of reputation     |     >= minDouble && <= maxDouble      |
 |          |     > maxDouble      |
