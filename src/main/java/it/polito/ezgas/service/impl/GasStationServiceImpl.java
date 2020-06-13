@@ -289,7 +289,7 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 
 		// Check on radius, if is invalid use default value (1 km)
-		//if(radius <= 0) {
+		if(radius <= 0) {
 		
 			// some info about lat, lon, kilometers and decimal degrees
 			// 1km (lat) = 0.00904371732 dd
@@ -303,9 +303,9 @@ public class GasStationServiceImpl implements GasStationService {
 
 			// Converting each GasStation to GasStationDto
 			return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
-		//}
+		}
 		
-		/*else {
+		else {
 			double phi = 0.009 * radius;
 			double teta = (0.0089*radius) / Math.cos(lat*Math.PI/180);
 			
@@ -316,7 +316,7 @@ public class GasStationServiceImpl implements GasStationService {
 
 			// Converting each GasStation to GasStationDto
 			return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
-		}*/
+		}
 	}
 
 	@Override
