@@ -14,6 +14,6 @@ These figures will not be used to evaluate neither the project nor the team
 | Week | CR0 | CR4  | CR7  | Other |
 |:-----------:|:--------:|:-----------:|:-----------:|:----------:|
 | jun 1 -  7 | 4 | | | | 
-| jun 8 - 14 | | | | |
+| jun 8 - 14 | | 3 | 2 | 2 |
 | jun 15 -21 | | | | |
 | jun 22 -28 | | | | |
