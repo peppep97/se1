@@ -1,5 +1,6 @@
 package it.polito.ezgas.service.impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -404,9 +405,9 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		
 		// Check if prices are not valid
-		if((gasStationDto.getHasDiesel() && dieselPrice < 0) || (gasStationDto.getHasSuper() && superPrice < 0) || 
-				(gasStationDto.getHasSuperPlus() && superPlusPrice < 0) || (gasStationDto.getHasGas() && gasPrice < 0) || 
-				(gasStationDto.getHasMethane() && methanePrice < 0) || (gasStationDto.getHasPremiumDiesel() && premiumDieselPrice < 0)) {
+		if((gasStationDto.getHasDiesel() && dieselPrice.doubleValue() < 0) || (gasStationDto.getHasSuper() && superPrice.doubleValue() < 0) || 
+				(gasStationDto.getHasSuperPlus() && superPlusPrice.doubleValue() < 0) || (gasStationDto.getHasGas() && gasPrice.doubleValue() < 0) || 
+				(gasStationDto.getHasMethane() && methanePrice.doubleValue() < 0) || (gasStationDto.getHasPremiumDiesel() && premiumDieselPrice.doubleValue() < 0)) {
 			throw new PriceException("ERROR: PRICE VALUES AREN'T VALID!");
 		}
 		
@@ -414,14 +415,34 @@ public class GasStationServiceImpl implements GasStationService {
 		if(userId < 0) {
 			throw new InvalidUserException("ERROR: USER ID ISN'T VALID!");
 		}
+		UserDto userDto = UserConverter.toUserDto(userRepository.findByUserId(userId));
+		GregorianCalendar now = new GregorianCalendar();
+		GregorianCalendar cal = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.ITALY);
+		
+		// Check if gas station has already a report
+		if(gasStationDto.getReportUser() > 0) {
+			try { cal.setTime(sdf.parse(gasStationDto.getReportTimestamp())); } catch (ParseException e) { e.printStackTrace(); } 
+			// Check if reputation of current user is lesser than the old one and 
+			// if the date of current report is more recent than 4 days from the old one
+			if((gasStationDto.getUserDto().getReputation() > userDto.getReputation()) &&
+					(((now.getTimeInMillis() - cal.getTimeInMillis()) / (24 * 60 * 60 * 1000)) <= 4))
+				return;
+		}
 		
 		// Round all prices to 3 decimal
-		dieselPrice = Double.parseDouble(String.format("%.3f%n", dieselPrice.doubleValue()).replace(',', '.'));
-		superPrice = Double.parseDouble(String.format("%.3f%n", superPrice.doubleValue()).replace(',', '.'));
-		superPlusPrice = Double.parseDouble(String.format("%.3f%n", superPlusPrice.doubleValue()).replace(',', '.'));
-		gasPrice = Double.parseDouble(String.format("%.3f%n", gasPrice.doubleValue()).replace(',', '.'));
-		methanePrice = Double.parseDouble(String.format("%.3f%n", methanePrice.doubleValue()).replace(',', '.'));
-		premiumDieselPrice = Double.parseDouble(String.format("%.3f%n", premiumDieselPrice.doubleValue()).replace(',', '.'));
+		if(dieselPrice != null)
+			dieselPrice = Double.parseDouble(String.format("%.3f%n", dieselPrice.doubleValue()).replace(',', '.'));
+		if(superPrice != null)
+			superPrice = Double.parseDouble(String.format("%.3f%n", superPrice.doubleValue()).replace(',', '.'));
+		if(superPlusPrice != null)
+			superPlusPrice = Double.parseDouble(String.format("%.3f%n", superPlusPrice.doubleValue()).replace(',', '.'));
+		if(gasPrice != null)
+			gasPrice = Double.parseDouble(String.format("%.3f%n", gasPrice.doubleValue()).replace(',', '.'));
+		if(methanePrice != null)
+			methanePrice = Double.parseDouble(String.format("%.3f%n", methanePrice.doubleValue()).replace(',', '.'));
+		if(premiumDieselPrice != null)
+			premiumDieselPrice = Double.parseDouble(String.format("%.3f%n", premiumDieselPrice.doubleValue()).replace(',', '.'));
 
 		// Update prices only if the gas station has that type of gasoline
 		if(gasStationDto.getHasDiesel())
@@ -439,15 +460,13 @@ public class GasStationServiceImpl implements GasStationService {
 		
 		// Update information about user...
 		gasStationDto.setReportUser(userId);
-		UserDto userDto = UserConverter.toUserDto(userRepository.findByUserId(userId));
 		gasStationDto.setUserDto(userDto);
 		
 		// ...timestamp...
-		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.ITALY);
-		Date now = new Date();
-		gasStationDto.setReportTimestamp(sdf.format(now));
+		Date timestamp = new Date();
+		gasStationDto.setReportTimestamp(sdf.format(timestamp));
 		// Try to calculate the dependability with this line below
-				//gasStationDto.setReportTimestamp("13/mag/2020 - 09:51:27");
+				//gasStationDto.setReportTimestamp("06-05-2020");
 		
 		//...and dependability
 		// First time dependability depends only on user reputation -> obsolescence = 1
