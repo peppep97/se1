@@ -114,23 +114,21 @@ public class GasStationServiceImpl implements GasStationService {
 		switch(gasolinetype){
 			case "Diesel":
 				gasStations = gasStationRepository.findByHasDieselTrue();
-				gasStations.sort(Comparator.comparingDouble(GasStation::getDieselPrice));
 			break;
 			case "Super":
 				gasStations = gasStationRepository.findByHasSuperTrue();
-				gasStations.sort(Comparator.comparingDouble(GasStation::getSuperPrice));
 			break;
 			case "SuperPlus":
 				gasStations = gasStationRepository.findByHasSuperPlusTrue();
-				gasStations.sort(Comparator.comparingDouble(GasStation::getSuperPlusPrice));
 			break;
 			case "Gas":
 				gasStations = gasStationRepository.findByHasGasTrue();
-				gasStations.sort(Comparator.comparingDouble(GasStation::getGasPrice));
 			break;
 			case "Methane":
 				gasStations = gasStationRepository.findByHasMethaneTrue();
-				gasStations.sort(Comparator.comparingDouble(GasStation::getMethanePrice));
+			break;
+			case "PremiumDiesel":
+				gasStations = gasStationRepository.findByHasPremiumDieselTrue();
 			break;
 			case "null": case "Select gasoline type":
 				gasStations = gasStationRepository.findAll();
@@ -173,9 +171,56 @@ public class GasStationServiceImpl implements GasStationService {
 		// Converting each GasStation to GasStationDto
 		return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<GasStationDto> getGasStationsByProximity(double lat, double lon, int radius) throws GPSDataException {
+		
+		// Check if coordinates are not valid
+		if(lat > 90 || lat < -90) {
+			throw new GPSDataException("Latitude out of boundaries!");
+		}
+		if(lon > 180 || lon < -180) {
+			throw new GPSDataException("Longitude out of boundaries!");
+		}
+		
+		// Retrieve all gas stations from repository
+		List<GasStation> gasStations = gasStationRepository.findAll();
+		if(gasStations == null) {
+			return new ArrayList<>();
+		}
+		// Check on radius, if is invalid use default value (1 km)
+		if(radius <= 0) {
+		
+			// some info about lat, lon, kilometers and decimal degrees
+			// 1km (lat) = 0.00904371732 dd
+			// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
+			double teta = 0.0089 / Math.cos(lat*Math.PI/180);
+
+			// Filter gas station for the coordinates inside the limits of 1km
+			Stream<GasStation> filteredGasStations = gasStations.stream()
+					.filter(g -> Math.abs(g.getLat() - lat) < 0.009)
+					.filter(g -> Math.abs(g.getLon() - lon) < teta);
+
+			// Converting each GasStation to GasStationDto
+			return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
+		}
+		
+		else {
+			double phi = 0.009 * radius;
+			double teta = (0.0089*radius) / Math.cos(lat*Math.PI/180);
+			
+			// Filter gas station for the coordinates inside the limits of 1km
+			Stream<GasStation> filteredGasStations = gasStations.stream()
+					.filter(g -> Math.abs(g.getLat() - lat) < phi)
+					.filter(g -> Math.abs(g.getLon() - lon) < teta);
+
+			// Converting each GasStation to GasStationDto
+			return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
+		}
+	}
 
 	@Override
-	public List<GasStationDto> getGasStationsWithCoordinates(double lat, double lon, String gasolinetype,
+	public List<GasStationDto> getGasStationsWithCoordinates(double lat, double lon, int radius, String gasolinetype,
 			String carsharing) throws InvalidGasTypeException, GPSDataException {
 
 		// Check if coordinates are not valid
@@ -205,6 +250,9 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrue();
 				break;
+				case "PremiumDiesel":
+					gasStations = gasStationRepository.findByHasPremiumDieselTrue();
+				break;
 				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findAll();
 				break;
@@ -229,6 +277,9 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrueAndCarSharing(carsharing);
 				break;
+				case "PremiumDiesel":
+					gasStations = gasStationRepository.findByHasPremiumDieselTrueAndCarSharing(carsharing);
+				break;
 				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findByCarSharing(carsharing);
 				break;
@@ -237,15 +288,35 @@ public class GasStationServiceImpl implements GasStationService {
 			}
 		}
 
-		double teta = 0.0089 / Math.cos(lat*Math.PI/180);
+		// Check on radius, if is invalid use default value (1 km)
+		//if(radius <= 0) {
 		
-		// Filter gas station for the coordinates inside the limits of 1km
-		Stream<GasStation> filteredGasStations = gasStations.stream()
-				.filter(g -> Math.abs(g.getLat() - lat) < 0.009)
-				.filter(g -> Math.abs(g.getLon() - lon) < teta);
+			// some info about lat, lon, kilometers and decimal degrees
+			// 1km (lat) = 0.00904371732 dd
+			// 1km (lon) = 0.00898311175 / cos(lat*pi/180) dd
+			double teta = 0.0089 / Math.cos(lat*Math.PI/180);
 
-		// Converting each GasStation to GasStationDto
-		return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
+			// Filter gas station for the coordinates inside the limits of 1km
+			Stream<GasStation> filteredGasStations = gasStations.stream()
+					.filter(g -> Math.abs(g.getLat() - lat) < 0.009)
+					.filter(g -> Math.abs(g.getLon() - lon) < teta);
+
+			// Converting each GasStation to GasStationDto
+			return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
+		//}
+		
+		/*else {
+			double phi = 0.009 * radius;
+			double teta = (0.0089*radius) / Math.cos(lat*Math.PI/180);
+			
+			// Filter gas station for the coordinates inside the limits of 1km
+			Stream<GasStation> filteredGasStations = gasStations.stream()
+					.filter(g -> Math.abs(g.getLat() - lat) < phi)
+					.filter(g -> Math.abs(g.getLon() - lon) < teta);
+
+			// Converting each GasStation to GasStationDto
+			return filteredGasStations.map(GasStationConverter::toGasStationDto).collect(Collectors.toList());
+		}*/
 	}
 
 	@Override
@@ -276,6 +347,9 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrueAndCarSharing(carsharing);
 				break;
+				case "PremiumDiesel":
+					gasStations = gasStationRepository.findByHasPremiumDieselTrueAndCarSharing(carsharing);
+				break;
 				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findAll();
 				break;
@@ -300,6 +374,9 @@ public class GasStationServiceImpl implements GasStationService {
 				case "Methane":
 					gasStations = gasStationRepository.findByHasMethaneTrue();
 				break;
+				case "PremiumDiesel":
+					gasStations = gasStationRepository.findByHasPremiumDieselTrue();
+				break;
 				case "null": case "Select gasoline type":
 					gasStations = gasStationRepository.findAll();
 				break;
@@ -313,8 +390,8 @@ public class GasStationServiceImpl implements GasStationService {
 	}
 
 	@Override
-	public void setReport(Integer gasStationId, double dieselPrice, double superPrice, double superPlusPrice,
-			double gasPrice, double methanePrice, Integer userId)
+	public void setReport(Integer gasStationId, Double dieselPrice, Double superPrice, Double superPlusPrice,
+			Double gasPrice, Double methanePrice, Double premiumDieselPrice, Integer userId)
 			throws InvalidGasStationException, PriceException, InvalidUserException {
 		
 		// Check if gas station is not valid
@@ -329,7 +406,7 @@ public class GasStationServiceImpl implements GasStationService {
 		// Check if prices are not valid
 		if((gasStationDto.getHasDiesel() && dieselPrice < 0) || (gasStationDto.getHasSuper() && superPrice < 0) || 
 				(gasStationDto.getHasSuperPlus() && superPlusPrice < 0) || (gasStationDto.getHasGas() && gasPrice < 0) || 
-				(gasStationDto.getHasMethane() && methanePrice < 0)) {
+				(gasStationDto.getHasMethane() && methanePrice < 0) || (gasStationDto.getHasPremiumDiesel() && premiumDieselPrice < 0)) {
 			throw new PriceException("ERROR: PRICE VALUES AREN'T VALID!");
 		}
 		
@@ -339,23 +416,26 @@ public class GasStationServiceImpl implements GasStationService {
 		}
 		
 		// Round all prices to 3 decimal
-		dieselPrice = Double.parseDouble(String.format("%.3f%n", dieselPrice).replace(',', '.'));
-		superPrice = Double.parseDouble(String.format("%.3f%n", superPrice).replace(',', '.'));
-		superPlusPrice = Double.parseDouble(String.format("%.3f%n", superPlusPrice).replace(',', '.'));
-		gasPrice = Double.parseDouble(String.format("%.3f%n", gasPrice).replace(',', '.'));
-		methanePrice = Double.parseDouble(String.format("%.3f%n", methanePrice).replace(',', '.'));
+		dieselPrice = Double.parseDouble(String.format("%.3f%n", dieselPrice.doubleValue()).replace(',', '.'));
+		superPrice = Double.parseDouble(String.format("%.3f%n", superPrice.doubleValue()).replace(',', '.'));
+		superPlusPrice = Double.parseDouble(String.format("%.3f%n", superPlusPrice.doubleValue()).replace(',', '.'));
+		gasPrice = Double.parseDouble(String.format("%.3f%n", gasPrice.doubleValue()).replace(',', '.'));
+		methanePrice = Double.parseDouble(String.format("%.3f%n", methanePrice.doubleValue()).replace(',', '.'));
+		premiumDieselPrice = Double.parseDouble(String.format("%.3f%n", premiumDieselPrice.doubleValue()).replace(',', '.'));
 
 		// Update prices only if the gas station has that type of gasoline
 		if(gasStationDto.getHasDiesel())
-			gasStationDto.setDieselPrice(dieselPrice);
+			gasStationDto.setDieselPrice(dieselPrice.doubleValue());
 		if(gasStationDto.getHasSuper())
-			gasStationDto.setSuperPrice(superPrice);
+			gasStationDto.setSuperPrice(superPrice.doubleValue());
 		if(gasStationDto.getHasSuperPlus())
-			gasStationDto.setSuperPlusPrice(superPlusPrice);
+			gasStationDto.setSuperPlusPrice(superPlusPrice.doubleValue());
 		if(gasStationDto.getHasGas())
-			gasStationDto.setGasPrice(gasPrice);
+			gasStationDto.setGasPrice(gasPrice.doubleValue());
 		if(gasStationDto.getHasMethane())
-			gasStationDto.setMethanePrice(methanePrice);
+			gasStationDto.setMethanePrice(methanePrice.doubleValue());
+		if(gasStationDto.getHasPremiumDiesel())
+			gasStationDto.setPremiumDieselPrice(premiumDieselPrice.doubleValue());
 		
 		// Update information about user...
 		gasStationDto.setReportUser(userId);
