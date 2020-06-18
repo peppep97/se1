@@ -39,8 +39,8 @@ public class GasStationDtoTest {
         gasStationDto.setGasPrice(1.567);
         assertEquals(1.567, gasStationDto.getGasPrice(), 0.001);
 
-        gasStationDto.setSuperPrice(2);
-        assertEquals(2, gasStationDto.getSuperPrice(), 0.001);
+        gasStationDto.setSuperPrice(2.1);
+        assertEquals(2.1, gasStationDto.getSuperPrice(), 0.001);
 
         gasStationDto.setReportUser(0);
         assertEquals(Integer.valueOf(0), gasStationDto.getReportUser());
@@ -56,6 +56,7 @@ public class GasStationDtoTest {
                 true,
                 true,
                 true,
+                false,
                 "boh",
                 45.002,
                 7.03,
@@ -64,6 +65,7 @@ public class GasStationDtoTest {
                 2.3,
                 11.3,
                 0.003,
+                2.78,
                 12,
                 "ora",
                 22.22);

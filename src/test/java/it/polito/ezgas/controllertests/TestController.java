@@ -39,10 +39,10 @@ public class TestController {
 
 	@Test
 	public void testGetUser() throws ClientProtocolException, IOException {
-		
+
 		HttpUriRequest request = new HttpGet("http://localhost:8080/user/getUser/78");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
-		
+
 		String jsonFromResponse = EntityUtils.toString(response.getEntity());
 
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -50,10 +50,10 @@ public class TestController {
 
 		assert(userDto.getUserName().equals("test"));
 	}
-	
+
 	@Test
 	public void testGetAllUsers() throws ClientProtocolException, IOException {
-		
+
 		HttpUriRequest request = new HttpGet("http://localhost:8080/user/getAllUsers");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
@@ -64,7 +64,7 @@ public class TestController {
 
 		assert(userList.length == 2);
 	}
-	
+
 	@Test
 	public void testSaveUser() throws ClientProtocolException, IOException {
 
@@ -84,7 +84,7 @@ public class TestController {
 
 		assert(response.getStatusLine().getStatusCode() == 200);
 	}
-	
+
 	@Test
 	public void testDeleteUser() throws ClientProtocolException, IOException {
 
@@ -94,22 +94,22 @@ public class TestController {
 
 		assert(response.getStatusLine().getStatusCode() == 200);
 	}
-	
+
 	@Test
 	public void testIncreaseUserReputation() throws ClientProtocolException, IOException {
 
 		HttpPost request = new HttpPost("http://localhost:8080/user/increaseUserReputation//1");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
-		
+
 		assert(response.getStatusLine().getStatusCode() == 200);
 	}
-	
+
 	@Test
 	public void testDecreaseUserReputation() throws ClientProtocolException, IOException {
 
 		HttpPost request = new HttpPost("http://localhost:8080/user/decreaseUserReputation//1");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
-		
+
 		assert(response.getStatusLine().getStatusCode() == 200);
 	}
 
@@ -164,7 +164,7 @@ public class TestController {
 	@Test
 	public void testSaveGasStation() throws ClientProtocolException, IOException {
 
-		GasStation g = new GasStation("testGasPOST", "Turin Piemont Italy", true, true, true, true, true, "Enjoy", 45.0677551, 7.6824892, -1, -1, -1, -1, -1, -1, null, 0);
+		GasStation g = new GasStation("testGasPOST", "Turin Piemont Italy", true, true, true, true, true, true, "Enjoy", 45.0677551, 7.6824892, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1, null, 0);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(g);

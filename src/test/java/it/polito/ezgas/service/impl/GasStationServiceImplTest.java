@@ -36,10 +36,11 @@ public class GasStationServiceImplTest {
     @Autowired
     GasStationServiceImpl gasStationService;
 
-    Integer aId, bId, userId;
+    Integer aId, bId, userId, userId2, userId3;
 
     GasStation a = new GasStation("Agippo",
             "Via Agrippa",
+            true,
             true,
             true,
             true,
@@ -53,11 +54,13 @@ public class GasStationServiceImplTest {
             1.3,
             0.9,
             0.8,
+            1.3,
             0,
             null,
             40.0);
     GasStation b = new GasStation("BP",
             "Via Brenta",
+            true,
             true,
             true,
             true,
@@ -71,11 +74,13 @@ public class GasStationServiceImplTest {
             1.3,
             0.9,
             0.8,
+            1.4,
             1,
             null,
             50.0);
     GasStation c = new GasStation("Agippo",
             "Via Cesare",
+            true,
             true,
             true,
             true,
@@ -89,23 +94,29 @@ public class GasStationServiceImplTest {
             1.3,
             0.9,
             0.8,
+            1.5,
             2,
             null,
             60.0);
 
     GasStationDto gasStationDto = new GasStationDto(14, "ENIO", "Via vittoria 10", true,
-            false, true, true, true, "car_sharing", 45.002, 7.03, 1.0, 2.5,
-            2.3, 11.3, 0.003, 12, null, 0.0);
+            false, true, true, true, true, "car_sharing", 45.002, 7.03, 1.0, 2.5,
+            2.3, 11.3, 0.003, 2.66, 0, null, 0.0);
 
     User user = new User("Alice", "Alice", "alice@ezgas.com", 10);
+    User user2 = new User("Bob", "Bob", "bob@ezgas.com", 9);
+    User user3 = new User("Charlie", "Charlie", "charlie@ezgas.com", 8);
 
     @Before
     public void setUp() {
+        userId = userRepository.save(user).getUserId();
+        userId2 = userRepository.save(user2).getUserId();
+        userId3 = userRepository.save(user3).getUserId();
+
         aId = gasStationRepository.save(a).getGasStationId();
         bId = gasStationRepository.save(b).getGasStationId();
         gasStationRepository.save(c);
 
-        userId = userRepository.save(user).getUserId();
     }
 
     @Test
@@ -173,34 +184,34 @@ public class GasStationServiceImplTest {
         List<GasStationDto> gasStations;
         double lat = 45, lon = 7;
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Diesel", null);
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Diesel", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Super", null);
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Super", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "SuperPlus", null);
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "SuperPlus", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Gas", null);
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Gas", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Methane", null);
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Methane", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Diesel", "Bcar");
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Diesel", "Bcar");
         assertEquals(0, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Super", "Bcar");
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Super", "Bcar");
         assertEquals(0, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "SuperPlus", "Bcar");
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "SuperPlus", "Bcar");
         assertEquals(0, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Gas", "Bcar");
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Gas", "Bcar");
         assertEquals(0, gasStations.size());
 
-        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, "Methane", "Bcar");
+        gasStations = gasStationService.getGasStationsWithCoordinates(lat, lon, 5, "Methane", "Bcar");
         assertEquals(0, gasStations.size());
     }
 
@@ -241,7 +252,7 @@ public class GasStationServiceImplTest {
 
     @Test
     public void testSetReport() throws InvalidGasStationException, PriceException, InvalidUserException {
-        gasStationService.setReport(aId, 2, 2, 2, 2, 2, userId);
+        gasStationService.setReport(aId, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0, userId);
 
         GasStationDto g = gasStationService.getGasStationById(aId);
 
