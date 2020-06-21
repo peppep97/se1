@@ -209,7 +209,7 @@ public class TestController {
 	@Test
 	public void testSearchGasStationByProximity() throws ClientProtocolException, IOException {
 
-		HttpUriRequest request = new HttpGet("http://localhost:8080/gasstation/searchGasStationByProximity/45.06/7.68/");
+		HttpUriRequest request = new HttpGet("http://localhost:8080/gasstation/searchGasStationByProximity/45.06/7.68/1/");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
 		String jsonFromResponse = EntityUtils.toString(response.getEntity());
@@ -223,7 +223,7 @@ public class TestController {
 	@Test
 	public void testGetGasStationsWithCoordinates() throws ClientProtocolException, IOException {
 
-		HttpUriRequest request = new HttpGet("http://localhost:8080/gasstation/getGasStationsWithCoordinates/45.06/7.68/Diesel/Enjoy");
+		HttpUriRequest request = new HttpGet("http://localhost:8080/gasstation/getGasStationsWithCoordinates/45.06/7.68/1/Diesel/Enjoy");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
 		String jsonFromResponse = EntityUtils.toString(response.getEntity());
