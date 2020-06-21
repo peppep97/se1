@@ -421,7 +421,7 @@ public class GasStationServiceImpl implements GasStationService {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.ITALY);
 
 		// Check if gas station has already a report
-		if(gasStationDto.getReportUser() != null) {
+		if(gasStationDto.getReportUser() != null && gasStationDto.getReportUser() > 0) {
 			try { cal.setTime(sdf.parse(gasStationDto.getReportTimestamp())); } catch (ParseException e) { e.printStackTrace(); }
 			// Check if reputation of current user is lesser than the old one and
 			// if the date of current report is more recent than 4 days from the old one
