@@ -11,8 +11,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polito.ezgas.dto.GasStationDto;
 import it.polito.ezgas.dto.IdPw;
+import it.polito.ezgas.dto.PriceReportDto;
 import it.polito.ezgas.dto.UserDto;
 import it.polito.ezgas.entity.GasStation;
+import it.polito.ezgas.entity.PriceReport;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.*;
@@ -235,7 +237,18 @@ public class TestController {
 	@Test
 	public void testSetGasStationReport() throws ClientProtocolException, IOException {
 
-		HttpPost request = new HttpPost("http://localhost:8080/gasstation/setGasStationReport/198/1/1/1/1/1/1/");
+		PriceReportDto p = new PriceReportDto(70, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writeValueAsString(p);
+
+		HttpPost request = new HttpPost("http://localhost:8080/gasstation/setGasStationReport");
+
+		StringEntity entity = new StringEntity(jsonString);
+		request.setEntity(entity);
+		request.setHeader("Accept", "application/json");
+		request.setHeader("Content-type", "application/json");
+
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
 		assert(response.getStatusLine().getStatusCode() == 200);
