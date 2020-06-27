@@ -52,7 +52,7 @@ public class GasStationServiceImplMockTest {
             0.8,
             1.3,
             0,
-            "25/mag/2020 - 01:01:01",
+            "05-25-2020",
             40.0);
     GasStation b = new GasStation("BP",
             "Via Brenta",
@@ -72,7 +72,7 @@ public class GasStationServiceImplMockTest {
             0.8,
             1.4,
             1,
-            "25/mag/2020 - 01:01:02",
+            "05-25-2020",
             50.0);
     GasStation c = new GasStation("Agippo",
             "Via Cesare",
@@ -92,7 +92,7 @@ public class GasStationServiceImplMockTest {
             0.8,
             1.5,
             2,
-            "25/mag/2020 - 01:01:03",
+            "05-25-2020",
             60.0);
 
     List<GasStation> list = new ArrayList<>();
