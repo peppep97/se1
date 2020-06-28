@@ -1,16 +1,16 @@
 # Project Dashboard
 
-The dashboard collects the key measures about the project.
-To be used to control the project, and compare with others. These measures will not be used to graduate the project. <br>
+The dashboard collects the critical measures of the project.
+To be used to control the project and compare it with others. These measures will not be used to graduate the project. <br>
 We consider two phases: <br>
--New development: From project start (april 13) to delivery of version 1 fixed (june 9)  <br>
--Maintenance: implementation of CR4 and CR7 (june 9 to end)   <br>
+-New development: From project start (April 13) to delivery of version 1 fixed (June 9)  <br>
+-Maintenance: implementation of CR4 and CR7 (June 9 to end)   <br>
 Report effort figures from the timesheet or timesheetCR document, compute size from the source code.
 
 ## New development 
 | Measure| Value |
 |---|---|
-|effort E (report here effort in person hours, for New development, from timesheet)  |120|
+|effort E (report here effort in person-hours, for New development, from timesheet)  |120|
 |size S (report here size in LOC of all code written, excluding test cases)  |2000|
 |productivity = S/E |17|
 |defects after release D (number of defects found running official acceptance tests and fixed in CR0) |3|
