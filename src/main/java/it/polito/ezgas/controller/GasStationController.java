@@ -87,18 +87,7 @@ public class GasStationController {
 		}
 		
 		return tmp;
-	}	
-	
-	/*@RequestMapping(value = Constants.GET_GASSTATIONS_BY_PROXIMITY, method = RequestMethod.GET)
-	public List<GasStationDto> getGasStationsByProximity(@PathVariable Double myLat, @PathVariable Double myLon) {
-		try {
-			return gasStationService.getGasStationsByProximity(myLat, myLon);
-		} catch (GPSDataException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			return new ArrayList<GasStationDto>();
-		}
-	}*/
+	}
 
 	@RequestMapping(value = Constants.GET_GASSTATIONS_BY_PROXIMITY, method = RequestMethod.GET)
 	public List<GasStationDto> getGasStationsByProximity(@PathVariable Double myLat, @PathVariable Double myLon,@PathVariable Integer myRadius) {
@@ -110,26 +99,6 @@ public class GasStationController {
 			return new ArrayList<GasStationDto>();
 		}
 	}
-	
-	/*@RequestMapping(value = Constants.GET_GASSTATIONS_WITH_COORDINATES, method = RequestMethod.GET)
-	public List<GasStationDto> getGasStationsWithCoordinates(@PathVariable Double myLat, @PathVariable Double myLon, @PathVariable String gasolineType, @PathVariable String carSharing) {
-		
-		ArrayList<GasStationDto> tmp = null;
-
-		try {
-			
-			tmp = (ArrayList<GasStationDto>) gasStationService.getGasStationsWithCoordinates(myLat, myLon, gasolineType, carSharing);
-			
-		} catch (InvalidGasTypeException | GPSDataException e) {
-
-			System.out.println(e.getMessage());
-			
-			tmp = new ArrayList<GasStationDto>();
-
-		}
-		
-		return tmp;
-	}*/
 
 	@RequestMapping(value = Constants.GET_GASSTATIONS_WITH_COORDINATES, method = RequestMethod.GET)
 	public List<GasStationDto> getGasStationsWithCoordinates(@PathVariable Double myLat,
@@ -155,51 +124,6 @@ public class GasStationController {
 		return tmp;
 	}
 
-	/*@RequestMapping(value = Constants.GET_GASSTATIONS_WITHOUT_COORDINATES, method = RequestMethod.GET)
-	public List<GasStationDto> getGasStationsWithoutCoordinates(@PathVariable String gasolineType, @PathVariable String carSharing) {
-		return gasStationService.getGasStationsWithoutCoordinates(gasolineType, carSharing);
-	}*/
-	//****************************************************************
-	/*@RequestMapping(value = Constants.SET_GASSTATION_REPORT, method = RequestMethod.POST)
-	public void setGasStationReport(@PathVariable Integer gasStationId, @PathVariable double dieselPrice, @PathVariable double superPrice, @PathVariable double superPlusPrice, @PathVariable double gasPrice, @PathVariable double methanePrice, @PathVariable Integer userId) {
-
-		try {
-			gasStationService.setReport(gasStationId, dieselPrice, superPrice, superPlusPrice, gasPrice, methanePrice, userId);
-		} catch (InvalidGasStationException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-		} catch (PriceException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-		} catch (InvalidUserException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-		}
-	}*/
-	//****************************************************************
-	/*@RequestMapping(value = Constants.SET_GASSTATION_REPORT, method = RequestMethod.POST)
-	public void setGasStationReport(@PathVariable Integer gasStationId,
-									@PathVariable Double dieselPrice,
-									@PathVariable Double superPrice,
-									@PathVariable Double superPlusPrice,
-									@PathVariable Double gasPrice,
-									@PathVariable Double methanePrice,
-									@PathVariable Double premiumDieselPrice,
-									@PathVariable Integer userId) {
-
-		try {
-			gasStationService.setReport(gasStationId, dieselPrice, superPrice, superPlusPrice, gasPrice, methanePrice, premiumDieselPrice, userId);
-		} catch (InvalidGasStationException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-		} catch (PriceException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-		} catch (InvalidUserException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-		}
-	}*/
 	@RequestMapping(value = Constants.SET_GASSTATION_REPORT, method = RequestMethod.POST)
 	public void setGasStationReport(@RequestBody PriceReportDto priceReportDto) {
 

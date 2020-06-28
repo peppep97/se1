@@ -423,7 +423,7 @@ public class GasStationServiceImpl implements GasStationService {
 		// Check if gas station has already a report
 		if(gasStationDto.getReportUser() != null && gasStationDto.getReportUser() > 0) {
 			try { cal.setTime(sdf.parse(gasStationDto.getReportTimestamp())); } catch (ParseException e) { e.printStackTrace(); }
-			// Check if reputation of current user is lesser than the old one and
+			// Check if reputation of current user is less than the old one and
 			// if the date of current report is more recent than 4 days from the old one
 			if((gasStationDto.getUserDto().getReputation() > userDto.getReputation()) &&
 					(((now.getTimeInMillis() - cal.getTimeInMillis()) / (24 * 60 * 60 * 1000)) <= 4))
