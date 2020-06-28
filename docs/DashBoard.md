@@ -10,7 +10,7 @@ Report effort figures from the timesheet or timesheetCR document, compute size f
 ## New development 
 | Measure| Value |
 |---|---|
-|effort E (report here effort in person hours, for New development, from timesheet)  ||
+|effort E (report here effort in person hours, for New development, from timesheet)  |133|
 |size S (report here size in LOC of all code written, excluding test cases)  ||
 |productivity = S/E ||
 |defects after release D (number of defects found running official acceptance tests and fixed in CR0) ||
