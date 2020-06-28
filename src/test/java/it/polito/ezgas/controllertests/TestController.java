@@ -1,12 +1,5 @@
 package it.polito.ezgas.controllertests;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polito.ezgas.dto.GasStationDto;
@@ -14,27 +7,20 @@ import it.polito.ezgas.dto.IdPw;
 import it.polito.ezgas.dto.PriceReportDto;
 import it.polito.ezgas.dto.UserDto;
 import it.polito.ezgas.entity.GasStation;
-import it.polito.ezgas.entity.PriceReport;
+import it.polito.ezgas.entity.User;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import it.polito.ezgas.entity.User;
-import it.polito.ezgas.repository.UserRepository;
+import java.io.IOException;
 
-import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer.Vanilla.std;
 import static org.junit.Assert.assertEquals;
 
 public class TestController {
@@ -50,7 +36,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		UserDto userDto = mapper.readValue(jsonFromResponse, UserDto.class);
 
-		assert(userDto.getUserName().equals("test"));
+		assertEquals("testName", userDto.getUserName());
 	}
 
 	@Test
@@ -64,7 +50,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		UserDto[] userList = mapper.readValue(jsonFromResponse, UserDto[].class);
 
-		assert(userList.length == 2);
+		assertEquals(2, userList.length);
 	}
 
 	@Test
@@ -84,7 +70,7 @@ public class TestController {
 
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 	@Test
@@ -94,7 +80,7 @@ public class TestController {
 
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 	@Test
@@ -103,7 +89,7 @@ public class TestController {
 		HttpPost request = new HttpPost("http://localhost:8080/user/increaseUserReputation//1");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 	@Test
@@ -112,7 +98,7 @@ public class TestController {
 		HttpPost request = new HttpPost("http://localhost:8080/user/decreaseUserReputation//1");
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 	@Test
@@ -132,7 +118,7 @@ public class TestController {
 
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 	@Test
@@ -146,7 +132,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		GasStationDto gasStationDto = mapper.readValue(jsonFromResponse, GasStationDto.class);
 
-		assert(gasStationDto.getGasStationName().equals("testGas"));
+		assertEquals("testGas", gasStationDto.getGasStationName());
 	}
 
 	@Test
@@ -160,7 +146,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		GasStationDto[] gasStationList = mapper.readValue(jsonFromResponse, GasStationDto[].class);
 
-		assert(gasStationList.length == 5);
+		assertEquals(5, gasStationList.length);
 	}
 
 	@Test
@@ -180,7 +166,7 @@ public class TestController {
 
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 	@Test
@@ -189,7 +175,7 @@ public class TestController {
 
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 	@Test
@@ -203,7 +189,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		GasStationDto[] gasStationList = mapper.readValue(jsonFromResponse, GasStationDto[].class);
 
-		assert(gasStationList.length == 3);
+		assertEquals(3, gasStationList.length);
 	}
 
 	@Test
@@ -217,7 +203,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		GasStationDto[] gasStationList = mapper.readValue(jsonFromResponse, GasStationDto[].class);
 
-		assert(gasStationList.length == 2);
+		assertEquals(2, gasStationList.length);
 	}
 
 	@Test
@@ -231,7 +217,7 @@ public class TestController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		GasStationDto[] gasStationList = mapper.readValue(jsonFromResponse, GasStationDto[].class);
 
-		assert(gasStationList.length == 1);
+		assertEquals(1, gasStationList.length);
 	}
 
 	@Test
@@ -251,7 +237,7 @@ public class TestController {
 
 		HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-		assert(response.getStatusLine().getStatusCode() == 200);
+		assertEquals(200, response.getStatusLine().getStatusCode());
 	}
 
 }
