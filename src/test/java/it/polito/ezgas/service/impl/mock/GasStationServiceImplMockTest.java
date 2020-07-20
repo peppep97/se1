@@ -41,6 +41,7 @@ public class GasStationServiceImplMockTest {
             true,
             true,
             true,
+            true,
             "Acar",
             45.0,
             7.0,
@@ -49,11 +50,13 @@ public class GasStationServiceImplMockTest {
             1.3,
             0.9,
             0.8,
+            1.3,
             0,
-            "25/mag/2020 - 01:01:01",
+            "05-25-2020",
             40.0);
     GasStation b = new GasStation("BP",
             "Via Brenta",
+            true,
             true,
             true,
             true,
@@ -67,11 +70,13 @@ public class GasStationServiceImplMockTest {
             1.3,
             0.9,
             0.8,
+            1.4,
             1,
-            "25/mag/2020 - 01:01:02",
+            "05-25-2020",
             50.0);
     GasStation c = new GasStation("Agippo",
             "Via Cesare",
+            true,
             true,
             true,
             true,
@@ -85,8 +90,9 @@ public class GasStationServiceImplMockTest {
             1.3,
             0.9,
             0.8,
+            1.5,
             2,
-            "25/mag/2020 - 01:01:03",
+            "05-25-2020",
             60.0);
 
     List<GasStation> list = new ArrayList<>();
@@ -197,34 +203,34 @@ public class GasStationServiceImplMockTest {
         List<GasStationDto> gasStations;
         double lat = 45, lon = 7;
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Diesel", null);
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Diesel", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Super", null);
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Super", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "SuperPlus", null);
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "SuperPlus", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Gas", null);
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Gas", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Methane", null);
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Methane", null);
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Diesel", "Bcar");
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Diesel", "Bcar");
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Super", "Bcar");
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Super", "Bcar");
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "SuperPlus", "Bcar");
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "SuperPlus", "Bcar");
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Gas", "Bcar");
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Gas", "Bcar");
         assertEquals(1, gasStations.size());
 
-        gasStations = test.getGasStationsWithCoordinates(lat, lon, "Methane", "Bcar");
+        gasStations = test.getGasStationsWithCoordinates(lat, lon, 5, "Methane", "Bcar");
         assertEquals(1, gasStations.size());
     }
 
@@ -266,7 +272,7 @@ public class GasStationServiceImplMockTest {
 
     @Test
     public void setReport() throws PriceException, InvalidUserException, InvalidGasStationException {
-        test.setReport(0, 1.1, 1.2, 1.3, 0.4, 0.5, 0);
+        test.setReport(0, 1.1, 1.2, 1.3, 0.4, 0.5, 1.5, 0);
         assertEquals(0.4, test.getGasStationById(0).getGasPrice(), 0.01);
     }
 

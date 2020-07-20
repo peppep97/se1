@@ -21,6 +21,7 @@ public class GasStationConverter {
 		gasStation.setHasSuper(gasStationDto.getHasSuper());
 		gasStation.setHasSuperPlus(gasStationDto.getHasSuperPlus());
 		gasStation.setHasMethane(gasStationDto.getHasMethane());
+		gasStation.setHasPremiumDiesel(gasStationDto.getHasPremiumDiesel());
 		gasStation.setHasGas(gasStationDto.getHasGas());
 		if(gasStationDto.getCarSharing() == null)
 			gasStation.setCarSharing("null");
@@ -33,6 +34,7 @@ public class GasStationConverter {
 		gasStation.setSuperPlusPrice(gasStationDto.getSuperPlusPrice());
 		gasStation.setGasPrice(gasStationDto.getGasPrice());
 		gasStation.setMethanePrice(gasStationDto.getMethanePrice());
+		gasStation.setPremiumDieselPrice(gasStationDto.getPremiumDieselPrice());
 		gasStation.setUser(UserConverter.toUser(gasStationDto.getUserDto()));
 		gasStation.setReportUser(gasStationDto.getReportUser());
 		gasStation.setReportTimestamp(gasStationDto.getReportTimestamp());
@@ -55,6 +57,7 @@ public class GasStationConverter {
 		gasStationDto.setHasSuperPlus(gasStation.getHasSuperPlus());
 		gasStationDto.setHasGas(gasStation.getHasGas());
 		gasStationDto.setHasMethane(gasStation.getHasMethane());
+		gasStationDto.setHasPremiumDiesel(gasStation.getHasPremiumDiesel());
 		if(gasStation.getCarSharing().compareTo("null") == 0)
 			gasStationDto.setCarSharing(null);
 		else
@@ -66,6 +69,7 @@ public class GasStationConverter {
 		gasStationDto.setSuperPlusPrice(gasStation.getSuperPlusPrice());
 		gasStationDto.setGasPrice(gasStation.getGasPrice());
 		gasStationDto.setMethanePrice(gasStation.getMethanePrice());
+		gasStationDto.setPremiumDieselPrice(gasStation.getPremiumDieselPrice());
 		gasStationDto.setUserDto(UserConverter.toUserDto(gasStation.getUser()));
 		gasStationDto.setReportUser(gasStation.getReportUser());
 		gasStationDto.setReportTimestamp(gasStation.getReportTimestamp());

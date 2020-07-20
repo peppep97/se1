@@ -38,7 +38,7 @@ public class GasStationTest {
         gasStation.setGasPrice(1.567);
         assertEquals(1.567, gasStation.getGasPrice(), 0.001);
 
-        gasStation.setSuperPrice(2);
+        gasStation.setSuperPrice(2.0);
         assertEquals(2, gasStation.getSuperPrice(), 0.001);
 
         gasStation.setReportUser(0);
@@ -54,6 +54,7 @@ public class GasStationTest {
                 true,
                 true,
                 true,
+                false,
                 "boh",
                 45.002,
                 7.03,
@@ -62,6 +63,7 @@ public class GasStationTest {
                 2.3,
                 11.3,
                 0.003,
+                2.8,
                 12,
                 "ora",
                 22.22);

@@ -28,6 +28,8 @@ public interface GasStationRepository extends CrudRepository<GasStation, Integer
 	List<GasStation> findByHasGasTrue();
 	// Retrieve all gas stations with methane
 	List<GasStation> findByHasMethaneTrue();
+	// Retrieve all gas stations with premium diesel
+	List<GasStation> findByHasPremiumDieselTrue();
 	// Retrieve all gas stations with diesel and with the specified car sharing 
 	List<GasStation> findByHasDieselTrueAndCarSharing(String carSharing);
 	// Retrieve all gas stations with super and with the specified car sharing
@@ -38,6 +40,8 @@ public interface GasStationRepository extends CrudRepository<GasStation, Integer
 	List<GasStation> findByHasGasTrueAndCarSharing(String carSharing);
 	// Retrieve all gas stations with methane and with the specified car sharing
 	List<GasStation> findByHasMethaneTrueAndCarSharing(String carSharing);
+	// Retrieve all gas stations with premium diesel and with the specified car sharing
+	List<GasStation> findByHasPremiumDieselTrueAndCarSharing(String carSharing);
 	// Retrieve all gas stations with the specified car sharing 
 	List<GasStation> findByCarSharing(String carSharing);
 	

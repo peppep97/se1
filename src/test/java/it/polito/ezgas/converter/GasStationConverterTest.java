@@ -17,8 +17,8 @@ public class GasStationConverterTest {
 	@Test
 	public void testToGasStation() {
 		GasStationDto gasStationDto = new GasStationDto(14, "ENIO", "Via vittoria 10", true,
-				false, true, true, true, "car_sharing", 45.002, 7.03, 1.0, 2.5,
-				2.3, 11.3, 0.003, 12, null, 0.0);
+				false, true, true, true, false, "car_sharing", 45.002, 7.03, 1.0, 2.5,
+				2.3, 11.3, 0.003, 3.2, 12, null, 0.0);
 
 		//UserDto userDto = new UserDto(2, "test", "test", "test@test.com", 1, true);
 		//gasStationDto.setUserDto(userDto);
@@ -49,8 +49,8 @@ public class GasStationConverterTest {
 	@Test
 	public void testToGasStationDto() {
 		GasStation gasStation = new GasStation("ENIO", "Via vittoria 10", true,
-				false, true, true, true, "car_sharing", 45.002, 7.03, 1.0, 2.5,
-				2.3, 11.3, 0.003, 12, null, 0.0);
+				false, true, true, true, true, "car_sharing", 45.002, 7.03, 1.0, 2.5,
+				2.3, 11.3, 0.003, 2.99, 12, null, 0.0);
 
 		gasStation.setGasStationId(100);
 
